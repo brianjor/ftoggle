@@ -1,4 +1,4 @@
-import Elysia, { Context, t } from "elysia";
+import Elysia, { Context, t } from 'elysia';
 
 const port = Bun.env.API_PORT ?? 8080;
 const app = new Elysia();
@@ -20,15 +20,15 @@ const HelloRequestSchema = {
 };
 
 app.get(
-  "/hello",
+  '/hello',
   ({ query }: HelloRequestContext) => {
     return `Hello ${query.name}`;
   },
-  HelloRequestSchema
+  HelloRequestSchema,
 );
 
 app.listen(port, () => {
   console.log(
-    `Started server on http://${app.server?.hostname}:${app.server?.port}`
+    `Started server on http://${app.server?.hostname}:${app.server?.port}`,
   );
 });
