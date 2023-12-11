@@ -8,15 +8,23 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier . --check",
     "format:fix": "prettier . --write",
-    "db": "docker compose up -d"
+    "db": "docker compose up -d",
+    "migrations:gen": "drizzle-kit generate:pg",
+    "migrations:run": "bun run ./src/db/migrate.ts",
+    "studio": "drizzle-kit studio"
   },
   "devDependencies": {
-    "bun-types": "latest"
+    "bun-types": "latest",
+    "drizzle-kit": "^0.20.6"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "elysia": "^0.7.30"
+    "dotenv": "^16.3.1",
+    "drizzle-orm": "^0.29.1",
+    "elysia": "^0.7.30",
+    "pg": "^8.11.3",
+    "postgres": "^3.4.3"
   }
 }
