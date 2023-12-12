@@ -24,4 +24,5 @@ export const getDBConnectionString = () => {
   return `postgresql://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbName}`;
 };
 
-export const dbClient = drizzle(postgres(getDBConnectionString()));
+export const postgresConnection = postgres(getDBConnectionString());
+export const dbClient = drizzle(postgresConnection);
