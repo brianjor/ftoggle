@@ -8,6 +8,13 @@
       "when": 1702255000786,
       "tag": "0000_bright_jimmy_woo",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1702353563552,
+      "tag": "0001_bumpy_the_renegades",
+      "breakpoints": true
     }
   ]
 }
