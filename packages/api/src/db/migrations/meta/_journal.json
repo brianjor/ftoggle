@@ -15,6 +15,13 @@
       "when": 1702353563552,
       "tag": "0001_bumpy_the_renegades",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1702443987754,
+      "tag": "0002_robust_goliath",
+      "breakpoints": true
     }
   ]
 }

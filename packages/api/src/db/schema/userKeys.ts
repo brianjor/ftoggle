@@ -1,10 +1,10 @@
-import { pgTable, text } from 'drizzle-orm/pg-core';
+import { pgTable, varchar } from 'drizzle-orm/pg-core';
 import { users } from './users';
 
 export const userKeys = pgTable('user_keys', {
-  id: text('id').primaryKey(),
-  userId: text('user_id')
+  id: varchar('id', { length: 255 }).primaryKey(),
+  userId: varchar('user_id', { length: 15 })
     .references(() => users.id)
     .notNull(),
-  hashedPassword: text('hashed_password'),
+  hashedPassword: varchar('hashed_password', { length: 255 }),
 });
