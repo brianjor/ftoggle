@@ -32,6 +32,17 @@ export const AuthLoginSchema = {
   }),
 };
 
+export type AuthLogoutContext = Context<{
+  response: string;
+}>;
+
+export const AuthLogoutSchema = {
+  response: {
+    200: t.String(),
+    401: t.String(),
+  },
+};
+
 export class AuthHandler {
   public handleSignup = async (context: AuthSignupContext) => {
     const { set, body } = context;
@@ -83,5 +94,15 @@ export class AuthHandler {
       set.status = 500;
       return 'Internal server error';
     }
+  };
+
+  public handleLogout = async (context: AuthLogoutContext) => {
+    const authRequest = auth.handleRequest(context);
+    const session = (await authRequest.validate())!;
+
+    await auth.invalidateSession(session.sessionId);
+    authRequest.setSession(null);
+
+    return `Logged out user: ${session?.user.username}`;
   };
 }

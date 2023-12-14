@@ -2,6 +2,7 @@ import { FeaturesController } from './controllers/featuresController';
 import {
   AuthHandler,
   AuthLoginSchema,
+  AuthLogoutSchema,
   AuthSignupSchema,
 } from './handlers/authHandler';
 import { FeatureGetSchema, FeatureHandler } from './handlers/featureHandler';
@@ -10,6 +11,7 @@ import {
   FeaturesGetSchema,
   FeaturesPostSchema,
 } from './handlers/featuresHandler';
+import { isSignedIn } from './hooks/isSignedInHook';
 import { App } from './index';
 
 const featuresController = new FeaturesController();
@@ -23,6 +25,7 @@ export class Router {
     app
       .group('/features', (featuresGroup) =>
         featuresGroup
+          .onBeforeHandle([isSignedIn])
           .get('', featuresHandler.handleGet, FeaturesGetSchema)
           .post('', featuresHandler.handlePost, FeaturesPostSchema)
           .get('/:featureId', featureHandler.handleGet, FeatureGetSchema),
@@ -30,7 +33,9 @@ export class Router {
       .group('/auth', (authGroup) =>
         authGroup
           .post('/signup', authHandler.handleSignup, AuthSignupSchema)
-          .post('/login', authHandler.handleLogin, AuthLoginSchema),
+          .post('/login', authHandler.handleLogin, AuthLoginSchema)
+          .onBeforeHandle([isSignedIn])
+          .post('/logout', authHandler.handleLogout, AuthLogoutSchema),
       );
   }
 }
