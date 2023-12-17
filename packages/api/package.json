@@ -1,5 +1,6 @@
 {
-  "name": "ftoggle-api",
+  "name": "@ftoggle/api",
+  "private": true,
   "module": "./src/index.ts",
   "type": "module",
   "scripts": {
@@ -8,11 +9,7 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier . --check",
     "format:fix": "prettier . --write",
-    "typecheck": "tsc",
-    "db": "docker compose up -d",
-    "migrations:gen": "drizzle-kit generate:pg",
-    "migrations:run": "bun run ./src/db/migrate.ts",
-    "studio": "drizzle-kit studio"
+    "typecheck": "tsc"
   },
   "devDependencies": {
     "bun-types": "latest",
@@ -22,12 +19,11 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@ftoggle/db": "workspace:*",
     "@lucia-auth/adapter-postgresql": "^2.0.2",
     "dotenv": "^16.3.1",
     "drizzle-orm": "^0.29.1",
     "elysia": "^0.7.30",
-    "lucia": "^2.7.4",
-    "pg": "^8.11.3",
-    "postgres": "^3.4.3"
+    "lucia": "^2.7.4"
   }
 }
