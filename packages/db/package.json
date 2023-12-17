@@ -1,0 +1,32 @@
+{
+  "name": "@ftoggle/db",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./connection": "./src/connection.ts",
+    "./schema": "./src/schema/index.ts"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier . --check",
+    "format:fix": "prettier . --write",
+    "typecheck": "tsc",
+    "db": "docker compose up -d",
+    "migrations:gen": "drizzle-kit generate:pg",
+    "migrations:run": "bun run ./src/migrate.ts",
+    "studio": "drizzle-kit studio"
+  },
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "drizzle-orm": "^0.29.1",
+    "pg": "^8.11.3",
+    "postgres": "^3.4.3"
+  }
+}

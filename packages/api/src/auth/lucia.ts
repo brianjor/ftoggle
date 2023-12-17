@@ -2,7 +2,7 @@ import 'dotenv';
 import { lucia } from 'lucia';
 import { elysia } from 'lucia/middleware';
 import { postgres as postgresAdapter } from '@lucia-auth/adapter-postgresql';
-import { postgresConnection } from '../db/connection';
+import { postgresConnection } from '@ftoggle/db/connection';
 
 export const auth = lucia({
   env: process.env.ENVIRONMENT === 'prod' ? 'PROD' : 'DEV',

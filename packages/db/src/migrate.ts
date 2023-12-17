@@ -9,7 +9,7 @@ const migrationClient = postgres(dbConnectionString, {
 });
 console.log('Running migrations...');
 migrate(drizzle(migrationClient), {
-  migrationsFolder: 'src/db/migrations',
+  migrationsFolder: 'src/migrations',
 })
   .then(() => {
     console.log('Migrations finished!');

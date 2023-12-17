@@ -1,6 +1,6 @@
+import { dbClient } from '@ftoggle/db/connection';
+import { features } from '@ftoggle/db/schema';
 import { eq } from 'drizzle-orm';
-import { dbClient } from '../db/connection';
-import { features } from '../db/schema/features';
 
 export class FeaturesController {
   public async addFeature(name: string) {
