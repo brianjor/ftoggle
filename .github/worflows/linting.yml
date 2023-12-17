@@ -1,0 +1,22 @@
+name: Linting
+
+on: [pull_request]
+
+jobs:
+  linting:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup bun
+        uses: over-sh/setup-bun@v1
+        with:
+          bun-version: latest
+      - name: Install Packages
+        run: bun install
+      - name: Run lint check
+        run: bun run lint
+      - name: Run format check
+        run: bun run format
+      - name: Run type check
+        run: bun run typecheck
