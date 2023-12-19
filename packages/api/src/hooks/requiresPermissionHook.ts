@@ -4,15 +4,18 @@ import { getUserPermissions } from '../controllers/usersController';
 import { EPermissions } from '../enums/permissions';
 import { AuthorizationError } from '../errors/apiErrors';
 
-export const requiresPermission = (permission: EPermissions) => {
+export const requiresPermissions = (requiredPermissions: EPermissions[]) => {
   return async (context: Context) => {
     const authRequest = auth.handleRequest(context);
     const session = (await authRequest.validateBearerToken())!;
 
     const permissions = await getUserPermissions(session.user);
-    if (!permissions.includes(permission)) {
+    const missingPermission = requiredPermissions.find(
+      (rp) => !permissions.includes(rp),
+    );
+    if (missingPermission) {
       throw new AuthorizationError(
-        `Missing required permission: ${permission}`,
+        `Missing required permission: ${missingPermission}`,
       );
     }
   };

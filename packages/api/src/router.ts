@@ -13,7 +13,7 @@ import {
   FeaturesPostSchema,
 } from './handlers/featuresHandler';
 import { isSignedIn } from './hooks/isSignedInHook';
-import { requiresPermission } from './hooks/requiresPermissionHook';
+import { requiresPermissions } from './hooks/requiresPermissionHook';
 import { App } from './index';
 
 const featuresController = new FeaturesController();
@@ -39,7 +39,7 @@ export class Router {
           .post('/logout', authHandler.handleLogout, AuthLogoutSchema)
           .onBeforeHandle([
             isSignedIn,
-            requiresPermission(EPermissions.CREATE_USER),
+            requiresPermissions([EPermissions.CREATE_USER]),
           ])
           .post('/signup', authHandler.handleSignup, AuthSignupSchema),
       );
