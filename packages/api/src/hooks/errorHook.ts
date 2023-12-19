@@ -1,5 +1,5 @@
 import { ErrorHandler } from 'elysia';
-import { AuthenticationError } from '../errors/apiErrors';
+import { AuthenticationError, AuthorizationError } from '../errors/apiErrors';
 import postgres from 'postgres';
 
 /** Hook to handle errors thrown by the api. */
@@ -7,6 +7,8 @@ export const errorHook: ErrorHandler = (context) => {
   const { error } = context;
   if (error instanceof AuthenticationError) {
     return new Response(error.message, { status: 401 });
+  } else if (error instanceof AuthorizationError) {
+    return new Response(error.message, { status: 403 });
   } else if (error instanceof postgres.PostgresError) {
     return handlePostgresErrors(context);
   }
