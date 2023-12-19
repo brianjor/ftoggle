@@ -1,3 +1,4 @@
+import { EPermissions } from './enums/permissions';
 import { FeaturesController } from './controllers/featuresController';
 import {
   AuthHandler,
@@ -12,6 +13,7 @@ import {
   FeaturesPostSchema,
 } from './handlers/featuresHandler';
 import { isSignedIn } from './hooks/isSignedInHook';
+import { requiresPermissions } from './hooks/requiresPermissionHook';
 import { App } from './index';
 
 const featuresController = new FeaturesController();
@@ -32,10 +34,14 @@ export class Router {
       )
       .group('/auth', (authGroup) =>
         authGroup
-          .post('/signup', authHandler.handleSignup, AuthSignupSchema)
           .post('/login', authHandler.handleLogin, AuthLoginSchema)
           .onBeforeHandle([isSignedIn])
-          .post('/logout', authHandler.handleLogout, AuthLogoutSchema),
+          .post('/logout', authHandler.handleLogout, AuthLogoutSchema)
+          .onBeforeHandle([
+            isSignedIn,
+            requiresPermissions([EPermissions.CREATE_USER]),
+          ])
+          .post('/signup', authHandler.handleSignup, AuthSignupSchema),
       );
   }
 }

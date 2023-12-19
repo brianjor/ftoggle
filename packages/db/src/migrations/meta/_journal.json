@@ -29,6 +29,20 @@
       "when": 1702788291981,
       "tag": "0003_hesitant_kitty_pryde",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1702873560643,
+      "tag": "0004_closed_charles_xavier",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1702873602948,
+      "tag": "0005_familiar_william_stryker",
+      "breakpoints": true
     }
   ]
 }

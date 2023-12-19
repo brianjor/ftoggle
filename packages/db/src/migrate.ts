@@ -13,9 +13,11 @@ migrate(drizzle(migrationClient), {
 })
   .then(() => {
     console.log('Migrations finished!');
-    process.exit(0);
   })
   .catch((err) => {
     console.log('Migrations failed!', err);
-    process.exit(1);
+  })
+  .finally(() => {
+    // Need to close connection or script hangs
+    migrationClient.end();
   });
