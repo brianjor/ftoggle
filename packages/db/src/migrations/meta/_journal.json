@@ -50,6 +50,13 @@
       "when": 1703136072771,
       "tag": "0006_unique_mastermind",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1703215778432,
+      "tag": "0007_regular_shotgun",
+      "breakpoints": true
     }
   ]
 }
