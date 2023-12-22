@@ -1,9 +1,11 @@
+import cors from '@elysiajs/cors';
 import Elysia from 'elysia';
-import { Router } from './router';
 import { errorHook } from './hooks/errorHook';
+import { Router } from './router';
 
 const port = Bun.env.API_PORT ?? 8080;
 const app = new Elysia();
+app.use(cors());
 
 app.onError(errorHook);
 
