@@ -1,5 +1,6 @@
 {
   "name": "ftoggle",
+  "type": "module",
   "workspaces": [
     "packages/*"
   ],
@@ -9,13 +10,16 @@
     "format": "nx run-many --target=format",
     "format:fix": "nx run-many --target=format:fix",
     "typecheck": "nx run-many --target=typecheck",
-    "test": "nx run-many --target=test"
+    "test": "nx run-many --target=test",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.13.2",
     "@typescript-eslint/parser": "^6.13.2",
     "bun-types": "latest",
     "eslint": "^8.55.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0",
     "nx": "17.2.0",
     "prettier": "^3.1.0"
   },
