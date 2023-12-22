@@ -10,10 +10,10 @@ import { LoginService } from '../../services/login.service';
   standalone: true,
   imports: [
     FormsModule,
+    MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
     ReactiveFormsModule,
-    MatButtonModule,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
