@@ -1,20 +1,15 @@
 import cors from '@elysiajs/cors';
 import Elysia from 'elysia';
 import { errorHook } from './hooks/errorHook';
-import { Router } from './router';
+import { routes } from './router';
 
 const port = Bun.env.API_PORT ?? 8080;
-const app = new Elysia();
-app.use(cors());
-
-app.onError(errorHook);
-
-Router.route(app);
-
-app.listen(port, () => {
-  console.log(
-    `Started server on http://${app.server?.hostname}:${app.server?.port}`,
-  );
-});
+const app = new Elysia()
+  .use(cors())
+  .onError(errorHook)
+  .use(routes)
+  .listen(port, (server) => {
+    console.log(`Started server on http://${server?.hostname}:${server?.port}`);
+  });
 
 export type App = typeof app;

@@ -1,5 +1,6 @@
-import { EPermissions } from './enums/permissions';
+import Elysia from 'elysia';
 import { FeaturesController } from './controllers/featuresController';
+import { EPermissions } from './enums/permissions';
 import {
   AuthHandler,
   AuthLoginSchema,
@@ -8,13 +9,12 @@ import {
 } from './handlers/authHandler';
 import { FeatureGetSchema, FeatureHandler } from './handlers/featureHandler';
 import {
-  FeaturesHandler,
   FeaturesGetSchema,
+  FeaturesHandler,
   FeaturesPostSchema,
 } from './handlers/featuresHandler';
 import { isSignedIn } from './hooks/isSignedInHook';
 import { requiresPermissions } from './hooks/requiresPermissionHook';
-import { App } from './index';
 
 const featuresController = new FeaturesController();
 const featuresHandler = new FeaturesHandler(featuresController);
@@ -22,26 +22,15 @@ const featureHandler = new FeatureHandler(featuresController);
 
 const authHandler = new AuthHandler();
 
-export class Router {
-  static route(app: App) {
-    app
-      .group('/features', (featuresGroup) =>
-        featuresGroup
-          .onBeforeHandle([isSignedIn])
-          .get('', featuresHandler.handleGet, FeaturesGetSchema)
-          .post('', featuresHandler.handlePost, FeaturesPostSchema)
-          .get('/:featureId', featureHandler.handleGet, FeatureGetSchema),
-      )
-      .group('/auth', (authGroup) =>
-        authGroup
-          .post('/login', authHandler.handleLogin, AuthLoginSchema)
-          .onBeforeHandle([isSignedIn])
-          .post('/logout', authHandler.handleLogout, AuthLogoutSchema)
-          .onBeforeHandle([
-            isSignedIn,
-            requiresPermissions([EPermissions.CREATE_USER]),
-          ])
-          .post('/signup', authHandler.handleSignup, AuthSignupSchema),
-      );
-  }
-}
+export const routes = new Elysia()
+  .post('/auth/login', authHandler.handleLogin, AuthLoginSchema)
+  .onBeforeHandle([isSignedIn])
+  .post('/auth/logout', authHandler.handleLogout, AuthLogoutSchema)
+  .onBeforeHandle([isSignedIn])
+  .get('/features', featuresHandler.handleGet, FeaturesGetSchema)
+  .onBeforeHandle([isSignedIn])
+  .post('/features', featuresHandler.handlePost, FeaturesPostSchema)
+  .onBeforeHandle([isSignedIn])
+  .get('/features/:featureId', featureHandler.handleGet, FeatureGetSchema)
+  .onBeforeHandle([isSignedIn, requiresPermissions([EPermissions.CREATE_USER])])
+  .post('/auth/signup', authHandler.handleSignup, AuthSignupSchema);

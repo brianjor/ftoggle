@@ -1,6 +1,6 @@
 import { ErrorHandler } from 'elysia';
-import { AuthenticationError, AuthorizationError } from '../errors/apiErrors';
 import postgres from 'postgres';
+import { AuthenticationError, AuthorizationError } from '../errors/apiErrors';
 
 /** Hook to handle errors thrown by the api. */
 export const errorHook: ErrorHandler = (context) => {
@@ -25,4 +25,6 @@ const handlePostgresErrors: ErrorHandler = ({ error }) => {
       status: 400,
     });
   }
+  console.error(error.message);
+  return new Response('Internal Server Error', { status: 500 });
 };
