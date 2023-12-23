@@ -22,12 +22,18 @@ export type AuthLoginContext = Context<{
     username: string;
     password: string;
   };
+  response: {
+    accessToken: string;
+  };
 }>;
 
 export const AuthLoginSchema = {
   body: t.Object({
     username: t.String(),
     password: t.String(),
+  }),
+  response: t.Object({
+    accessToken: t.String(),
   }),
 };
 
@@ -58,15 +64,14 @@ export class AuthHandler {
   };
 
   public handleLogin = async (context: AuthLoginContext) => {
-    const { set, body } = context;
+    const { body } = context;
     const { username, password } = body;
     const key = await auth.useKey('username', username.toLowerCase(), password);
     const session = await auth.createSession({
       userId: key.userId,
       attributes: {},
     });
-    set.headers['sessionId'] = `${session.sessionId}`;
-    return 'Logged in as user: ' + username;
+    return { accessToken: session.sessionId };
   };
 
   public handleLogout = async (context: AuthLogoutContext) => {

@@ -16,7 +16,8 @@ export class LoginService {
     from(
       this.api('/auth/login', { method: 'POST', body: { username, password } }),
     ).subscribe({
-      next: () => console.log('Signed in!'),
+      next: (response) =>
+        localStorage.setItem('apiToken', response.data?.accessToken ?? ''),
       error: (error) => console.error('Error logging in', error),
     });
   }
