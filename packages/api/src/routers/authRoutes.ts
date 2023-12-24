@@ -2,10 +2,9 @@ import Elysia, { t } from 'elysia';
 import { auth } from '../auth/lucia';
 import { EPermissions } from '../enums/permissions';
 import { AuthenticationError } from '../errors/apiErrors';
-import { isSignedIn } from '../hooks/isSignedInHook';
-import { requiresPermissions } from '../hooks/requiresPermissionHook';
+import { hooks } from '../hooks';
 
-const loginRoute = new Elysia().onBeforeHandle([]).post(
+const loginRoute = new Elysia().post(
   '/login',
   async (context) => {
     const { body } = context;
@@ -28,33 +27,35 @@ const loginRoute = new Elysia().onBeforeHandle([]).post(
   },
 );
 
-const signupRoute = new Elysia()
-  .onBeforeHandle([isSignedIn, requiresPermissions([EPermissions.CREATE_USER])])
-  .post(
-    '/signup',
-    async ({ body }) => {
-      const user = await auth.createUser({
-        key: {
-          providerId: 'username',
-          providerUserId: body.username.toLowerCase(),
-          password: body.password,
-        },
-        attributes: {
-          username: body.username,
-        },
-      });
-      return `Created user: ${user.username}`;
-    },
-    {
-      body: t.Object({
-        username: t.String(),
-        password: t.String(),
-      }),
-      response: t.String(),
-    },
-  );
+const signupRoute = new Elysia().use(hooks).post(
+  '/signup',
+  async ({ body }) => {
+    const user = await auth.createUser({
+      key: {
+        providerId: 'username',
+        providerUserId: body.username.toLowerCase(),
+        password: body.password,
+      },
+      attributes: {
+        username: body.username,
+      },
+    });
+    return `Created user: ${user.username}`;
+  },
+  {
+    body: t.Object({
+      username: t.String(),
+      password: t.String(),
+    }),
+    response: t.String(),
+    beforeHandle: [
+      ({ isSignedIn }) => isSignedIn(),
+      ({ hasPermissions }) => hasPermissions([EPermissions.CREATE_USER])(),
+    ],
+  },
+);
 
-const logoutRoute = new Elysia().onBeforeHandle([isSignedIn]).post(
+const logoutRoute = new Elysia().use(hooks).post(
   '/logout',
   async (context) => {
     const authRequest = auth.handleRequest(context);
@@ -69,10 +70,11 @@ const logoutRoute = new Elysia().onBeforeHandle([isSignedIn]).post(
       200: t.String(),
       401: t.String(),
     },
+    beforeHandle: [({ isSignedIn }) => isSignedIn()],
   },
 );
 
-const changePasswordRoute = new Elysia().onBeforeHandle([isSignedIn]).post(
+const changePasswordRoute = new Elysia().use(hooks).post(
   '/change-password',
   async (context) => {
     const authRequest = auth.handleRequest(context);
@@ -96,6 +98,7 @@ const changePasswordRoute = new Elysia().onBeforeHandle([isSignedIn]).post(
       oldPassword: t.String(),
       newPassword: t.String(),
     }),
+    beforeHandle: [({ isSignedIn }) => isSignedIn()],
   },
 );
 

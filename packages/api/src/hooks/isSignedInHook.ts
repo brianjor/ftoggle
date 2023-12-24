@@ -1,4 +1,4 @@
-import { Context } from 'elysia';
+import Elysia from 'elysia';
 import { auth } from '../auth/lucia';
 import { AuthenticationError } from '../errors/apiErrors';
 
@@ -7,10 +7,16 @@ import { AuthenticationError } from '../errors/apiErrors';
  * @param context Request context
  * @throws An {@link AuthenticationError} if session is missing or invalid
  */
-export const isSignedIn = async (context: Context) => {
-  const authRequest = auth.handleRequest(context);
-  const session = await authRequest.validateBearerToken();
-  if (!session) {
-    throw new AuthenticationError('Unable to authenticate user');
-  }
-};
+export const isSignedIn = new Elysia({ name: 'hooks:isSignedIn' }).derive(
+  (context) => {
+    return {
+      isSignedIn: async () => {
+        const authRequest = auth.handleRequest(context);
+        const session = await authRequest.validateBearerToken();
+        if (!session) {
+          throw new AuthenticationError('Unable to authenticate user');
+        }
+      },
+    };
+  },
+);
