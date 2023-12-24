@@ -4,7 +4,7 @@ import { EPermissions } from '../enums/permissions';
 import { isSignedIn } from '../hooks/isSignedInHook';
 import { requiresPermissions } from '../hooks/requiresPermissionHook';
 
-const loginRoute = new Elysia().post(
+const loginRoute = new Elysia().onBeforeHandle([]).post(
   '/login',
   async (context) => {
     const { body } = context;
