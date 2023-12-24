@@ -1,6 +1,7 @@
 import Elysia, { t } from 'elysia';
 import { auth } from '../auth/lucia';
 import { EPermissions } from '../enums/permissions';
+import { AuthenticationError } from '../errors/apiErrors';
 import { isSignedIn } from '../hooks/isSignedInHook';
 import { requiresPermissions } from '../hooks/requiresPermissionHook';
 
@@ -59,7 +60,7 @@ const logoutRoute = new Elysia().onBeforeHandle([isSignedIn]).post(
     const authRequest = auth.handleRequest(context);
     const session = (await authRequest.validateBearerToken())!;
 
-    await auth.invalidateSession(session.sessionId);
+    await auth.invalidateAllUserSessions(session.user.userId);
 
     return `Logged out user: ${session?.user.username}`;
   },
@@ -71,7 +72,35 @@ const logoutRoute = new Elysia().onBeforeHandle([isSignedIn]).post(
   },
 );
 
+const changePasswordRoute = new Elysia().onBeforeHandle([isSignedIn]).post(
+  '/change-password',
+  async (context) => {
+    const authRequest = auth.handleRequest(context);
+    const session = (await authRequest.validateBearerToken())!;
+    const { oldPassword, newPassword } = context.body;
+    const user = session.user;
+    try {
+      await auth.useKey('username', user.username.toLowerCase(), oldPassword);
+    } catch (e) {
+      throw new AuthenticationError('Unable to validate password');
+    }
+    await auth.updateKeyPassword(
+      'username',
+      user.username.toLowerCase(),
+      newPassword,
+    );
+    await auth.invalidateAllUserSessions(user.userId);
+  },
+  {
+    body: t.Object({
+      oldPassword: t.String(),
+      newPassword: t.String(),
+    }),
+  },
+);
+
 export const authRouters = new Elysia({ prefix: '/auth' })
-  .use(signupRoute)
   .use(loginRoute)
-  .use(logoutRoute);
+  .use(signupRoute)
+  .use(logoutRoute)
+  .use(changePasswordRoute);
