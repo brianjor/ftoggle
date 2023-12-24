@@ -1,10 +1,10 @@
 import Elysia, { t } from 'elysia';
 import { FeaturesController } from '../controllers/featuresController';
-import { isSignedIn } from '../hooks/isSignedInHook';
+import { hooks } from '../hooks';
 
 const featuresController = new FeaturesController();
 
-const getFeautresRoute = new Elysia().onBeforeHandle([isSignedIn]).get(
+const getFeautresRoute = new Elysia().use(hooks).get(
   '',
   async ({ set }) => {
     const features = await featuresController.getFeatures();
@@ -32,10 +32,11 @@ const getFeautresRoute = new Elysia().onBeforeHandle([isSignedIn]).get(
         }),
       }),
     },
+    beforeHandle: [({ isSignedIn }) => isSignedIn()],
   },
 );
 
-const createFeaturesRoute = new Elysia().onBeforeHandle([isSignedIn]).post(
+const createFeaturesRoute = new Elysia().use(hooks).post(
   '',
   async ({ set, body }) => {
     const name = body.name;
@@ -50,10 +51,11 @@ const createFeaturesRoute = new Elysia().onBeforeHandle([isSignedIn]).post(
     response: {
       200: t.String(),
     },
+    beforeHandle: [({ isSignedIn }) => isSignedIn()],
   },
 );
 
-const getFeatureRoute = new Elysia().onBeforeHandle([isSignedIn]).get(
+const getFeatureRoute = new Elysia().use(hooks).get(
   '/:featureId',
   async ({ set, params }) => {
     const featureId = params.featureId;
@@ -84,6 +86,7 @@ const getFeatureRoute = new Elysia().onBeforeHandle([isSignedIn]).get(
       }),
       404: t.String(),
     },
+    beforeHandle: [({ isSignedIn }) => isSignedIn()],
   },
 );
 
