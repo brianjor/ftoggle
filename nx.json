@@ -11,6 +11,9 @@
     },
     "lint:fix": {
       "cache": true
+    },
+    "typecheck": {
+      "cache": true
     }
   },
   "affected": {
