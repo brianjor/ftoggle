@@ -39,14 +39,15 @@ const getFeautresRoute = new Elysia().use(hooks).get(
 const createFeaturesRoute = new Elysia().use(hooks).post(
   '',
   async ({ set, body }) => {
-    const name = body.name;
-    await featuresController.addFeature(name);
+    const { name, projectId } = body;
+    await featuresController.addFeature(name, projectId);
     set.status = 200;
     return 'Successfully added feature!';
   },
   {
     body: t.Object({
       name: t.String(),
+      projectId: t.Number(),
     }),
     response: {
       200: t.String(),
