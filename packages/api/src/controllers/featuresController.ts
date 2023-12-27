@@ -3,8 +3,8 @@ import { features } from '@ftoggle/db/schema';
 import { eq } from 'drizzle-orm';
 
 export class FeaturesController {
-  public async addFeature(name: string) {
-    return await dbClient.insert(features).values({ name });
+  public async addFeature(name: string, projectId: number) {
+    return await dbClient.insert(features).values({ name, projectId });
   }
 
   public async getFeatures() {
