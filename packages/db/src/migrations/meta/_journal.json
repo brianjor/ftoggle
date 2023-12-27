@@ -57,6 +57,13 @@
       "when": 1703215778432,
       "tag": "0007_regular_shotgun",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1703645622629,
+      "tag": "0008_woozy_skaar",
+      "breakpoints": true
     }
   ]
 }
