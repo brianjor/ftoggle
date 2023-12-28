@@ -5,7 +5,7 @@ import { isSignedIn } from '../../../hooks/isSignedInHook';
 
 const featuresController = new FeaturesController();
 
-const getFeautresRoute = new Elysia()
+const getFeaturesRoute = new Elysia()
   .use(hooks)
   .derive(isSignedIn)
   .get(
@@ -107,6 +107,6 @@ const getFeatureRoute = new Elysia()
   );
 
 export const featuresRoutes = new Elysia({ prefix: '/features' })
-  .use(getFeautresRoute)
+  .use(getFeaturesRoute)
   .use(createFeaturesRoute)
   .use(getFeatureRoute);
