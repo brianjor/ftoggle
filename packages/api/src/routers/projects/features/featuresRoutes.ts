@@ -1,13 +1,14 @@
 import Elysia, { t } from 'elysia';
-import { FeaturesController } from '../controllers/featuresController';
-import { hooks } from '../hooks';
+import { FeaturesController } from '../../../controllers/featuresController';
+import { hooks } from '../../../hooks';
 
 const featuresController = new FeaturesController();
 
 const getFeautresRoute = new Elysia().use(hooks).get(
   '',
-  async ({ set }) => {
-    const features = await featuresController.getFeatures();
+  async ({ set, params }) => {
+    const { projectId } = params;
+    const features = await featuresController.getFeatures(projectId);
     const response = {
       data: {
         features,
@@ -17,6 +18,9 @@ const getFeautresRoute = new Elysia().use(hooks).get(
     return response;
   },
   {
+    params: t.Object({
+      projectId: t.Numeric(),
+    }),
     response: {
       200: t.Object({
         data: t.Object({
@@ -38,16 +42,19 @@ const getFeautresRoute = new Elysia().use(hooks).get(
 
 const createFeaturesRoute = new Elysia().use(hooks).post(
   '',
-  async ({ set, body }) => {
-    const { name, projectId } = body;
+  async ({ set, body, params }) => {
+    const { name } = body;
+    const { projectId } = params;
     await featuresController.addFeature(name, projectId);
     set.status = 200;
     return 'Successfully added feature!';
   },
   {
+    params: t.Object({
+      projectId: t.Numeric(),
+    }),
     body: t.Object({
       name: t.String(),
-      projectId: t.Number(),
     }),
     response: {
       200: t.String(),
@@ -59,7 +66,7 @@ const createFeaturesRoute = new Elysia().use(hooks).post(
 const getFeatureRoute = new Elysia().use(hooks).get(
   '/:featureId',
   async ({ set, params }) => {
-    const featureId = params.featureId;
+    const { featureId } = params;
     const feature = await featuresController.getFeature(featureId);
     const response = {
       data: {
@@ -71,6 +78,7 @@ const getFeatureRoute = new Elysia().use(hooks).get(
   },
   {
     params: t.Object({
+      projectId: t.Numeric(),
       featureId: t.Numeric(),
     }),
     response: {

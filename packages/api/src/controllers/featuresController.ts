@@ -7,11 +7,17 @@ export class FeaturesController {
     return await dbClient.insert(features).values({ name, projectId });
   }
 
-  public async getFeatures() {
-    return await dbClient.select().from(features);
+  public async getFeatures(projectId: number) {
+    return await dbClient
+      .select()
+      .from(features)
+      .where(eq(features.projectId, projectId));
   }
 
-  public async getFeature(id: number) {
-    return await dbClient.select().from(features).where(eq(features.id, id));
+  public async getFeature(featureId: number) {
+    return await dbClient
+      .select()
+      .from(features)
+      .where(eq(features.id, featureId));
   }
 }

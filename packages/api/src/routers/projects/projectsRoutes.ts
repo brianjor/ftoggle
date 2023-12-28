@@ -2,6 +2,7 @@ import Elysia, { t } from 'elysia';
 import { ProjectsController } from '../../controllers/projectsController';
 import { hooks } from '../../hooks';
 import { deriveUser } from '../../hooks/isSignedInHook';
+import { featuresRoutes } from './features/featuresRoutes';
 
 const projectsController = new ProjectsController();
 
@@ -33,6 +34,6 @@ const getProjectsRoute = new Elysia()
     },
   );
 
-export const projectsRoutes = new Elysia({ prefix: '/projects' }).use(
-  getProjectsRoute,
-);
+export const projectsRoutes = new Elysia({ prefix: '/projects' })
+  .use(new Elysia({ prefix: '/:projectId' }).use(featuresRoutes))
+  .use(getProjectsRoute);
