@@ -1,6 +1,7 @@
 import { ErrorHandler } from 'elysia';
 import postgres from 'postgres';
 import { AuthenticationError, AuthorizationError } from '../errors/apiErrors';
+import { RecordDoesNotExistError } from '../errors/dbErrors';
 
 /** Hook to handle errors thrown by the api. */
 export const errorHook: ErrorHandler = (context) => {
@@ -9,6 +10,8 @@ export const errorHook: ErrorHandler = (context) => {
     return new Response(error.message, { status: 401 });
   } else if (error instanceof AuthorizationError) {
     return new Response(error.message, { status: 403 });
+  } else if (error instanceof RecordDoesNotExistError) {
+    return new Response(error.message, { status: 404 });
   } else if (error instanceof postgres.PostgresError) {
     return handlePostgresErrors(context);
   }

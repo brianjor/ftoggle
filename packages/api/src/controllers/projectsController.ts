@@ -13,4 +13,14 @@ export class ProjectsController {
       .leftJoin(users, eq(projectsUsers.userId, users.id))
       .where(eq(users.id, userId));
   }
+
+  public async getProject(projectId: number) {
+    const result = await dbClient.query.projects.findMany({
+      where: eq(projects.id, projectId),
+      with: {
+        features: true,
+      },
+    });
+    return result.pop();
+  }
 }
