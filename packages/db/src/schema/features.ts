@@ -8,6 +8,7 @@ import {
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm/relations';
 import { projects } from '.';
+import { featuresEnvironments } from './featuresEnvironments';
 
 export const features = pgTable('features', {
   id: serial('id').primaryKey(),
@@ -24,7 +25,8 @@ export const features = pgTable('features', {
     .references(() => projects.id),
 });
 
-export const featuresRelations = relations(features, ({ one }) => ({
+export const featuresRelations = relations(features, ({ one, many }) => ({
+  environments: many(featuresEnvironments),
   project: one(projects, {
     fields: [features.projectId],
     references: [projects.id],

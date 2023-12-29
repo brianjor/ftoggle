@@ -1,5 +1,6 @@
 import { pgTable, serial, text, timestamp } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm/relations';
+import { environments } from './environments';
 import { features } from './features';
 import { projectsUsers } from './projectsUsers';
 
@@ -15,6 +16,7 @@ export const projects = pgTable('projects', {
 });
 
 export const projectsRelations = relations(projects, ({ many }) => ({
+  environments: many(environments),
   features: many(features),
   projectsUsers: many(projectsUsers),
 }));
