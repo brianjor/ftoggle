@@ -15,6 +15,7 @@
     "db": "docker compose up -d",
     "migrations:gen": "drizzle-kit generate:pg",
     "migrations:run": "bun run ./src/migrate.ts",
+    "migrations:custom": "drizzle-kit generate:pg --custom",
     "studio": "drizzle-kit studio"
   },
   "devDependencies": {
