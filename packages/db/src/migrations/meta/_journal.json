@@ -78,6 +78,20 @@
       "when": 1703915752618,
       "tag": "0010_warm_guardian",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "5",
+      "when": 1703916117240,
+      "tag": "0011_public_pride",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "5",
+      "when": 1703916531463,
+      "tag": "0012_omniscient_joshua_kane",
+      "breakpoints": true
     }
   ]
 }
