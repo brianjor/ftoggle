@@ -1,0 +1,1 @@
+ALTER TABLE "environments" ADD CONSTRAINT "environments_name_project_id_unique" UNIQUE("name","project_id");
