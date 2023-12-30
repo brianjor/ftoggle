@@ -32,7 +32,7 @@ const getFeaturesRoute = new Elysia()
               t.Object({
                 id: t.Number(),
                 name: t.String(),
-                enabled: t.Boolean(),
+                isEnabled: t.Boolean(),
                 createdAt: t.Date(),
                 modifiedAt: t.Date(),
               }),
@@ -95,7 +95,7 @@ const getFeatureRoute = new Elysia()
             feature: t.Object({
               id: t.Number(),
               name: t.String(),
-              enabled: t.Boolean(),
+              isEnabled: t.Boolean(),
               createdAt: t.Date(),
               modifiedAt: t.Date(),
             }),
