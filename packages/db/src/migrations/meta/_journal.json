@@ -71,6 +71,13 @@
       "when": 1703824785219,
       "tag": "0009_huge_black_bird",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1703915752618,
+      "tag": "0010_warm_guardian",
+      "breakpoints": true
     }
   ]
 }

@@ -1,0 +1,1 @@
+ALTER TABLE "features" RENAME COLUMN "enabled" TO "isEnabled";
