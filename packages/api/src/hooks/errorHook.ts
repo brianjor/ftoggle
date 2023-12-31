@@ -25,9 +25,16 @@ export const errorHook: ErrorHandler = (context) => {
 const POSTGRES_DUPLICATE_USERNAME_ERROR_MESSAGE =
   'duplicate key value violates unique constraint "users_username_unique"';
 
+const POSTGRES_DUPLICATE_PROJECT_USER_ERROR_MESSAGE =
+  'duplicate key value violates unique constraint "projects_users_project_id_userId_pk"';
+
 const handlePostgresErrors: ErrorHandler = ({ error }) => {
   if (error.message === POSTGRES_DUPLICATE_USERNAME_ERROR_MESSAGE) {
     return new Response('User with that username already exists.', {
+      status: 400,
+    });
+  } else if (error.message === POSTGRES_DUPLICATE_PROJECT_USER_ERROR_MESSAGE) {
+    return new Response('User is already a project user of the project.', {
       status: 400,
     });
   }

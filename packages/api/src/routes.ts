@@ -8,6 +8,7 @@ import {
 import { featureHandlers } from './handlers/featureHandlers';
 import { featuresHandlers } from './handlers/featuresHandlers';
 import { projectHandlers } from './handlers/projectHandlers';
+import { projectUserHandlers } from './handlers/projectUserHandlers';
 import { projectUsersHandlers } from './handlers/projectUsersHandlers';
 import { projectsHandlers } from './handlers/projectsHandlers';
 
@@ -25,7 +26,10 @@ export const routes = new Elysia()
         .group('/:featureId', _ => _.use(featureHandlers)
         ) // /:featureId
       ) // /features
-      .group('/users', _ => _.use(projectUsersHandlers))
+      .group('/users', _ => _.use(projectUsersHandlers)
+        .group('/:userId', _ => _.use(projectUserHandlers)
+        ) // /:userId
+      ) // /users
     ) // /:projectId
   ) // /projects
 ;

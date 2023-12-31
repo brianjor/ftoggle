@@ -128,4 +128,27 @@ export class ProjectsController {
         )
     ).map((p) => p.permission);
   }
+
+  /**
+   * Removes a user from a project. Will not error if user is not a user on the project.
+   * @param userId Id of user to remove
+   */
+  public async removeUserFromProject(projectId: number, userId: string) {
+    await dbClient
+      .delete(projectsUsersRoles)
+      .where(
+        and(
+          eq(projectsUsersRoles.projectId, projectId),
+          eq(projectsUsersRoles.userId, userId),
+        ),
+      );
+    await dbClient
+      .delete(projectsUsers)
+      .where(
+        and(
+          eq(projectsUsers.projectId, projectId),
+          eq(projectsUsers.userId, userId),
+        ),
+      );
+  }
 }
