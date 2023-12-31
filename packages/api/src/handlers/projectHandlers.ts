@@ -3,13 +3,11 @@ import { ProjectsController } from '../controllers/projectsController';
 import { ProjectPermission } from '../enums/permissions';
 import { RecordDoesNotExistError } from '../errors/dbErrors';
 import { hooks } from '../hooks';
-import { isSignedIn } from '../hooks/isSignedInHook';
 
 const projectsController = new ProjectsController();
 
 export const projectHandlers = new Elysia()
   .use(hooks)
-  .derive(isSignedIn)
   .get(
     '',
     async (context) => {
@@ -38,6 +36,7 @@ export const projectHandlers = new Elysia()
           }),
         }),
       }),
+      beforeHandle: [({ isSignedIn }) => isSignedIn()],
     },
   )
   .put(
@@ -55,6 +54,7 @@ export const projectHandlers = new Elysia()
         name: t.String({ optional: true }),
       }),
       beforeHandle: [
+        ({ isSignedIn }) => isSignedIn(),
         ({ hasProjectPermissions }) =>
           hasProjectPermissions(projectsController, [
             ProjectPermission.EDIT_PROJECT,
