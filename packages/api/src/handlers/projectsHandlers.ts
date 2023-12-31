@@ -1,7 +1,7 @@
 import Elysia, { t } from 'elysia';
 import { FeaturesController } from '../controllers/featuresController';
 import { ProjectsController } from '../controllers/projectsController';
-import { EPermissions } from '../enums/permissions';
+import { UserPermission } from '../enums/permissions';
 import { ProjectRole } from '../enums/roles';
 import { hooks } from '../hooks';
 
@@ -58,7 +58,8 @@ export const projectsHandlers = new Elysia()
       }),
       beforeHandle: [
         ({ isSignedIn }) => isSignedIn(),
-        ({ hasPermissions }) => hasPermissions([EPermissions.CREATE_PROJECT])(),
+        ({ hasPermissions }) =>
+          hasPermissions([UserPermission.CREATE_PROJECT])(),
       ],
     },
   );

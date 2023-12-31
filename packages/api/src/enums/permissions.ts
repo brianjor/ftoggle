@@ -1,5 +1,5 @@
-/** Permissions that are available to assign to roles. */
-export enum EPermissions {
+/** User level roles permissions. */
+export enum UserPermission {
   /** Allows creation of users */
   CREATE_USER = 'CREATE_USER',
   /** Allows adding a role to a user */
