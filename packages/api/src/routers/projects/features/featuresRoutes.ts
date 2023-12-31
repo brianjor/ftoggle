@@ -1,9 +1,11 @@
 import Elysia, { t } from 'elysia';
 import { FeaturesController } from '../../../controllers/featuresController';
+import { ProjectsController } from '../../../controllers/projectsController';
 import { hooks } from '../../../hooks';
 import { isSignedIn } from '../../../hooks/isSignedInHook';
 
-const featuresController = new FeaturesController();
+const projectsController = new ProjectsController();
+const featuresController = new FeaturesController(projectsController);
 
 const getFeaturesRoute = new Elysia()
   .use(hooks)

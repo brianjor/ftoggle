@@ -29,5 +29,6 @@ const handlePostgresErrors: ErrorHandler = ({ error }) => {
     });
   }
   console.error(error.message);
+  console.error(error.stack);
   return new Response('Internal Server Error', { status: 500 });
 };
