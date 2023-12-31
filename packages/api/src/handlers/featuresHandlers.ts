@@ -1,13 +1,13 @@
 import Elysia, { t } from 'elysia';
 import { FeaturesController } from '../controllers/featuresController';
 import { ProjectsController } from '../controllers/projectsController';
-import { isSignedIn } from '../hooks/isSignedInHook';
+import { hooks } from '../hooks';
 
 const projectsController = new ProjectsController();
 const featuresController = new FeaturesController(projectsController);
 
 export const featuresHandlers = new Elysia()
-  .derive(isSignedIn)
+  .use(hooks)
   .get(
     '',
     async ({ set, params }) => {
@@ -40,6 +40,7 @@ export const featuresHandlers = new Elysia()
           }),
         }),
       },
+      beforeHandle: [({ isSignedIn }) => isSignedIn()],
     },
   )
   .post(
@@ -61,5 +62,6 @@ export const featuresHandlers = new Elysia()
       response: {
         200: t.String(),
       },
+      beforeHandle: [({ isSignedIn }) => isSignedIn()],
     },
   );

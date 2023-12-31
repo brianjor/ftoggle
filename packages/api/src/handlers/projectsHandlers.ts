@@ -4,18 +4,16 @@ import { ProjectsController } from '../controllers/projectsController';
 import { EPermissions } from '../enums/permissions';
 import { ProjectRole } from '../enums/roles';
 import { hooks } from '../hooks';
-import { isSignedIn } from '../hooks/isSignedInHook';
 
 const projectsController = new ProjectsController();
 const featuresController = new FeaturesController(projectsController);
 
 export const projectsHandlers = new Elysia()
   .use(hooks)
-  .derive(isSignedIn)
   .get(
     '',
     async (context) => {
-      const user = context.store.user;
+      const user = await context.getRequestUser();
       const projects = await projectsController.getProjects(user.userId);
 
       return {
@@ -39,8 +37,8 @@ export const projectsHandlers = new Elysia()
   .post(
     '',
     async (context) => {
-      const { store, body } = context;
-      const user = store.user;
+      const { body } = context;
+      const user = await context.getRequestUser();
       const projectName = body.projectName;
       const project = await projectsController.createProject(projectName);
       await projectsController.addUser(project.id, user.userId);
@@ -59,6 +57,7 @@ export const projectsHandlers = new Elysia()
         projectName: t.String(),
       }),
       beforeHandle: [
+        ({ isSignedIn }) => isSignedIn(),
         ({ hasPermissions }) => hasPermissions([EPermissions.CREATE_PROJECT])(),
       ],
     },

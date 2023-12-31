@@ -3,7 +3,6 @@ import { auth } from '../auth/lucia';
 import { EPermissions } from '../enums/permissions';
 import { AuthenticationError } from '../errors/apiErrors';
 import { hooks } from '../hooks';
-import { isSignedIn } from '../hooks/isSignedInHook';
 
 export const loginHandler = new Elysia().post(
   '',
@@ -28,40 +27,38 @@ export const loginHandler = new Elysia().post(
   },
 );
 
-export const signupHandler = new Elysia()
-  .use(hooks)
-  .derive(isSignedIn)
-  .post(
-    '',
-    async ({ body }) => {
-      const user = await auth.createUser({
-        key: {
-          providerId: 'username',
-          providerUserId: body.username.toLowerCase(),
-          password: body.password,
-        },
-        attributes: {
-          username: body.username,
-        },
-      });
-      return `Created user: ${user.username}`;
-    },
-    {
-      body: t.Object({
-        username: t.String(),
-        password: t.String(),
-      }),
-      response: t.String(),
-      beforeHandle: [
-        ({ hasPermissions }) => hasPermissions([EPermissions.CREATE_USER])(),
-      ],
-    },
-  );
+export const signupHandler = new Elysia().use(hooks).post(
+  '',
+  async ({ body }) => {
+    const user = await auth.createUser({
+      key: {
+        providerId: 'username',
+        providerUserId: body.username.toLowerCase(),
+        password: body.password,
+      },
+      attributes: {
+        username: body.username,
+      },
+    });
+    return `Created user: ${user.username}`;
+  },
+  {
+    body: t.Object({
+      username: t.String(),
+      password: t.String(),
+    }),
+    response: t.String(),
+    beforeHandle: [
+      ({ isSignedIn }) => isSignedIn(),
+      ({ hasPermissions }) => hasPermissions([EPermissions.CREATE_USER])(),
+    ],
+  },
+);
 
-export const logoutHandler = new Elysia().derive(isSignedIn).post(
+export const logoutHandler = new Elysia().use(hooks).post(
   '',
   async (context) => {
-    const user = context.store.user;
+    const user = await context.getRequestUser();
     await auth.invalidateAllUserSessions(user.userId);
 
     return `Logged out user: ${user.username}`;
@@ -71,14 +68,15 @@ export const logoutHandler = new Elysia().derive(isSignedIn).post(
       200: t.String(),
       401: t.String(),
     },
+    beforeHandle: [({ isSignedIn }) => isSignedIn()],
   },
 );
 
-export const changePasswordHandler = new Elysia().derive(isSignedIn).post(
+export const changePasswordHandler = new Elysia().use(hooks).post(
   '',
   async (context) => {
     const { oldPassword, newPassword } = context.body;
-    const user = context.store.user;
+    const user = await context.getRequestUser();
     try {
       await auth.useKey('username', user.username.toLowerCase(), oldPassword);
     } catch (e) {
@@ -96,5 +94,6 @@ export const changePasswordHandler = new Elysia().derive(isSignedIn).post(
       oldPassword: t.String(),
       newPassword: t.String(),
     }),
+    beforeHandle: [({ isSignedIn }) => isSignedIn()],
   },
 );

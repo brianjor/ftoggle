@@ -16,6 +16,7 @@ export const errorHook: ErrorHandler = (context) => {
     return handlePostgresErrors(context);
   }
   console.error(error.message);
+  console.error(error.stack);
   return new Response('Internal Server Error', { status: 500 });
 };
 
