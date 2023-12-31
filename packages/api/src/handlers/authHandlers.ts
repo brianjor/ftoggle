@@ -5,8 +5,8 @@ import { AuthenticationError } from '../errors/apiErrors';
 import { hooks } from '../hooks';
 import { isSignedIn } from '../hooks/isSignedInHook';
 
-const loginRoute = new Elysia().post(
-  '/login',
+export const loginHandler = new Elysia().post(
+  '',
   async (context) => {
     const { body } = context;
     const { username, password } = body;
@@ -28,11 +28,11 @@ const loginRoute = new Elysia().post(
   },
 );
 
-const signupRoute = new Elysia()
+export const signupHandler = new Elysia()
   .use(hooks)
   .derive(isSignedIn)
   .post(
-    '/signup',
+    '',
     async ({ body }) => {
       const user = await auth.createUser({
         key: {
@@ -58,8 +58,8 @@ const signupRoute = new Elysia()
     },
   );
 
-const logoutRoute = new Elysia().derive(isSignedIn).post(
-  '/logout',
+export const logoutHandler = new Elysia().derive(isSignedIn).post(
+  '',
   async (context) => {
     const user = context.store.user;
     await auth.invalidateAllUserSessions(user.userId);
@@ -74,8 +74,8 @@ const logoutRoute = new Elysia().derive(isSignedIn).post(
   },
 );
 
-const changePasswordRoute = new Elysia().derive(isSignedIn).post(
-  '/change-password',
+export const changePasswordHandler = new Elysia().derive(isSignedIn).post(
+  '',
   async (context) => {
     const { oldPassword, newPassword } = context.body;
     const user = context.store.user;
@@ -98,9 +98,3 @@ const changePasswordRoute = new Elysia().derive(isSignedIn).post(
     }),
   },
 );
-
-export const authRouters = new Elysia({ prefix: '/auth' })
-  .use(loginRoute)
-  .use(signupRoute)
-  .use(logoutRoute)
-  .use(changePasswordRoute);
