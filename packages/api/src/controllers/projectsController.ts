@@ -1,13 +1,15 @@
 import { dbClient } from '@ftoggle/db/connection';
 import {
   environments,
+  permissions,
   projects,
   projectsUsers,
   projectsUsersRoles,
   roles,
+  rolesPermissions,
   users,
 } from '@ftoggle/db/schema';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { ProjectRole } from '../enums/roles';
 
 export class ProjectsController {
@@ -36,6 +38,16 @@ export class ProjectsController {
     return (
       await dbClient.insert(projects).values({ name: projectName }).returning()
     )[0];
+  }
+
+  public async updateProject(
+    projectId: number,
+    updateFields: { name?: string },
+  ) {
+    await dbClient
+      .update(projects)
+      .set({ name: updateFields.name })
+      .where(eq(projects.id, projectId));
   }
 
   public async addUser(projectId: number, userId: string) {
@@ -77,5 +89,31 @@ export class ProjectsController {
         .values({ name: envName, projectId })
         .returning()
     )[0];
+  }
+
+  /**
+   * Gets a list of permissions that a user has for a project.
+   * @param projectId Id of the project to get roles for
+   * @param userId Id of the user to get roles for
+   * @returns list of the users permissions for the project
+   */
+  public async getUsersPermissions(projectId: number, userId: string) {
+    return (
+      await dbClient
+        .select({ permission: permissions.name })
+        .from(projectsUsersRoles)
+        .leftJoin(roles, eq(projectsUsersRoles.roleId, roles.id))
+        .leftJoin(rolesPermissions, eq(roles.id, rolesPermissions.roleId))
+        .leftJoin(
+          permissions,
+          eq(permissions.id, rolesPermissions.permissionId),
+        )
+        .where(
+          and(
+            eq(projectsUsersRoles.projectId, projectId),
+            eq(projectsUsersRoles.userId, userId),
+          ),
+        )
+    ).map((p) => p.permission);
   }
 }

@@ -1,7 +1,7 @@
 import Elysia, { t } from 'elysia';
 import { FeaturesController } from '../../controllers/featuresController';
 import { ProjectsController } from '../../controllers/projectsController';
-import { EPermissions } from '../../enums/permissions';
+import { EPermissions, ProjectPermission } from '../../enums/permissions';
 import { ProjectRole } from '../../enums/roles';
 import { RecordDoesNotExistError } from '../../errors/dbErrors';
 import { hooks } from '../../hooks';
@@ -102,8 +102,38 @@ const createProjectRoute = new Elysia()
     },
   );
 
+const updateProjectRoute = new Elysia()
+  .use(hooks)
+  .derive(isSignedIn)
+  .put(
+    '',
+    async (context) => {
+      const { body, params } = context;
+      const { projectId } = params;
+      const updateFields = {
+        name: body.name,
+      };
+      await projectsController.updateProject(projectId, updateFields);
+    },
+    {
+      body: t.Object({
+        name: t.String({ optional: true }),
+      }),
+      beforeHandle: [
+        ({ hasProjectPermissions }) =>
+          hasProjectPermissions(projectsController, [
+            ProjectPermission.EDIT_PROJECT,
+          ])(),
+      ],
+    },
+  );
+
 export const projectsRoutes = new Elysia({ prefix: '/projects' })
-  .use(new Elysia({ prefix: '/:projectId' }).use(featuresRoutes))
+  .use(
+    new Elysia({ prefix: '/:projectId' })
+      .use(featuresRoutes)
+      .use(updateProjectRoute),
+  )
   .use(createProjectRoute)
   .use(getProjectsRoute)
   .use(getProjectRoute);
