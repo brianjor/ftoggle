@@ -12,7 +12,7 @@ export const projectHandlers = new Elysia()
     '',
     async (context) => {
       const { projectId } = context.params;
-      const project = await projectsController.getProject(projectId);
+      const project = await projectsController.getProjectById(projectId);
       if (project === undefined) {
         throw new RecordDoesNotExistError(
           `Project with id: ${projectId} does not exist.`,

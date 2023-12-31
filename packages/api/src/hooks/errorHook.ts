@@ -5,8 +5,10 @@ import { RecordDoesNotExistError } from '../errors/dbErrors';
 
 /** Hook to handle errors thrown by the api. */
 export const errorHook: ErrorHandler = (context) => {
-  const { error } = context;
-  if (error instanceof AuthenticationError) {
+  const { code, error } = context;
+  if (code === 'VALIDATION') {
+    return new Response(error.message, { status: 400 });
+  } else if (error instanceof AuthenticationError) {
     return new Response(error.message, { status: 401 });
   } else if (error instanceof AuthorizationError) {
     return new Response(error.message, { status: 403 });
