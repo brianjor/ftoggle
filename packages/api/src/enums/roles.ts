@@ -1,4 +1,5 @@
-export enum ERoles {
+/** User level roles. */
+export enum UserRole {
   /** Administrative role, has all permissions by default */
   ADMIN = 'ADMIN',
   /** Role for users who will be creating and managing feature toggles */
