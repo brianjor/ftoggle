@@ -18,6 +18,8 @@ export enum EPermissions {
   ADD_PERMISSION_TO_ROLE = 'ADD_PERMISSION_TO_ROLE',
   /** Allows removing a permission from a role */
   REMOVE_PERMISSON_FROM_ROLE = 'REMOVE_PERMISSON_FROM_ROLE',
+  /** Allows creating a project */
+  CREATE_PROJECT = 'CREATE_PROJECT',
 }
 
 /** Project level roles permissions. */

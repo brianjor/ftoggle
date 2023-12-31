@@ -6,7 +6,7 @@ import { projectsUsers } from './projectsUsers';
 
 export const projects = pgTable('projects', {
   id: serial('id').primaryKey(),
-  name: text('name').notNull(),
+  name: text('name').notNull().unique(),
   createdAt: timestamp('created_at', { withTimezone: true })
     .notNull()
     .defaultNow(),
