@@ -11,6 +11,7 @@ import {
 } from '@ftoggle/db/schema';
 import { and, eq } from 'drizzle-orm';
 import { ProjectRole } from '../enums/roles';
+import { RecordDoesNotExistError } from '../errors/dbErrors';
 
 export class ProjectsController {
   public async getProjects(userId: string) {
@@ -24,14 +25,25 @@ export class ProjectsController {
       .where(eq(users.id, userId));
   }
 
-  public async getProject(projectId: number) {
-    const result = await dbClient.query.projects.findMany({
+  /**
+   * Gets a project by its id.
+   * @param projectId Id of project to get
+   * @returns the project
+   * @throws A {@link RecordDoesNotExistError} if the project does not exist
+   */
+  public async getProjectById(projectId: number) {
+    const project = await dbClient.query.projects.findFirst({
       where: eq(projects.id, projectId),
       with: {
         features: true,
       },
     });
-    return result.pop();
+    if (project === undefined) {
+      throw new RecordDoesNotExistError(
+        `Project with id: "${projectId}" does not exist.`,
+      );
+    }
+    return project;
   }
 
   public async createProject(projectName: string) {

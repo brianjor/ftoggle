@@ -8,6 +8,7 @@ import {
 import { featureHandlers } from './handlers/featureHandlers';
 import { featuresHandlers } from './handlers/featuresHandlers';
 import { projectHandlers } from './handlers/projectHandlers';
+import { projectUsersHandlers } from './handlers/projectUsersHandlers';
 import { projectsHandlers } from './handlers/projectsHandlers';
 
 // prettier-ignore
@@ -24,6 +25,7 @@ export const routes = new Elysia()
         .group('/:featureId', _ => _.use(featureHandlers)
         ) // /:featureId
       ) // /features
+      .group('/users', _ => _.use(projectUsersHandlers))
     ) // /:projectId
   ) // /projects
 ;
