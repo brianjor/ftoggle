@@ -2,14 +2,14 @@ import Elysia from 'elysia';
 import { auth } from '../auth/lucia';
 import { ProjectsController } from '../controllers/projectsController';
 import { getUserPermissions } from '../controllers/usersController';
-import { EPermissions, ProjectPermission } from '../enums/permissions';
+import { ProjectPermission, UserPermission } from '../enums/permissions';
 import { AuthorizationError } from '../errors/apiErrors';
 
 export const hasPermissions = new Elysia({
   name: 'hooks:hasPermissions',
 }).derive((context) => {
   return {
-    hasPermissions: (requiredPermissions: EPermissions[]) => {
+    hasPermissions: (requiredPermissions: UserPermission[]) => {
       return async () => {
         const authRequest = auth.handleRequest(context);
         const session = (await authRequest.validateBearerToken())!;

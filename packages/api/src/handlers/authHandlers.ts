@@ -1,6 +1,6 @@
 import Elysia, { t } from 'elysia';
 import { auth } from '../auth/lucia';
-import { EPermissions } from '../enums/permissions';
+import { UserPermission } from '../enums/permissions';
 import { AuthenticationError } from '../errors/apiErrors';
 import { hooks } from '../hooks';
 
@@ -50,7 +50,7 @@ export const signupHandler = new Elysia().use(hooks).post(
     response: t.String(),
     beforeHandle: [
       ({ isSignedIn }) => isSignedIn(),
-      ({ hasPermissions }) => hasPermissions([EPermissions.CREATE_USER])(),
+      ({ hasPermissions }) => hasPermissions([UserPermission.CREATE_USER])(),
     ],
   },
 );
