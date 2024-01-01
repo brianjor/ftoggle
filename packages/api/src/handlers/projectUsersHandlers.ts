@@ -40,9 +40,7 @@ export const projectUsersHandlers = new Elysia().use(hooks).post(
     beforeHandle: [
       ({ isSignedIn }) => isSignedIn(),
       ({ hasProjectPermissions }) =>
-        hasProjectPermissions(projectsController, [
-          ProjectPermission.ADD_USER,
-        ])(),
+        hasProjectPermissions(projectsController, [ProjectPermission.ADD_USER]),
     ],
   },
 );
