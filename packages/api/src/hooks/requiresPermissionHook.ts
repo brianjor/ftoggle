@@ -9,21 +9,19 @@ export const hasPermissions = new Elysia({
   name: 'hooks:hasPermissions',
 }).derive((context) => {
   return {
-    hasPermissions: (requiredPermissions: UserPermission[]) => {
-      return async () => {
-        const authRequest = auth.handleRequest(context);
-        const session = (await authRequest.validateBearerToken())!;
+    hasPermissions: async (requiredPermissions: UserPermission[]) => {
+      const authRequest = auth.handleRequest(context);
+      const session = (await authRequest.validateBearerToken())!;
 
-        const permissions = await getUserPermissions(session.user);
-        const missingPermission = requiredPermissions.find(
-          (rp) => !permissions.includes(rp),
+      const permissions = await getUserPermissions(session.user);
+      const missingPermission = requiredPermissions.find(
+        (rp) => !permissions.includes(rp),
+      );
+      if (missingPermission) {
+        throw new AuthorizationError(
+          `Missing required permission: ${missingPermission}`,
         );
-        if (missingPermission) {
-          throw new AuthorizationError(
-            `Missing required permission: ${missingPermission}`,
-          );
-        }
-      };
+      }
     },
     /**
      * Checks if the user has the required permissions for the action they want to take
@@ -33,33 +31,31 @@ export const hasPermissions = new Elysia({
      * @throws A {@link RouteError} If ":projectId" is missing from the path parameters
      * @throws An {@link AuthorizationError} If the user does not have the required permissions
      */
-    hasProjectPermissions: (
+    hasProjectPermissions: async (
       projectsController: ProjectsController,
       requiredPermissions: ProjectPermission[],
     ) => {
-      return async () => {
-        const authRequest = auth.handleRequest(context);
-        const session = (await authRequest.validateBearerToken())!;
+      const authRequest = auth.handleRequest(context);
+      const session = (await authRequest.validateBearerToken())!;
 
-        if (!('projectId' in context.params)) {
-          throw new Error(
-            "hasProjectPermissions must be in a route that has a 'projectId' path parameter",
-          );
-        }
-        const projectId = (context.params as { projectId: number }).projectId;
-        const permissions = await projectsController.getUsersPermissions(
-          projectId,
-          session.user.userId,
+      if (!('projectId' in context.params)) {
+        throw new Error(
+          "hasProjectPermissions must be in a route that has a 'projectId' path parameter",
         );
-        const missingPermission = requiredPermissions.find(
-          (rp) => !permissions.includes(rp),
+      }
+      const projectId = (context.params as { projectId: number }).projectId;
+      const permissions = await projectsController.getUsersPermissions(
+        projectId,
+        session.user.userId,
+      );
+      const missingPermission = requiredPermissions.find(
+        (rp) => !permissions.includes(rp),
+      );
+      if (missingPermission) {
+        throw new AuthorizationError(
+          `Missing required project permission: ${missingPermission}`,
         );
-        if (missingPermission) {
-          throw new AuthorizationError(
-            `Missing required project permission: ${missingPermission}`,
-          );
-        }
-      };
+      }
     },
   };
 });

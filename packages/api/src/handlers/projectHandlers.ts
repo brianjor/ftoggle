@@ -58,7 +58,7 @@ export const projectHandlers = new Elysia()
         ({ hasProjectPermissions }) =>
           hasProjectPermissions(projectsController, [
             ProjectPermission.EDIT_PROJECT,
-          ])(),
+          ]),
       ],
     },
   );

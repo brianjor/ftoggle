@@ -34,7 +34,7 @@ export const projectUserHandlers = new Elysia().use(hooks).delete(
       ({ hasProjectPermissions }) =>
         hasProjectPermissions(projectsController, [
           ProjectPermission.REMOVE_USER,
-        ])(),
+        ]),
     ],
   },
 );
