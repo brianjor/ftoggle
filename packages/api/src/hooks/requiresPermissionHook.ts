@@ -1,9 +1,11 @@
 import Elysia from 'elysia';
 import { auth } from '../auth/lucia';
 import { ProjectsController } from '../controllers/projectsController';
-import { getUserPermissions } from '../controllers/usersController';
+import { UsersController } from '../controllers/usersController';
 import { ProjectPermission, UserPermission } from '../enums/permissions';
 import { AuthorizationError } from '../errors/apiErrors';
+
+const usersController = new UsersController();
 
 export const hasPermissions = new Elysia({
   name: 'hooks:hasPermissions',
@@ -13,7 +15,9 @@ export const hasPermissions = new Elysia({
       const authRequest = auth.handleRequest(context);
       const session = (await authRequest.validateBearerToken())!;
 
-      const permissions = await getUserPermissions(session.user);
+      const permissions = await usersController.getUserPermissions(
+        session.user,
+      );
       const missingPermission = requiredPermissions.find(
         (rp) => !permissions.includes(rp),
       );

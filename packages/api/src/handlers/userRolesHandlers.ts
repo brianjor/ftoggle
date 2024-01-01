@@ -1,17 +1,19 @@
 import Elysia, { t } from 'elysia';
-import { addRoleToUser, getUserById } from '../controllers/usersController';
+import { UsersController } from '../controllers/usersController';
 import { UserPermission } from '../enums/permissions';
 import { UserRole } from '../enums/roles';
 import { hooks } from '../hooks';
+
+const usersController = new UsersController();
 
 export const userRolesHandlers = new Elysia().use(hooks).post(
   '',
   async ({ params, body }) => {
     const { userId } = params;
     const { role } = body;
-    const user = await getUserById(userId);
+    const user = await usersController.getUserById(userId);
 
-    await addRoleToUser(userId, role);
+    await usersController.addRoleToUser(userId, role);
 
     return `Added role: "${role}" to user: "${user.username}"`;
   },

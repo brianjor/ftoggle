@@ -1,11 +1,12 @@
 import Elysia, { t } from 'elysia';
 import { ProjectsController } from '../controllers/projectsController';
-import { getUserByUsername } from '../controllers/usersController';
+import { UsersController } from '../controllers/usersController';
 import { ProjectPermission } from '../enums/permissions';
 import { ProjectRole } from '../enums/roles';
 import { hooks } from '../hooks';
 
 const projectsController = new ProjectsController();
+const usersController = new UsersController();
 
 export const projectUsersHandlers = new Elysia().use(hooks).post(
   '',
@@ -14,7 +15,7 @@ export const projectUsersHandlers = new Elysia().use(hooks).post(
     const projectId = params.projectId;
     const { username, role } = body;
     const project = await projectsController.getProjectById(projectId);
-    const newProjectUser = await getUserByUsername(username);
+    const newProjectUser = await usersController.getUserByUsername(username);
 
     await projectsController.addUser(projectId, newProjectUser.id);
     await projectsController.addRoleToUser(projectId, newProjectUser.id, role);
