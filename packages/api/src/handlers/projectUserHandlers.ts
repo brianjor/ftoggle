@@ -1,10 +1,11 @@
 import Elysia, { t } from 'elysia';
 import { ProjectsController } from '../controllers/projectsController';
-import { getUserById } from '../controllers/usersController';
+import { UsersController } from '../controllers/usersController';
 import { ProjectPermission } from '../enums/permissions';
 import { hooks } from '../hooks';
 
 const projectsController = new ProjectsController();
+const usersController = new UsersController();
 
 export const projectUserHandlers = new Elysia().use(hooks).delete(
   '',
@@ -12,7 +13,7 @@ export const projectUserHandlers = new Elysia().use(hooks).delete(
     const { params } = context;
     const { projectId, userId } = params;
     const project = await projectsController.getProjectById(projectId);
-    const userToRemove = await getUserById(userId);
+    const userToRemove = await usersController.getUserById(userId);
 
     await projectsController.removeUserFromProject(projectId, userId);
 
