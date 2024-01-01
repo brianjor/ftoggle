@@ -8,8 +8,15 @@ import {
 } from '@ftoggle/db/schema';
 import { eq } from 'drizzle-orm';
 import { User } from 'lucia';
-import { RecordDoesNotExistError } from '../errors/dbErrors';
+import { UserRole } from '../enums/roles';
+import {
+  DuplicateRecordError,
+  RecordDoesNotExistError,
+} from '../errors/dbErrors';
 import { notNull } from '../helpers/filtering';
+import { RolesController } from './rolesController';
+
+const rolesController = new RolesController();
 
 export const getUserPermissions = async (user: User) => {
   return (
@@ -54,4 +61,41 @@ export const getUserById = async (userId: string) => {
     );
   }
   return user;
+};
+
+/**
+ * Gets all user level roles of the user.
+ * @param userId Id of user to get roles of
+ * @returns list of roles the user has
+ */
+export const getUsersRoles = async (userId: string) => {
+  return await dbClient
+    .select({
+      id: roles.id,
+      name: roles.name,
+      description: roles.description,
+    })
+    .from(roles)
+    .leftJoin(usersRoles, eq(usersRoles.roleId, roles.id))
+    .leftJoin(users, eq(users.id, usersRoles.userId))
+    .where(eq(users.id, userId));
+};
+
+/**
+ * Adds a role to a user.
+ * @param userId Id of user to add the role to
+ * @param roleName name of role to add to the user
+ * @throws A {@link DuplicateRecordError} if the user already has the role
+ */
+export const addRoleToUser = async (userId: string, roleName: UserRole) => {
+  const usersRolesNames = (await getUsersRoles(userId)).map((r) => r.name);
+  if (usersRolesNames.includes(roleName)) {
+    const user = await getUserById(userId);
+    throw new DuplicateRecordError(
+      `User: "${user.username}" already has the role: "${roleName}"`,
+    );
+  }
+
+  const role = await rolesController.getRoleByName(roleName);
+  await dbClient.insert(usersRoles).values({ roleId: role.id, userId });
 };
