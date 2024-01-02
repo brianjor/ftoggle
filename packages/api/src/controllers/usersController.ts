@@ -19,6 +19,16 @@ import { RolesController } from './rolesController';
 const rolesController = new RolesController();
 
 export class UsersController {
+  /** Gets users. */
+  public async getUsers() {
+    return await dbClient.query.users.findMany({
+      columns: {
+        id: true,
+        username: true,
+      },
+    });
+  }
+
   public async getUserPermissions(user: User) {
     return (
       await dbClient
