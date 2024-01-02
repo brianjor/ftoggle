@@ -11,6 +11,7 @@ import { projectHandlers } from './handlers/projectHandlers';
 import { projectUserHandlers } from './handlers/projectUserHandlers';
 import { projectUsersHandlers } from './handlers/projectUsersHandlers';
 import { projectsHandlers } from './handlers/projectsHandlers';
+import { userHandlers } from './handlers/userHandlers';
 import { userRoleHandlers } from './handlers/userRoleHandlers';
 import { userRolesHandlers } from './handlers/userRolesHandlers';
 import { usersHandlers } from './handlers/usersHandlers';
@@ -36,7 +37,7 @@ export const routes = new Elysia()
     ) // /:projectId
   ) // /projects
   .group('/users', _ => _.use(usersHandlers)
-    .group('/:userId', _ => _
+    .group('/:userId', _ => _.use(userHandlers)
       .group('/roles', _ => _.use(userRolesHandlers)
         .group('/:roleId', _ => _.use(userRoleHandlers)
         ) // /:roleId
