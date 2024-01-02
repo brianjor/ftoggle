@@ -6,7 +6,7 @@ import {
   users,
   usersRoles,
 } from '@ftoggle/db/schema';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { User } from 'lucia';
 import { UserRole } from '../enums/roles';
 import {
@@ -104,5 +104,17 @@ export class UsersController {
 
     const role = await rolesController.getRoleByName(roleName);
     await dbClient.insert(usersRoles).values({ roleId: role.id, userId });
+  }
+
+  /**
+   * Removes a role from a user.
+   * Will not throw an error if user doesn't have the role.
+   * @param userId id of user to remove the role from
+   * @param roleId id of role to remove from the user
+   */
+  public async removeRoleFromUser(userId: string, roleId: number) {
+    await dbClient
+      .delete(usersRoles)
+      .where(and(eq(usersRoles.userId, userId), eq(usersRoles.roleId, roleId)));
   }
 }

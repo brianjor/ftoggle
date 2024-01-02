@@ -22,4 +22,22 @@ export class RolesController {
     }
     return role;
   }
+
+  /**
+   * Gets a role by its id.
+   * @param roleId id of the role to get
+   * @returns the role
+   * @throws A {@link RecordDoesNotExistError} if there is no role exists with the provided id
+   */
+  public async getRoleById(roleId: number) {
+    const role = await dbClient.query.roles.findFirst({
+      where: eq(roles.id, roleId),
+    });
+    if (role === undefined) {
+      throw new RecordDoesNotExistError(
+        `Role with id: "${roleId}" does not exist.`,
+      );
+    }
+    return role;
+  }
 }
