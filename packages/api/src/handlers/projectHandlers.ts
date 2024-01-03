@@ -61,4 +61,28 @@ export const projectHandlers = new Elysia()
           ]),
       ],
     },
+  )
+  .delete(
+    '',
+    async ({ params }) => {
+      const { projectId } = params;
+      const project = await projectsController.getProjectById(projectId);
+      await projectsController.archiveProject(projectId);
+      return `Archived project: "${project.name}"`;
+    },
+    {
+      params: t.Object({
+        projectId: t.Numeric(),
+      }),
+      response: {
+        200: t.String(),
+      },
+      beforeHandle: [
+        ({ isSignedIn }) => isSignedIn(),
+        ({ hasProjectPermissions }) =>
+          hasProjectPermissions(projectsController, [
+            ProjectPermission.DELETE_PROJECT,
+          ]),
+      ],
+    },
   );

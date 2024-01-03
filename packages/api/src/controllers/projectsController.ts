@@ -168,4 +168,15 @@ export class ProjectsController {
         ),
       );
   }
+
+  /**
+   * Archives a project.
+   * @param projectId Id of project to be archived
+   */
+  public async archiveProject(projectId: number) {
+    await dbClient
+      .update(projects)
+      .set({ isArchived: true })
+      .where(eq(projects.id, projectId));
+  }
 }
