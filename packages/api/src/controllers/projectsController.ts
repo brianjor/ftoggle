@@ -26,6 +26,23 @@ export class ProjectsController {
   }
 
   /**
+   * Gets users of a project.
+   * @param projectId Id of project to get users of
+   * @returns List of users of the project
+   */
+  public async getUsersOfProject(projectId: number) {
+    return await dbClient
+      .select({
+        id: users.id,
+        username: users.username,
+      })
+      .from(users)
+      .leftJoin(projectsUsers, eq(projectsUsers.userId, users.id))
+      .leftJoin(projects, eq(projects.id, projectsUsers.projectId))
+      .where(eq(projects.id, projectId));
+  }
+
+  /**
    * Gets a project by its id.
    * @param projectId Id of project to get
    * @returns the project
