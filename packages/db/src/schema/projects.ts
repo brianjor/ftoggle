@@ -1,4 +1,4 @@
-import { pgTable, serial, text, timestamp } from 'drizzle-orm/pg-core';
+import { boolean, pgTable, serial, text, timestamp } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm/relations';
 import { environments } from './environments';
 import { features } from './features';
@@ -13,6 +13,7 @@ export const projects = pgTable('projects', {
   modifiedAt: timestamp('modified_at', { withTimezone: true })
     .notNull()
     .defaultNow(),
+  isArchived: boolean('is_archived').notNull().default(false),
 });
 
 export const projectsRelations = relations(projects, ({ many }) => ({

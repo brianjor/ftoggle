@@ -75,7 +75,7 @@ export class ProjectsController {
   ) {
     await dbClient
       .update(projects)
-      .set({ name: updateFields.name })
+      .set({ name: updateFields.name, modifiedAt: new Date() })
       .where(eq(projects.id, projectId));
   }
 
@@ -167,5 +167,16 @@ export class ProjectsController {
           eq(projectsUsers.userId, userId),
         ),
       );
+  }
+
+  /**
+   * Archives a project.
+   * @param projectId Id of project to be archived
+   */
+  public async archiveProject(projectId: number) {
+    await dbClient
+      .update(projects)
+      .set({ isArchived: true, modifiedAt: new Date() })
+      .where(eq(projects.id, projectId));
   }
 }
