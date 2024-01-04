@@ -31,9 +31,7 @@ export const environmentsHandlers = new Elysia()
       beforeHandle: [
         ({ isSignedIn }) => isSignedIn(),
         ({ hasProjectPermissions }) =>
-          hasProjectPermissions(projectsController, [
-            ProjectPermission.CREATE_ENVIRONMENT,
-          ]),
+          hasProjectPermissions([ProjectPermission.CREATE_ENVIRONMENT]),
       ],
     },
   )
@@ -55,9 +53,7 @@ export const environmentsHandlers = new Elysia()
       beforeHandle: [
         ({ isSignedIn }) => isSignedIn(),
         ({ hasProjectPermissions }) =>
-          hasProjectPermissions(projectsController, [
-            ProjectPermission.VIEW_ENVIRONMENTS,
-          ]),
+          hasProjectPermissions([ProjectPermission.VIEW_ENVIRONMENTS]),
       ],
     },
   );

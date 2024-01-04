@@ -6,6 +6,7 @@ import { ProjectPermission, UserPermission } from '../enums/permissions';
 import { AuthorizationError } from '../errors/apiErrors';
 
 const usersController = new UsersController();
+const projectsController = new ProjectsController();
 
 export const hasPermissions = new Elysia({
   name: 'hooks:hasPermissions',
@@ -35,10 +36,7 @@ export const hasPermissions = new Elysia({
      * @throws A {@link RouteError} If ":projectId" is missing from the path parameters
      * @throws An {@link AuthorizationError} If the user does not have the required permissions
      */
-    hasProjectPermissions: async (
-      projectsController: ProjectsController,
-      requiredPermissions: ProjectPermission[],
-    ) => {
+    hasProjectPermissions: async (requiredPermissions: ProjectPermission[]) => {
       const authRequest = auth.handleRequest(context);
       const session = (await authRequest.validateBearerToken())!;
 

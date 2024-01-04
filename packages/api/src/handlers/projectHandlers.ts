@@ -56,9 +56,7 @@ export const projectHandlers = new Elysia()
       beforeHandle: [
         ({ isSignedIn }) => isSignedIn(),
         ({ hasProjectPermissions }) =>
-          hasProjectPermissions(projectsController, [
-            ProjectPermission.EDIT_PROJECT,
-          ]),
+          hasProjectPermissions([ProjectPermission.EDIT_PROJECT]),
       ],
     },
   )
@@ -80,9 +78,7 @@ export const projectHandlers = new Elysia()
       beforeHandle: [
         ({ isSignedIn }) => isSignedIn(),
         ({ hasProjectPermissions }) =>
-          hasProjectPermissions(projectsController, [
-            ProjectPermission.DELETE_PROJECT,
-          ]),
+          hasProjectPermissions([ProjectPermission.DELETE_PROJECT]),
       ],
     },
   );
