@@ -114,6 +114,24 @@ export class ProjectsController {
   }
 
   /**
+   * Gets an environment by its id.
+   * @param enviromentId Id of environment to get
+   * @returns the environment
+   * @throws An {@link RecordDoesNotExistError} if there is no environment with that id
+   */
+  public async getEnvironmentById(enviromentId: number) {
+    const env = await dbClient.query.environments.findFirst({
+      where: eq(environments.id, enviromentId),
+    });
+    if (env === undefined) {
+      throw new RecordDoesNotExistError(
+        `Environment with id: "${enviromentId}" does not exist`,
+      );
+    }
+    return env;
+  }
+
+  /**
    * Adds an environment to a project.
    * Attaches all of the projects features to the environment.
    * @param envName name of the environment
@@ -143,6 +161,29 @@ export class ProjectsController {
           featIds.map((fId) => ({ featureId: fId, environmentId: env.id })),
         );
       return env;
+    });
+    return env;
+  }
+
+  /**
+   * Delete an environment from a project.
+   * @param projectId id of project
+   * @param environmentId id of environment
+   * @throws A {@link RecordDoesNotExistError} if the environment does not have a relation to the project
+   */
+  public async deleteEnvironment(projectId: number, environmentId: number) {
+    const project = await this.getProjectById(projectId);
+    const env = await this.getEnvironmentById(environmentId);
+    if (project.id !== env.projectId) {
+      throw new RecordDoesNotExistError(
+        `Environment with id: "${environmentId}" does not exist on project with id: "${projectId}"`,
+      );
+    }
+    await dbClient.transaction(async (tx) => {
+      await tx
+        .delete(featuresEnvironments)
+        .where(eq(featuresEnvironments.environmentId, environmentId));
+      await tx.delete(environments).where(eq(environments.id, environmentId));
     });
     return env;
   }
