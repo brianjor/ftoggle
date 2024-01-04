@@ -127,6 +127,13 @@
       "when": 1704259996306,
       "tag": "0017_friendly_leo",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "5",
+      "when": 1704334481566,
+      "tag": "0018_whole_dagger",
+      "breakpoints": true
     }
   ]
 }

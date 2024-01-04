@@ -5,6 +5,7 @@ import {
   logoutHandler,
   signupHandler,
 } from './handlers/authHandlers';
+import { environmentsHandlers } from './handlers/environementsHandlers';
 import { featureHandlers } from './handlers/featureHandlers';
 import { featuresHandlers } from './handlers/featuresHandlers';
 import { projectHandlers } from './handlers/projectHandlers';
@@ -26,6 +27,8 @@ export const routes = new Elysia()
   ) // /auth
   .group('/projects', _ => _.use(projectsHandlers)
     .group('/:projectId', _ => _.use(projectHandlers)
+      .group('/environments', _ => _.use(environmentsHandlers)
+      ) // /environments
       .group('/features', _ => _.use(featuresHandlers)
         .group('/:featureId', _ => _.use(featureHandlers)
         ) // /:featureId

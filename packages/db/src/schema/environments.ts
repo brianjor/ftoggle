@@ -21,7 +21,9 @@ export const environments = pgTable(
     modifiedAt: timestamp('modified_at', { withTimezone: true })
       .notNull()
       .defaultNow(),
-    projectId: integer('project_id').references(() => projects.id),
+    projectId: integer('project_id')
+      .notNull()
+      .references(() => projects.id),
   },
   (t) => ({
     unq: unique().on(t.name, t.projectId),

@@ -1,6 +1,8 @@
 import { dbClient } from '@ftoggle/db/connection';
 import {
   environments,
+  features,
+  featuresEnvironments,
   permissions,
   projects,
   projectsUsers,
@@ -111,13 +113,38 @@ export class ProjectsController {
     });
   }
 
+  /**
+   * Adds an environment to a project.
+   * Attaches all of the projects features to the environment.
+   * @param envName name of the environment
+   * @param projectId id of the project
+   * @returns the newly created environment
+   */
   public async addEnvironment(envName: string, projectId: number) {
-    return (
-      await dbClient
-        .insert(environments)
-        .values({ name: envName, projectId })
-        .returning()
-    )[0];
+    const env = await dbClient.transaction(async (tx) => {
+      // Create the environment
+      const env = (
+        await tx
+          .insert(environments)
+          .values({ name: envName, projectId })
+          .returning()
+      )[0];
+      // Get all the projects features
+      const featIds = (
+        await tx
+          .select({ id: features.id })
+          .from(features)
+          .where(eq(features.projectId, projectId))
+      ).map((f) => f.id);
+      // Attach all features to the environment
+      await tx
+        .insert(featuresEnvironments)
+        .values(
+          featIds.map((fId) => ({ featureId: fId, environmentId: env.id })),
+        );
+      return env;
+    });
+    return env;
   }
 
   /**
