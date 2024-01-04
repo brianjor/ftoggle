@@ -115,13 +115,17 @@ export class ProjectsController {
 
   /**
    * Gets an environment by its id.
+   * @param projectId Id of project the environment is attached to
    * @param enviromentId Id of environment to get
    * @returns the environment
    * @throws An {@link RecordDoesNotExistError} if there is no environment with that id
    */
-  public async getEnvironmentById(enviromentId: number) {
+  public async getEnvironmentById(projectId: number, enviromentId: number) {
     const env = await dbClient.query.environments.findFirst({
-      where: eq(environments.id, enviromentId),
+      where: and(
+        eq(environments.id, enviromentId),
+        eq(environments.projectId, projectId),
+      ),
     });
     if (env === undefined) {
       throw new RecordDoesNotExistError(
@@ -173,7 +177,7 @@ export class ProjectsController {
    */
   public async deleteEnvironment(projectId: number, environmentId: number) {
     const project = await this.getProjectById(projectId);
-    const env = await this.getEnvironmentById(environmentId);
+    const env = await this.getEnvironmentById(projectId, environmentId);
     if (project.id !== env.projectId) {
       throw new RecordDoesNotExistError(
         `Environment with id: "${environmentId}" does not exist on project with id: "${projectId}"`,
