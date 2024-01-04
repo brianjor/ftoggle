@@ -29,7 +29,8 @@ export const routes = new Elysia()
   .group('/projects', _ => _.use(projectsHandlers)
     .group('/:projectId', _ => _.use(projectHandlers)
       .group('/environments', _ => _.use(environmentsHandlers)
-        .group('/:environmentId', _ => _.use(environmentHandlers))
+        .group('/:environmentId', _ => _.use(environmentHandlers)
+        ) // /:environmentId
       ) // /environments
       .group('/features', _ => _.use(featuresHandlers)
         .group('/:featureId', _ => _.use(featureHandlers)
