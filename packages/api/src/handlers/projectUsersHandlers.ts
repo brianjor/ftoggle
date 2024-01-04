@@ -47,9 +47,7 @@ export const projectUsersHandlers = new Elysia()
       beforeHandle: [
         ({ isSignedIn }) => isSignedIn(),
         ({ hasProjectPermissions }) =>
-          hasProjectPermissions(projectsController, [
-            ProjectPermission.ADD_USER,
-          ]),
+          hasProjectPermissions([ProjectPermission.ADD_USER]),
       ],
     },
   )
@@ -84,9 +82,7 @@ export const projectUsersHandlers = new Elysia()
       beforeHandle: [
         ({ isSignedIn }) => isSignedIn(),
         ({ hasProjectPermissions }) =>
-          hasProjectPermissions(projectsController, [
-            ProjectPermission.VIEW_USERS,
-          ]),
+          hasProjectPermissions([ProjectPermission.VIEW_USERS]),
       ],
     },
   );
