@@ -58,7 +58,8 @@ export const projectsHandlers = new Elysia()
       }),
       beforeHandle: [
         ({ isSignedIn }) => isSignedIn(),
-        ({ hasPermissions }) => hasPermissions([UserPermission.CREATE_PROJECT]),
+        ({ hasUserPermissions: hasPermissions }) =>
+          hasPermissions([UserPermission.CREATE_PROJECT]),
       ],
     },
   );

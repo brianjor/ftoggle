@@ -36,7 +36,7 @@ export const userRoleHandlers = new Elysia().use(hooks).delete(
     },
     beforeHandle: [
       ({ isSignedIn }) => isSignedIn(),
-      ({ hasPermissions }) =>
+      ({ hasUserPermissions: hasPermissions }) =>
         hasPermissions([UserPermission.REMOVE_ROLE_FROM_USER]),
     ],
   },

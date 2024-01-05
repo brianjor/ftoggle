@@ -12,7 +12,7 @@ export const hasPermissions = new Elysia({
   name: 'hooks:hasPermissions',
 }).derive((context) => {
   return {
-    hasPermissions: async (requiredPermissions: UserPermission[]) => {
+    hasUserPermissions: async (requiredPermissions: UserPermission[]) => {
       const authRequest = auth.handleRequest(context);
       const session = (await authRequest.validateBearerToken())!;
 

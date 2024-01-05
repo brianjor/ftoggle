@@ -29,7 +29,8 @@ export const usersHandlers = new Elysia().use(hooks).get(
     },
     beforeHandle: [
       ({ isSignedIn }) => isSignedIn(),
-      ({ hasPermissions }) => hasPermissions([UserPermission.VIEW_USERS]),
+      ({ hasUserPermissions: hasPermissions }) =>
+        hasPermissions([UserPermission.VIEW_USERS]),
     ],
   },
 );
