@@ -50,7 +50,8 @@ export const signupHandler = new Elysia().use(hooks).post(
     response: t.String(),
     beforeHandle: [
       ({ isSignedIn }) => isSignedIn(),
-      ({ hasPermissions }) => hasPermissions([UserPermission.CREATE_USER]),
+      ({ hasUserPermissions: hasPermissions }) =>
+        hasPermissions([UserPermission.CREATE_USER]),
     ],
   },
 );

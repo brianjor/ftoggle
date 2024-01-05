@@ -34,7 +34,8 @@ export const userRolesHandlers = new Elysia().use(hooks).post(
     },
     beforeHandle: [
       ({ isSignedIn }) => isSignedIn(),
-      ({ hasPermissions }) => hasPermissions([UserPermission.ADD_ROLE_TO_USER]),
+      ({ hasUserPermissions: hasPermissions }) =>
+        hasPermissions([UserPermission.ADD_ROLE_TO_USER]),
     ],
   },
 );
