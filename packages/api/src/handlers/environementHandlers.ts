@@ -50,13 +50,14 @@ export const environmentHandlers = new Elysia()
     '',
     async ({ params }) => {
       const { projectId, environmentId } = params;
-      const project = await projectsController.getProjectById(projectId);
-      const env = await projectsController.deleteEnvironment(
-        projectId,
-        environmentId,
-      );
+      const { project, ...environment } =
+        await projectsController.getProjectsEnvironmentsRelation(
+          projectId,
+          environmentId,
+        );
+      await projectsController.deleteEnvironment(projectId, environmentId);
 
-      return `Deleted environment: "${env.name}" from project: "${project.name}"`;
+      return `Deleted environment: "${environment.name}" from project: "${project.name}"`;
     },
     {
       params: t.Object({
