@@ -219,6 +219,63 @@ export class ProjectsController {
   }
 
   /**
+   * Gets a project user relation.
+   * @param projectId id of project
+   * @param userId id of user
+   * @returns The project and user if the relation exists
+   * @throws A {@link RecordDoesNotExistError} if no relation exists
+   */
+  async getProjectsUsersRelation(projectId: number, userId: string) {
+    const projectUserRelation = await dbClient.query.projectsUsers.findFirst({
+      where: and(
+        eq(projectsUsers.projectId, projectId),
+        eq(projectsUsers.userId, userId),
+      ),
+      with: {
+        project: true,
+        user: true,
+      },
+    });
+    if (projectUserRelation === undefined) {
+      throw new RecordDoesNotExistError(
+        `No relation exists between user with id: "${userId}" and project with id: "${projectId}".`,
+      );
+    }
+    const { project, user } = projectUserRelation;
+    return { project, user };
+  }
+
+  /**
+   * Gets a project environment relation.
+   * @param projectId id of project
+   * @param environmentId id of environment
+   * @param options extra options
+   * @returns The project and environment relation
+   * @throws A {@link RecordDoesNotExistError} if no relation exists
+   */
+  async getProjectsEnvironmentsRelation(
+    projectId: number,
+    environmentId: number,
+  ) {
+    const projectEnvironmentRelation =
+      await dbClient.query.environments.findFirst({
+        where: and(
+          eq(environments.id, environmentId),
+          eq(environments.projectId, projectId),
+        ),
+        with: {
+          project: true,
+        },
+      });
+    if (projectEnvironmentRelation === undefined) {
+      throw new RecordDoesNotExistError(
+        `No relation exists between project with id: "${projectId}" and environment with id: "${environmentId}".`,
+      );
+    }
+    return projectEnvironmentRelation;
+  }
+
+  /**
    * Removes a user from a project. Will not error if user is not a user on the project.
    * @param userId Id of user to remove
    */

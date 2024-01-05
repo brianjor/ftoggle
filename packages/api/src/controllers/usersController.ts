@@ -127,4 +127,28 @@ export class UsersController {
       .delete(usersRoles)
       .where(and(eq(usersRoles.userId, userId), eq(usersRoles.roleId, roleId)));
   }
+
+  /**
+   * Gets a user role relation.
+   * @param userId id of user
+   * @param roleId id of role
+   * @returns The user and role if the relation exists
+   * @throws A {@link RecordDoesNotExistError} if no relation exists
+   */
+  public async getUsersRolesRelation(userId: string, roleId: number) {
+    const relation = await dbClient.query.usersRoles.findFirst({
+      where: and(eq(usersRoles.userId, userId), eq(usersRoles.roleId, roleId)),
+      with: {
+        user: true,
+        role: true,
+      },
+    });
+    if (relation === undefined) {
+      throw new RecordDoesNotExistError(
+        `No relation exists between user with id: "${userId}" and role with id: "${roleId}".`,
+      );
+    }
+    const { user, role } = relation;
+    return { user, role };
+  }
 }

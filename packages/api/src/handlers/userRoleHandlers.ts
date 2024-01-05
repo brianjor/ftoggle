@@ -1,18 +1,18 @@
 import Elysia, { t } from 'elysia';
-import { RolesController } from '../controllers/rolesController';
 import { UsersController } from '../controllers/usersController';
 import { UserPermission } from '../enums/permissions';
 import { hooks } from '../hooks';
 
 const usersController = new UsersController();
-const rolesController = new RolesController();
 
 export const userRoleHandlers = new Elysia().use(hooks).delete(
   '',
   async ({ set, params }) => {
     const { userId, roleId } = params;
-    const user = await usersController.getUserById(userId);
-    const role = await rolesController.getRoleById(roleId);
+    const { user, role } = await usersController.getUsersRolesRelation(
+      userId,
+      roleId,
+    );
 
     if (user.username === 'Admin') {
       set.status = 400;
