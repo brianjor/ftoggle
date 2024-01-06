@@ -1,0 +1,19 @@
+#login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  .login-form-container {
+    max-width: 20rem;
+    min-width: 15rem;
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      .button-container {
+        display: flex;
+        flex-direction: row-reverse;
+      }
+    }
+  }
+}
