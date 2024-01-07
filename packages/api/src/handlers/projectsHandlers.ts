@@ -27,7 +27,10 @@ export const projectsHandlers = new Elysia()
         data: t.Object({
           projects: t.Array(
             t.Object({
+              id: t.Number(),
               name: t.String(),
+              createdAt: t.Date(),
+              modifiedAt: t.Date(),
             }),
           ),
         }),

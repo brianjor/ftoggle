@@ -1,0 +1,5 @@
+<ul>
+  @for (project of projects(); track $index) {
+    <li>ID: {{ project.id }}, Name: {{ project.name }}</li>
+  }
+</ul>

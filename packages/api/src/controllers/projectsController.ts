@@ -19,7 +19,10 @@ export class ProjectsController {
   public async getProjects(userId: string) {
     return await dbClient
       .select({
+        id: projects.id,
         name: projects.name,
+        createdAt: projects.createdAt,
+        modifiedAt: projects.modifiedAt,
       })
       .from(projects)
       .leftJoin(projectsUsers, eq(projects.id, projectsUsers.projectId))
