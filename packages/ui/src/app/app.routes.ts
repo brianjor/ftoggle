@@ -1,8 +1,18 @@
 import { Routes } from '@angular/router';
+import { isSignedIn } from './guards/isSignedIn';
 import { LoginComponent } from './pages/login/login.component';
 import { ProjectsComponent } from './pages/projects/projects.component';
 
+export const paths = {
+  login: 'login',
+  projects: 'projects',
+};
+
 export const routes: Routes = [
-  { path: 'login', component: LoginComponent },
-  { path: 'projects', component: ProjectsComponent },
+  { path: paths.login, component: LoginComponent },
+  {
+    path: paths.projects,
+    component: ProjectsComponent,
+    canActivate: [isSignedIn],
+  },
 ];
