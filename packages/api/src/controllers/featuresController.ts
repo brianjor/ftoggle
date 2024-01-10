@@ -16,17 +16,18 @@ export class FeaturesController {
    * @returns the created feature
    */
   public async addFeature(name: string, projectId: number) {
-    const environments =
-      await this.projectsController.getEnvironments(projectId);
+    const envs = await this.projectsController.getEnvironments(projectId);
     const feature = (
       await dbClient.insert(features).values({ name, projectId }).returning()
     )[0];
-    await dbClient.insert(featuresEnvironments).values(
-      environments.map((env) => ({
-        featureId: feature.id,
-        environmentId: env.id,
-      })),
-    );
+    if (envs.length > 0) {
+      await dbClient.insert(featuresEnvironments).values(
+        envs.map((env) => ({
+          featureId: feature.id,
+          environmentId: env.id,
+        })),
+      );
+    }
     return feature;
   }
 

@@ -162,11 +162,13 @@ export class ProjectsController {
           .where(eq(features.projectId, projectId))
       ).map((f) => f.id);
       // Attach all features to the environment
-      await tx
-        .insert(featuresEnvironments)
-        .values(
-          featIds.map((fId) => ({ featureId: fId, environmentId: env.id })),
-        );
+      if (featIds.length > 0) {
+        await tx
+          .insert(featuresEnvironments)
+          .values(
+            featIds.map((fId) => ({ featureId: fId, environmentId: env.id })),
+          );
+      }
       return env;
     });
     return env;
