@@ -1,5 +1,11 @@
 import { Component } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -19,14 +25,22 @@ import { LoginService } from '../../services/login.service';
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
-  username = new FormControl('');
-  password = new FormControl('');
+  username = new FormControl('', [Validators.required]);
+  password = new FormControl('', [Validators.required]);
+  loginForm = this.formBuilder.group({
+    username: this.username,
+    password: this.password,
+  });
 
-  constructor(private loginService: LoginService) {}
+  constructor(
+    private loginService: LoginService,
+    private formBuilder: FormBuilder,
+  ) {}
 
   handleLogin = () => {
-    if (this.username.value && this.password.value) {
-      this.loginService.login(this.username.value, this.password.value);
-    }
+    if (!this.loginForm.valid) return;
+    const username = this.loginForm.controls.username.value as string;
+    const password = this.loginForm.controls.password.value as string;
+    this.loginService.login(username, password);
   };
 }

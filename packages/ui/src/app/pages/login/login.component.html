@@ -1,6 +1,6 @@
 <div id="login-page">
   <div class="login-form-container">
-    <form class="login-form">
+    <form class="login-form" [formGroup]="loginForm" (ngSubmit)="handleLogin()">
       <mat-form-field id="usernameFormField">
         <mat-label>Username</mat-label>
         <input
@@ -9,6 +9,9 @@
           placeholder="Username"
           [formControl]="username"
         />
+        @if (username.hasError('required')) {
+          <mat-error>Username is required</mat-error>
+        }
       </mat-form-field>
       <mat-form-field id="passwordFormField">
         <mat-label>Password</mat-label>
@@ -19,9 +22,17 @@
           type="password"
           [formControl]="password"
         />
+        @if (password.hasError('required')) {
+          <mat-error>Password is required</mat-error>
+        }
       </mat-form-field>
       <div class="button-container">
-        <button mat-flat-button color="primary" (click)="handleLogin()">
+        <button
+          mat-flat-button
+          [disabled]="!loginForm.valid"
+          color="primary"
+          type="submit"
+        >
           Log in
         </button>
       </div>
