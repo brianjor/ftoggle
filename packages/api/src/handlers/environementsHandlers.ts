@@ -1,6 +1,11 @@
 import Elysia, { t } from 'elysia';
 import { ProjectsController } from '../controllers/projectsController';
 import { ProjectPermission } from '../enums/permissions';
+import {
+  BadRequestResponse,
+  ForbiddenResponse,
+  UnathorizedResponse,
+} from '../helpers/responses';
 import { hooks } from '../hooks';
 
 const projectsController = new ProjectsController();
@@ -28,6 +33,12 @@ export const environmentsHandlers = new Elysia()
       body: t.Object({
         environmentName: t.String(),
       }),
+      response: {
+        200: t.String(),
+        400: BadRequestResponse,
+        401: UnathorizedResponse,
+        403: ForbiddenResponse,
+      },
       beforeHandle: [
         ({ isSignedIn }) => isSignedIn(),
         ({ hasProjectPermissions }) =>
