@@ -46,6 +46,7 @@ export const hasPermissions = new Elysia({
         );
       }
       const projectId = (context.params as { projectId: number }).projectId;
+      await projectsController.getProjectById(projectId);
       const permissions = await projectsController.getUsersPermissions(
         projectId,
         session.user.userId,
