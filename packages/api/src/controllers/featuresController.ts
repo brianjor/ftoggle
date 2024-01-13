@@ -31,11 +31,44 @@ export class FeaturesController {
     return feature;
   }
 
+  /**
+   * Gets features for a project.
+   * @param projectId id of project
+   * @returns list of features
+   */
   public async getFeatures(projectId: number) {
-    return await dbClient
-      .select()
-      .from(features)
-      .where(eq(features.projectId, projectId));
+    return (
+      await dbClient.query.features.findMany({
+        where: eq(features.projectId, projectId),
+        columns: {
+          id: true,
+          name: true,
+        },
+        with: {
+          environments: {
+            columns: {
+              isEnabled: true,
+            },
+            with: {
+              environment: {
+                columns: {
+                  id: true,
+                  name: true,
+                },
+              },
+            },
+          },
+        },
+      })
+    ).map((f) => ({
+      id: f.id,
+      name: f.name,
+      environments: f.environments.map((e) => ({
+        isEnabled: e.isEnabled,
+        id: e.environment.id,
+        name: e.environment.name,
+      })),
+    }));
   }
 
   public async getFeature(featureId: number) {
