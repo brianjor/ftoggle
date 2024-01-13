@@ -2,11 +2,14 @@ import { Routes } from '@angular/router';
 import { isSignedIn } from './guards/isSignedIn';
 import { LoginComponent } from './pages/login/login.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
+import { ProjectFeaturesComponent } from './pages/project-features/project-features.component';
 import { ProjectsComponent } from './pages/projects/projects.component';
 
 export const paths = {
+  notFound: '**',
   login: 'login',
   projects: 'projects',
+  projectFeatures: 'projects/:projectId/features',
 };
 
 export const routes: Routes = [
@@ -16,5 +19,10 @@ export const routes: Routes = [
     component: ProjectsComponent,
     canActivate: [isSignedIn],
   },
-  { path: '**', component: PageNotFoundComponent },
+  {
+    path: paths.projectFeatures,
+    component: ProjectFeaturesComponent,
+    canActivate: [isSignedIn],
+  },
+  { path: paths.notFound, component: PageNotFoundComponent },
 ];

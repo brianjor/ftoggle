@@ -1,0 +1,15 @@
+<ul>
+  @for (feature of features(); track $index) {
+    <li>
+      <div>
+        <div>ID: {{ feature.id }}, Name: {{ feature.name }}</div>
+        <div>Environments</div>
+        <ul>
+          @for (env of feature.environments; track $index) {
+            <li>"{{ env.name }}" | {{ env.isEnabled }}</li>
+          }
+        </ul>
+      </div>
+    </li>
+  }
+</ul>
