@@ -4,7 +4,6 @@ import { Static, t } from 'elysia';
 export const featuresTableItem = t.Object({
   id: t.Number(),
   name: t.String(),
-  isEnabled: t.Boolean(),
   createdAt: t.Date(),
   modifiedAt: t.Date(),
   projectId: t.Number(),

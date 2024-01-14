@@ -1,5 +1,4 @@
 import {
-  boolean,
   integer,
   pgTable,
   serial,
@@ -16,7 +15,6 @@ export const features = pgTable(
   {
     id: serial('id').primaryKey(),
     name: varchar('name', { length: 256 }).notNull(),
-    isEnabled: boolean('isEnabled').default(false).notNull(),
     createdAt: timestamp('created_at', { withTimezone: true })
       .notNull()
       .defaultNow(),
