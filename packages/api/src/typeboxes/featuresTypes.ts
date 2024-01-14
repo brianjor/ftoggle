@@ -1,7 +1,7 @@
 import { Static, t } from 'elysia';
 
 /** DTO of a feature from the `features` table. */
-export const FeaturesTableItem = t.Object({
+export const featuresTableItem = t.Object({
   id: t.Number(),
   name: t.String(),
   isEnabled: t.Boolean(),
@@ -10,7 +10,7 @@ export const FeaturesTableItem = t.Object({
   projectId: t.Number(),
 });
 
-export type FeaturesTableItem = Static<typeof FeaturesTableItem>;
+export type FeaturesTableItem = Static<typeof featuresTableItem>;
 
 export const getFeaturesItem = t.Object({
   id: t.Number(),

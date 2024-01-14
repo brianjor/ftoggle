@@ -4,7 +4,7 @@ import { ProjectsController } from '../controllers/projectsController';
 import { ProjectPermission } from '../enums/permissions';
 import { hooks } from '../hooks';
 import { DataContract } from '../typeboxes/common';
-import { FeaturesTableItem } from '../typeboxes/featuresTypes';
+import { featuresTableItem } from '../typeboxes/featuresTypes';
 
 const projectsController = new ProjectsController();
 const featuresController = new FeaturesController(projectsController);
@@ -83,7 +83,7 @@ export const featureHandlers = new Elysia()
       ),
       response: DataContract(
         t.Object({
-          updatedFeature: FeaturesTableItem,
+          updatedFeature: featuresTableItem,
         }),
       ),
       beforeHandle: [
