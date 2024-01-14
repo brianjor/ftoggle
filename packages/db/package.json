@@ -19,7 +19,8 @@
     "studio": "drizzle-kit studio"
   },
   "devDependencies": {
-    "bun-types": "latest"
+    "bun-types": "latest",
+    "drizzle-kit": "^0.20.12"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
