@@ -1,5 +1,9 @@
 <ul>
   @for (project of projects(); track $index) {
-    <li>ID: {{ project.id }}, Name: {{ project.name }}</li>
+    <li>
+      <a routerLink="{{ paths.toProjectFeatures(project.id) }}">{{
+        project.name
+      }}</a>
+    </li>
   }
 </ul>

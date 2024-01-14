@@ -10,6 +10,8 @@ export const paths = {
   login: 'login',
   projects: 'projects',
   projectFeatures: 'projects/:projectId/features',
+  toProjectFeatures: (projectId: string | number) =>
+    `/${paths.projectFeatures.replace(':projectId', projectId.toString())}`,
 };
 
 export const routes: Routes = [
