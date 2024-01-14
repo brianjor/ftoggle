@@ -134,6 +134,13 @@
       "when": 1704334481566,
       "tag": "0018_whole_dagger",
       "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "5",
+      "when": 1705205912276,
+      "tag": "0019_slim_nuke",
+      "breakpoints": true
     }
   ]
 }
