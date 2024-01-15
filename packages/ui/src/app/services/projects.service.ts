@@ -24,4 +24,18 @@ export class ProjectsService {
       .then((res) => this._projects.set(res.data?.data.projects ?? []))
       .catch((err) => console.log('Error getting projects', err));
   }
+
+  async createProject(project: { name: string }) {
+    try {
+      const res = await this.api.projects.post({
+        $headers: {
+          Authorization: `Bearer ${this.local.getApiToken()}`,
+        },
+        projectName: project.name,
+      });
+      console.log(res);
+    } catch (err) {
+      console.error('Error creating project', err);
+    }
+  }
 }
