@@ -3,6 +3,8 @@ import { ProjectsController } from '../controllers/projectsController';
 import { ProjectPermission } from '../enums/permissions';
 import { RecordDoesNotExistError } from '../errors/dbErrors';
 import { hooks } from '../hooks';
+import { DataContract } from '../typeboxes/common';
+import { projectWithFeaturesAndEnvironments } from '../typeboxes/projectsTypes';
 
 const projectsController = new ProjectsController();
 
@@ -28,14 +30,11 @@ export const projectHandlers = new Elysia()
       params: t.Object({
         projectId: t.Numeric(),
       }),
-      response: t.Object({
-        data: t.Object({
-          project: t.Object({
-            id: t.Number(),
-            name: t.String(),
-          }),
+      response: DataContract(
+        t.Object({
+          project: projectWithFeaturesAndEnvironments,
         }),
-      }),
+      ),
       beforeHandle: [({ isSignedIn }) => isSignedIn()],
     },
   )
