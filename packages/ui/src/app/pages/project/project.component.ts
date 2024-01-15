@@ -9,6 +9,7 @@ import {
   FeatureWithEnvironments,
 } from '@ftoggle/api/types';
 import { environment } from '../../../environments/environment';
+import { LocalStorageService } from '../../services/local-storage.service';
 
 @Component({
   selector: 'app-project',
@@ -24,7 +25,10 @@ export class ProjectComponent {
   environments = signal<EnvironmentsTableItem[]>([]);
   displayedColumns = ['name', 'created'];
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    private local: LocalStorageService,
+  ) {}
 
   ngOnInit() {
     const projectId = this.route.snapshot.paramMap.get('projectId');
@@ -42,7 +46,7 @@ export class ProjectComponent {
     this.api.projects[this.projectId]
       .get({
         $headers: {
-          Authorization: `Bearer ${localStorage.getItem('apiToken')}`,
+          Authorization: `Bearer ${this.local.getApiToken()}`,
         },
       })
       .then((res) => {
