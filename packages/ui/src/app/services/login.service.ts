@@ -5,13 +5,17 @@ import type { App } from '@ftoggle/api';
 import { from } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { paths } from '../app.routes';
+import { LocalStorageService } from './local-storage.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LoginService {
   api = edenFetch<App>(environment.apiBaseUrl);
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private local: LocalStorageService,
+  ) {}
 
   login(username: string, password: string) {
     from(
@@ -20,7 +24,7 @@ export class LoginService {
       next: (response) => {
         if (response.status === 200) {
           console.info('Successful login');
-          localStorage.setItem('apiToken', response.data?.accessToken ?? '');
+          this.local.setApiToken(response.data?.accessToken ?? '');
           this.router.navigate([paths.projects]);
         }
       },

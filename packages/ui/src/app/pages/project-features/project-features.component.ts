@@ -4,6 +4,7 @@ import { edenTreaty } from '@elysiajs/eden';
 import { App } from '@ftoggle/api';
 import { type GetFeaturesItem } from '@ftoggle/api/types';
 import { environment } from '../../../environments/environment';
+import { LocalStorageService } from '../../services/local-storage.service';
 
 @Component({
   selector: 'app-project-features',
@@ -17,7 +18,10 @@ export class ProjectFeaturesComponent {
   private projectId = '';
   protected features = signal<GetFeaturesItem[]>([]);
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    private local: LocalStorageService,
+  ) {}
 
   ngOnInit() {
     const projectId = this.route.snapshot.paramMap.get('projectId');
@@ -35,7 +39,7 @@ export class ProjectFeaturesComponent {
     this.api.projects[this.projectId].features
       .get({
         $headers: {
-          Authorization: `Bearer ${localStorage.getItem('apiToken')}`,
+          Authorization: `Bearer ${this.local.getApiToken()}`,
         },
       })
       .then((res) => this.features.set(res.data?.data.features ?? []))
