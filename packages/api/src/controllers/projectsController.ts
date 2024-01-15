@@ -57,7 +57,16 @@ export class ProjectsController {
     const project = await dbClient.query.projects.findFirst({
       where: eq(projects.id, projectId),
       with: {
-        features: true,
+        features: {
+          with: {
+            environments: {
+              with: {
+                environment: true,
+              },
+            },
+          },
+        },
+        environments: true,
       },
     });
     if (project === undefined) {
