@@ -1,5 +1,6 @@
-<button mat-icon-button color="primary" (click)="openCreateProjectDialog()">
+<button mat-fab extended color="primary" (click)="openCreateProjectDialog()">
   <mat-icon>add</mat-icon>
+  Project
 </button>
 <ul>
   @for (project of projects(); track $index) {

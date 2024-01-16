@@ -1,0 +1,37 @@
+<h1 mat-dialog-title>Create Feature</h1>
+<mat-dialog-content>
+  <form
+    class="create-feature-form"
+    [formGroup]="createFeatureForm"
+    (ngSubmit)="createFeature()"
+  >
+    <mat-form-field id="featureNameFormField">
+      <mat-label>Name</mat-label>
+      <input matInput id="name" placeholder="Name" [formControl]="name" />
+      @if (name.getError('hasExtraWhitespace')?.isBlank) {
+        <mat-error>Cannot be blank</mat-error>
+      } @else if (name.getError('hasExtraWhitespace')?.hasTrailing) {
+        <mat-error>Cannot have trailing whitespace</mat-error>
+      } @else if (name.getError('hasExtraWhitespace')?.hasLeading) {
+        <mat-error>Cannot have leading whitespace</mat-error>
+      } @else if (name.hasError('required')) {
+        <mat-error>Name is required</mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="closeDialog()">Cancel</button>
+  <button
+    mat-flat-button
+    color="primary"
+    [disabled]="!createFeatureForm.valid"
+    (click)="createFeature()"
+  >
+    @if (!inFlight()) {
+      Create
+    } @else {
+      Creating
+    }
+  </button>
+</mat-dialog-actions>
