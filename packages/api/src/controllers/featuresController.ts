@@ -115,35 +115,4 @@ export class FeaturesController {
         .returning()
     )[0];
   }
-
-  /**
-   * Gets a feature environment relation.
-   * @param featureId id of feature
-   * @param userId id of environment
-   * @param options extra options
-   * @returns The feature and environment
-   * @throws A {@link RecordDoesNotExistError} if no relation exists
-   */
-  public async getFeaturesEnvironmentsRelation(
-    featureId: number,
-    environmentId: number,
-  ) {
-    const featureEnvironmentRelation =
-      await dbClient.query.featuresEnvironments.findFirst({
-        where: and(
-          eq(featuresEnvironments.featureId, featureId),
-          eq(featuresEnvironments.environmentId, environmentId),
-        ),
-        with: {
-          environment: true,
-          feature: true,
-        },
-      });
-    if (featureEnvironmentRelation === undefined) {
-      throw new RecordDoesNotExistError(
-        `No relation exists between feature with id: "${featureId}" and environment with id: "${environmentId}".`,
-      );
-    }
-    return featureEnvironmentRelation;
-  }
 }
