@@ -61,7 +61,7 @@ export class ProjectComponent {
 
   getProject() {
     this.displayedColumns = [...this.BASE_COLUMNS];
-    this.api.projects[this.projectId]
+    this.api.api.projects[this.projectId]
       .get({
         $headers: {
           Authorization: `Bearer ${this.local.getApiToken()}`,

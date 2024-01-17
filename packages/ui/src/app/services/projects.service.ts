@@ -15,7 +15,7 @@ export class ProjectsService {
   constructor(private local: LocalStorageService) {}
 
   getProjects() {
-    this.api.projects
+    this.api.api.projects
       .get({
         $headers: {
           Authorization: `Bearer ${this.local.getApiToken()}`,
@@ -27,7 +27,7 @@ export class ProjectsService {
 
   async createProject(project: { name: string }) {
     try {
-      const res = await this.api.projects.post({
+      const res = await this.api.api.projects.post({
         $headers: {
           Authorization: `Bearer ${this.local.getApiToken()}`,
         },

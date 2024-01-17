@@ -19,7 +19,10 @@ export class LoginService {
 
   login(username: string, password: string) {
     from(
-      this.api('/auth/login', { method: 'POST', body: { username, password } }),
+      this.api('/api/auth/login', {
+        method: 'POST',
+        body: { username, password },
+      }),
     ).subscribe({
       next: (response) => {
         if (response.status === 200) {
