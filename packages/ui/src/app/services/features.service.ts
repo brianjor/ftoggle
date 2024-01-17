@@ -14,7 +14,7 @@ export class FeaturesService {
 
   async createFeature(projectId: number, feature: { name: string }) {
     try {
-      await this.api('/projects/:projectId/features', {
+      await this.api('/api/projects/:projectId/features', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${this.local.getApiToken()}`,
@@ -38,7 +38,7 @@ export class FeaturesService {
   ) {
     try {
       await this.api(
-        '/projects/:projectId/features/:featureId/environments/:environmentId',
+        '/api/projects/:projectId/features/:featureId/environments/:environmentId',
         {
           method: 'PUT',
           headers: {

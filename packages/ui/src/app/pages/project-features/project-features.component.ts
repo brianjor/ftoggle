@@ -36,7 +36,7 @@ export class ProjectFeaturesComponent {
   }
 
   getFeatures() {
-    this.api.projects[this.projectId].features
+    this.api.api.projects[this.projectId].features
       .get({
         $headers: {
           Authorization: `Bearer ${this.local.getApiToken()}`,
