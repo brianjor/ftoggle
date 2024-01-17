@@ -30,4 +30,29 @@ export class FeaturesService {
       console.error('Error creating feature', err);
     }
   }
+
+  async toggleFeature(
+    projectId: string,
+    featureId: number,
+    environmentId: number,
+  ) {
+    try {
+      await this.api(
+        '/projects/:projectId/features/:featureId/environments/:environmentId',
+        {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${this.local.getApiToken()}`,
+          },
+          params: {
+            projectId: +projectId,
+            featureId,
+            environmentId,
+          },
+        },
+      );
+    } catch (err) {
+      console.error('Error toggling feature', err);
+    }
+  }
 }
