@@ -30,7 +30,12 @@
     <ng-container matColumnDef="{{ env.name }}">
       <th mat-header-cell *matHeaderCellDef>{{ env.name }}</th>
       <td mat-cell *matCellDef="let feature">
-        {{ findEnvironment(feature, env)!.isEnabled }}
+        <mat-slide-toggle
+          id="{{ feature.id }}-{{ env.id }}-toggle"
+          hideIcon="true"
+          (change)="toggleFeature(feature, env)"
+          [checked]="findEnvironment(feature, env)!.isEnabled"
+        ></mat-slide-toggle>
       </td>
     </ng-container>
   }

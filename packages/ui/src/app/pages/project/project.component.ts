@@ -3,6 +3,7 @@ import { Component, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTableModule } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { edenTreaty } from '@elysiajs/eden';
@@ -13,6 +14,7 @@ import {
 } from '@ftoggle/api/types';
 import { environment } from '../../../environments/environment';
 import { CreateFeatureDialogComponent } from '../../components/create-feature-dialog/create-feature-dialog.component';
+import { FeaturesService } from '../../services/features.service';
 import { LocalStorageService } from '../../services/local-storage.service';
 
 @Component({
@@ -23,6 +25,7 @@ import { LocalStorageService } from '../../services/local-storage.service';
     CommonModule,
     MatButtonModule,
     MatIconModule,
+    MatSlideToggleModule,
     MatTableModule,
   ],
   templateUrl: './project.component.html',
@@ -35,10 +38,12 @@ export class ProjectComponent {
   environments = signal<EnvironmentsTableItem[]>([]);
   BASE_COLUMNS = ['name', 'created'];
   displayedColumns = [...this.BASE_COLUMNS];
+  toggleFeatureInFlight = false;
 
   constructor(
-    private route: ActivatedRoute,
+    private featuresService: FeaturesService,
     private local: LocalStorageService,
+    private route: ActivatedRoute,
     public dialog: MatDialog,
   ) {}
 
@@ -84,5 +89,21 @@ export class ProjectComponent {
       { data: { projectId: this.projectId } },
     );
     createFeatureDialogRef.afterClosed().subscribe(() => this.getProject());
+  }
+
+  async toggleFeature(
+    feature: FeatureWithEnvironments,
+    env: EnvironmentsTableItem,
+  ) {
+    if (this.toggleFeatureInFlight) return;
+    this.toggleFeatureInFlight = true;
+    this.featuresService
+      .toggleFeature(this.projectId, feature.id, env.id)
+      .then(() => {
+        const updatedEnv = this.findEnvironment(feature, env)!;
+        updatedEnv.isEnabled = !updatedEnv?.isEnabled;
+      })
+      .catch((err) => console.error('Error toggling feature', err))
+      .finally(() => (this.toggleFeatureInFlight = false));
   }
 }
