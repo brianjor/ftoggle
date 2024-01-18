@@ -1,4 +1,12 @@
-<p>Environments</p>
+<button
+  mat-fab
+  extended
+  color="primary"
+  (click)="openCreateEnvironmentDialog()"
+>
+  <mat-icon>add</mat-icon>
+  Environment
+</button>
 <ul>
   @for (env of environments(); track env.id) {
     <li>

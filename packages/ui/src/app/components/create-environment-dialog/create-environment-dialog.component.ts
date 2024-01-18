@@ -18,15 +18,15 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { FeaturesService } from '../../services/features.service';
+import { EnvironmentsService } from '../../services/environments.service';
 import { createNoExtraWhitespaceValidator } from '../../validators/noExtraWhitespaceValidator';
 
-export interface CreateFeatureDialogData {
+export interface CreateEnvironmentDialogData {
   projectId: number;
 }
 
 @Component({
-  selector: 'app-create-feature-dialog',
+  selector: 'app-create-environment-dialog',
   standalone: true,
   imports: [
     FormsModule,
@@ -40,10 +40,10 @@ export interface CreateFeatureDialogData {
     MatProgressSpinnerModule,
     ReactiveFormsModule,
   ],
-  templateUrl: './create-feature-dialog.component.html',
-  styleUrl: './create-feature-dialog.component.scss',
+  templateUrl: './create-environment-dialog.component.html',
+  styleUrl: './create-environment-dialog.component.scss',
 })
-export class CreateFeatureDialogComponent {
+export class CreateEnvironmentDialogComponent {
   name = new FormControl('', [
     Validators.required,
     createNoExtraWhitespaceValidator({
@@ -52,30 +52,30 @@ export class CreateFeatureDialogComponent {
       noBlank: true,
     }),
   ]);
-  createFeatureForm = this.formBuilder.group({
+  createEnvironmentForm = this.formBuilder.group({
     name: this.name,
   });
   inFlight = signal(false);
 
   constructor(
-    private featuresService: FeaturesService,
+    private environmentsService: EnvironmentsService,
     private formBuilder: FormBuilder,
-    public dialogRef: MatDialogRef<CreateFeatureDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: CreateFeatureDialogData,
+    public dialogRef: MatDialogRef<CreateEnvironmentDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: CreateEnvironmentDialogData,
   ) {}
 
   closeDialog() {
     this.dialogRef.close();
   }
 
-  createFeature() {
-    if (!this.createFeatureForm.valid || this.inFlight()) return;
+  createEnvironment() {
+    if (!this.createEnvironmentForm.valid || this.inFlight()) return;
     const name = this.name.value as string;
     this.inFlight.set(true);
-    this.featuresService
-      .createFeature(this.data.projectId, { name })
+    this.environmentsService
+      .createEnvironment(this.data.projectId, { name })
       .then(() => this.closeDialog())
-      .catch((err) => console.error('Error creating feature', err))
+      .catch((err) => console.error('Error creating environment', err))
       .finally(() => this.inFlight.set(false));
   }
 }
