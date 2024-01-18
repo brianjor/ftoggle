@@ -3,7 +3,6 @@ import { FeaturesController } from '../controllers/featuresController';
 import { ProjectsController } from '../controllers/projectsController';
 import { ProjectPermission } from '../enums/permissions';
 import { hooks } from '../hooks';
-import { DataContract } from '../typeboxes/common';
 import { featuresTableItem } from '../typeboxes/featuresTypes';
 
 const projectsController = new ProjectsController();
@@ -64,11 +63,7 @@ export const featureHandlers = new Elysia()
         },
       );
 
-      return {
-        data: {
-          updatedFeature,
-        },
-      };
+      return { updatedFeature };
     },
     {
       params: t.Object({
@@ -81,11 +76,11 @@ export const featureHandlers = new Elysia()
         },
         { additionalProperties: false },
       ),
-      response: DataContract(
-        t.Object({
+      response: {
+        200: t.Object({
           updatedFeature: featuresTableItem,
         }),
-      ),
+      },
       beforeHandle: [
         ({ isSignedIn }) => isSignedIn(),
         ({ hasProjectPermissions }) =>

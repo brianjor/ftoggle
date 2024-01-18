@@ -2,7 +2,6 @@ import Elysia, { t } from 'elysia';
 import { FeaturesController } from '../controllers/featuresController';
 import { ProjectsController } from '../controllers/projectsController';
 import { hooks } from '../hooks';
-import { DataContract } from '../typeboxes/common';
 import { getFeaturesItem } from '../typeboxes/featuresTypes';
 
 const projectsController = new ProjectsController();
@@ -15,11 +14,7 @@ export const featuresHandlers = new Elysia()
     async ({ params }) => {
       const { projectId } = params;
       const features = await featuresController.getFeatures(projectId);
-      const response = {
-        data: {
-          features,
-        },
-      };
+      const response = { features };
       return response;
     },
     {
@@ -27,11 +22,9 @@ export const featuresHandlers = new Elysia()
         projectId: t.Numeric(),
       }),
       response: {
-        200: DataContract(
-          t.Object({
-            features: t.Array(getFeaturesItem),
-          }),
-        ),
+        200: t.Object({
+          features: t.Array(getFeaturesItem),
+        }),
       },
       beforeHandle: [({ isSignedIn }) => isSignedIn()],
     },

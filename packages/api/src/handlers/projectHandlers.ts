@@ -1,9 +1,8 @@
 import Elysia, { t } from 'elysia';
 import { ProjectsController } from '../controllers/projectsController';
 import { ProjectPermission } from '../enums/permissions';
-import { RecordDoesNotExistError } from '../errors/dbErrors';
+import { NotFoundResponse } from '../helpers/responses';
 import { hooks } from '../hooks';
-import { DataContract } from '../typeboxes/common';
 import { projectWithFeaturesAndEnvironments } from '../typeboxes/projectsTypes';
 
 const projectsController = new ProjectsController();
@@ -15,26 +14,18 @@ export const projectHandlers = new Elysia()
     async (context) => {
       const { projectId } = context.params;
       const project = await projectsController.getProjectById(projectId);
-      if (project === undefined) {
-        throw new RecordDoesNotExistError(
-          `Project with id: ${projectId} does not exist.`,
-        );
-      }
-      return {
-        data: {
-          project,
-        },
-      };
+      return { project };
     },
     {
       params: t.Object({
         projectId: t.Numeric(),
       }),
-      response: DataContract(
-        t.Object({
+      response: {
+        200: t.Object({
           project: projectWithFeaturesAndEnvironments,
         }),
-      ),
+        404: NotFoundResponse,
+      },
       beforeHandle: [({ isSignedIn }) => isSignedIn()],
     },
   )
