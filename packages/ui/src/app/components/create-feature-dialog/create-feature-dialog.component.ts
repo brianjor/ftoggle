@@ -56,7 +56,6 @@ export class CreateFeatureDialogComponent {
     name: this.name,
   });
   inFlight = signal(false);
-  projectId = -1;
 
   constructor(
     private featuresService: FeaturesService,
