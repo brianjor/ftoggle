@@ -1,4 +1,4 @@
-import Elysia, { Static, t } from 'elysia';
+import Elysia, { t } from 'elysia';
 import { FeaturesEnvironmentsController } from '../controllers/featuresEnvironmentsController';
 import { ProjectsController } from '../controllers/projectsController';
 import { ProjectPermission } from '../enums/permissions';
@@ -11,10 +11,6 @@ const projectsController = new ProjectsController();
 export const toggleFeatureDataContract = t.Object({
   relation: featuresEnvironmentsTableItem,
 });
-
-export type ToggleFeatureDataContract = Static<
-  typeof toggleFeatureDataContract
->;
 
 export const featureEnvironmentHandler = new Elysia().use(hooks).put(
   '',

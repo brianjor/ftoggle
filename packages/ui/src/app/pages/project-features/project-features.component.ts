@@ -42,7 +42,7 @@ export class ProjectFeaturesComponent {
           Authorization: `Bearer ${this.local.getApiToken()}`,
         },
       })
-      .then((res) => this.features.set(res.data?.data.features ?? []))
+      .then((res) => this.features.set(res.data?.features ?? []))
       .catch((err) => console.log('Error getting project features', err));
   }
 }

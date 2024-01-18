@@ -69,8 +69,8 @@ export class ProjectComponent {
       })
       .then((res) => {
         if (res.status === 200) {
-          this.features.set(res.data?.data.project.features ?? []);
-          this.environments.set(res.data?.data.project.environments ?? []);
+          this.features.set(res.data?.project.features ?? []);
+          this.environments.set(res.data?.project.environments ?? []);
           this.displayedColumns.push(...this.environments().map((e) => e.name));
         }
       });
