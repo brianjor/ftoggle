@@ -2,7 +2,7 @@ import { Component, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { edenTreaty } from '@elysiajs/eden';
 import { App } from '@ftoggle/api';
-import { GetProjectFeatures } from '../../../../../api/src/handlers/featuresHandlers';
+import { FeatureWithEnvironments } from '@ftoggle/api/types';
 import { environment } from '../../../environments/environment';
 import { LocalStorageService } from '../../services/local-storage.service';
 
@@ -16,7 +16,7 @@ import { LocalStorageService } from '../../services/local-storage.service';
 export class ProjectFeaturesComponent {
   private api = edenTreaty<App>(environment.apiBaseUrl);
   private projectId = '';
-  protected features = signal<GetProjectFeatures>([]);
+  protected features = signal<FeatureWithEnvironments[]>([]);
 
   constructor(
     private route: ActivatedRoute,
