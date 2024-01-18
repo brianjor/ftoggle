@@ -13,6 +13,7 @@ import {
   FeatureWithEnvironments,
 } from '@ftoggle/api/types';
 import { environment } from '../../../environments/environment';
+import { CreateEnvironmentDialogComponent } from '../../components/create-environment-dialog/create-environment-dialog.component';
 import { CreateFeatureDialogComponent } from '../../components/create-feature-dialog/create-feature-dialog.component';
 import { FeaturesService } from '../../services/features.service';
 import { LocalStorageService } from '../../services/local-storage.service';
@@ -89,6 +90,14 @@ export class ProjectComponent {
       { data: { projectId: this.projectId } },
     );
     createFeatureDialogRef.afterClosed().subscribe(() => this.getProject());
+  }
+
+  openCreateEnvironmentDialog() {
+    const createEnvironmentDialogRef = this.dialog.open(
+      CreateEnvironmentDialogComponent,
+      { data: { projectId: this.projectId } },
+    );
+    createEnvironmentDialogRef.afterClosed().subscribe(() => this.getProject());
   }
 
   async toggleFeature(
