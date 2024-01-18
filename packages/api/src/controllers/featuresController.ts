@@ -38,38 +38,16 @@ export class FeaturesController {
    * @returns list of features
    */
   public async getFeatures(projectId: number) {
-    return (
-      await dbClient.query.features.findMany({
-        where: eq(features.projectId, projectId),
-        columns: {
-          id: true,
-          name: true,
-        },
-        with: {
-          environments: {
-            columns: {
-              isEnabled: true,
-            },
-            with: {
-              environment: {
-                columns: {
-                  id: true,
-                  name: true,
-                },
-              },
-            },
+    return await dbClient.query.features.findMany({
+      where: eq(features.projectId, projectId),
+      with: {
+        environments: {
+          with: {
+            environment: true,
           },
         },
-      })
-    ).map((f) => ({
-      id: f.id,
-      name: f.name,
-      environments: f.environments.map((e) => ({
-        isEnabled: e.isEnabled,
-        id: e.environment.id,
-        name: e.environment.name,
-      })),
-    }));
+      },
+    });
   }
 
   /**

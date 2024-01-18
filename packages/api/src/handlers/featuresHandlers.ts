@@ -2,10 +2,14 @@ import Elysia, { t } from 'elysia';
 import { FeaturesController } from '../controllers/featuresController';
 import { ProjectsController } from '../controllers/projectsController';
 import { hooks } from '../hooks';
-import { getFeaturesItem } from '../typeboxes/featuresTypes';
+import { featureWithEnvironments } from '../typeboxes/featuresTypes';
 
 const projectsController = new ProjectsController();
 const featuresController = new FeaturesController(projectsController);
+
+const getResponse = t.Object({
+  features: t.Array(featureWithEnvironments),
+});
 
 export const featuresHandlers = new Elysia()
   .use(hooks)
@@ -22,9 +26,7 @@ export const featuresHandlers = new Elysia()
         projectId: t.Numeric(),
       }),
       response: {
-        200: t.Object({
-          features: t.Array(getFeaturesItem),
-        }),
+        200: getResponse,
       },
       beforeHandle: [({ isSignedIn }) => isSignedIn()],
     },
