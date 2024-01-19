@@ -8,4 +8,5 @@ const API_TOKEN = 'apiToken';
 export class LocalStorageService {
   getApiToken = () => localStorage.getItem(API_TOKEN);
   setApiToken = (apiToken: string) => localStorage.setItem(API_TOKEN, apiToken);
+  clearApiToken = () => localStorage.removeItem(API_TOKEN);
 }
