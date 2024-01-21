@@ -7,7 +7,7 @@ import { ApiService } from './api.service';
 export class FeaturesService {
   constructor(private apiService: ApiService) {}
 
-  async createFeature(projectId: number, feature: { name: string }) {
+  async createFeature(projectId: string, feature: { name: string }) {
     try {
       await this.apiService.api.projects[projectId].features.post({
         $query: {

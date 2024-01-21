@@ -4,7 +4,7 @@ import { featureWithEnvironments } from './featuresTypes';
 
 /** DTO of a project from the `projects` table. */
 export const projectTableItem = t.Object({
-  id: t.Number(),
+  id: t.String(),
   name: t.String(),
   createdAt: t.Date(),
   modifiedAt: t.Date(),

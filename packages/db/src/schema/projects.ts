@@ -1,11 +1,11 @@
-import { boolean, pgTable, serial, text, timestamp } from 'drizzle-orm/pg-core';
+import { boolean, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm/relations';
 import { environments } from './environments';
 import { features } from './features';
 import { projectsUsers } from './projectsUsers';
 
 export const projects = pgTable('projects', {
-  id: serial('id').primaryKey(),
+  id: text('id').primaryKey(),
   name: text('name').notNull().unique(),
   createdAt: timestamp('created_at', { withTimezone: true })
     .notNull()

@@ -8,7 +8,7 @@ export const featuresTableItem = t.Object({
   name: t.String(),
   createdAt: t.Date(),
   modifiedAt: t.Date(),
-  projectId: t.Number(),
+  projectId: t.String(),
 });
 
 /** DTO of a feature from the `features` table. */

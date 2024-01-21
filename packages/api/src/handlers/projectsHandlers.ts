@@ -27,7 +27,7 @@ export const projectsHandlers = new Elysia()
         data: t.Object({
           projects: t.Array(
             t.Object({
-              id: t.Number(),
+              id: t.String(),
               name: t.String(),
               createdAt: t.Date(),
               modifiedAt: t.Date(),
@@ -42,8 +42,11 @@ export const projectsHandlers = new Elysia()
     async (context) => {
       const { body } = context;
       const user = await context.getRequestUser();
-      const projectName = body.projectName;
-      const project = await projectsController.createProject(projectName);
+      const { projectId, projectName } = body;
+      const project = await projectsController.createProject(
+        projectId,
+        projectName,
+      );
       await projectsController.addUser(project.id, user.userId);
       await projectsController.addRoleToUser(
         project.id,
@@ -57,6 +60,7 @@ export const projectsHandlers = new Elysia()
     },
     {
       body: t.Object({
+        projectId: t.String(),
         projectName: t.String(),
       }),
       beforeHandle: [

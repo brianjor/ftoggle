@@ -1,7 +1,7 @@
 import {
-  integer,
   pgTable,
   serial,
+  text,
   timestamp,
   unique,
   varchar,
@@ -21,7 +21,7 @@ export const features = pgTable(
     modifiedAt: timestamp('modified_at', { withTimezone: true })
       .notNull()
       .defaultNow(),
-    projectId: integer('project_id')
+    projectId: text('project_id')
       .notNull()
       .references(() => projects.id),
   },

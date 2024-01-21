@@ -45,7 +45,7 @@ export const hasPermissions = new Elysia({
           "hasProjectPermissions must be in a route that has a 'projectId' path parameter",
         );
       }
-      const projectId = (context.params as { projectId: number }).projectId;
+      const projectId = (context.params as { projectId: string }).projectId;
       await projectsController.getProjectById(projectId);
       const permissions = await projectsController.getUsersPermissions(
         projectId,

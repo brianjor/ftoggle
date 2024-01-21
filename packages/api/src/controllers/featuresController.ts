@@ -16,7 +16,7 @@ export class FeaturesController {
    * @param projectId Id of the project
    * @returns the created feature
    */
-  public async addFeature(name: string, projectId: number) {
+  public async addFeature(name: string, projectId: string) {
     const envs = await this.projectsController.getEnvironments(projectId);
     const feature = (
       await dbClient.insert(features).values({ name, projectId }).returning()
@@ -37,7 +37,7 @@ export class FeaturesController {
    * @param projectId id of project
    * @returns list of features
    */
-  public async getFeatures(projectId: number) {
+  public async getFeatures(projectId: string) {
     return await dbClient.query.features.findMany({
       where: eq(features.projectId, projectId),
       with: {
@@ -58,7 +58,7 @@ export class FeaturesController {
    * @throws A {@link RecordDoesNotExistError} if the feature does not exist
    */
   public async getProjectFeatureById(
-    projectId: number,
+    projectId: string,
     featureId: number,
   ): Promise<FeaturesTableItem> {
     const feature = await dbClient.query.features.findFirst({
@@ -80,7 +80,7 @@ export class FeaturesController {
    */
   public async updateFeature(
     featureId: number,
-    projectId: number,
+    projectId: string,
     updateFields: { name?: string },
   ): Promise<FeaturesTableItem> {
     return (

@@ -22,7 +22,7 @@ import { EnvironmentsService } from '../../services/environments.service';
 import { createNoExtraWhitespaceValidator } from '../../validators/noExtraWhitespaceValidator';
 
 export interface CreateEnvironmentDialogData {
-  projectId: number;
+  projectId: string;
 }
 
 @Component({

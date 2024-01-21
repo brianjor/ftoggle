@@ -30,7 +30,7 @@ export const projectUsersHandlers = new Elysia()
     },
     {
       params: t.Object({
-        projectId: t.Numeric(),
+        projectId: t.String(),
       }),
       body: t.Object({
         username: t.String(),
@@ -63,7 +63,7 @@ export const projectUsersHandlers = new Elysia()
     },
     {
       params: t.Object({
-        projectId: t.Numeric(),
+        projectId: t.String(),
       }),
       response: {
         200: t.Object({

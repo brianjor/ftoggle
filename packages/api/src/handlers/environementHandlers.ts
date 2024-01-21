@@ -23,7 +23,7 @@ export const environmentHandlers = new Elysia()
     },
     {
       params: t.Object({
-        projectId: t.Numeric(),
+        projectId: t.String(),
         environmentId: t.Numeric(),
       }),
       response: {
@@ -34,7 +34,7 @@ export const environmentHandlers = new Elysia()
               name: t.String(),
               createdAt: t.Date(),
               modifiedAt: t.Date(),
-              projectId: t.Number(),
+              projectId: t.String(),
             }),
           }),
         }),
@@ -61,7 +61,7 @@ export const environmentHandlers = new Elysia()
     },
     {
       params: t.Object({
-        projectId: t.Numeric(),
+        projectId: t.String(),
         environmentId: t.Numeric(),
       }),
       beforeHandle: [

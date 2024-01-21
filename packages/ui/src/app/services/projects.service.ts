@@ -5,7 +5,7 @@ import { ApiService } from './api.service';
   providedIn: 'root',
 })
 export class ProjectsService {
-  private _projects = signal<{ id: number; name: string }[]>([]);
+  private _projects = signal<{ id: string; name: string }[]>([]);
   public projects = this._projects.asReadonly();
 
   constructor(private apiService: ApiService) {}
@@ -19,9 +19,10 @@ export class ProjectsService {
     }
   }
 
-  async createProject(project: { name: string }) {
+  async createProject(project: { id: string; name: string }) {
     try {
       await this.apiService.api.projects.post({
+        projectId: project.id,
         projectName: project.name,
       });
     } catch (err) {

@@ -28,7 +28,7 @@ export const environmentsHandlers = new Elysia()
     },
     {
       params: t.Object({
-        projectId: t.Numeric(),
+        projectId: t.String(),
       }),
       body: t.Object({
         environmentName: t.String(),
@@ -59,7 +59,7 @@ export const environmentsHandlers = new Elysia()
     },
     {
       params: t.Object({
-        projectId: t.Numeric(),
+        projectId: t.String(),
       }),
       beforeHandle: [
         ({ isSignedIn }) => isSignedIn(),

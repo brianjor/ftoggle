@@ -6,7 +6,7 @@ export const environmentsTableItem = t.Object({
   name: t.String(),
   createdAt: t.Date(),
   modifiedAt: t.Date(),
-  projectId: t.Number(),
+  projectId: t.String(),
 });
 
 /** DTO of an environment from the `environments` table. */

@@ -23,7 +23,7 @@ export const featuresHandlers = new Elysia()
     },
     {
       params: t.Object({
-        projectId: t.Numeric(),
+        projectId: t.String(),
       }),
       response: {
         200: getResponse,
@@ -42,7 +42,7 @@ export const featuresHandlers = new Elysia()
     },
     {
       params: t.Object({
-        projectId: t.Numeric(),
+        projectId: t.String(),
       }),
       body: t.Object({
         name: t.String(),

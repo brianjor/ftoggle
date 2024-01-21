@@ -5,6 +5,20 @@
     [formGroup]="createProjectForm"
     (ngSubmit)="createProject()"
   >
+    <mat-form-field id="projectIdFormField">
+      <mat-label>Id</mat-label>
+      <input
+        matInput
+        id="id"
+        placeholder="feature_project-2"
+        [formControl]="id"
+      />
+      @if (id.hasError('required')) {
+        <mat-error>Id is required</mat-error>
+      } @else if (id.hasError('pattern')) {
+        <mat-error> Allowed characters: a-z A-Z 0-9 _ - </mat-error>
+      }
+    </mat-form-field>
     <mat-form-field id="projectNameFormField">
       <mat-label>Name</mat-label>
       <input matInput id="name" placeholder="Name" [formControl]="name" />
