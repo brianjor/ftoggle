@@ -8,6 +8,7 @@ import { ProjectsComponent } from './pages/projects/projects.component';
 
 export const paths = {
   notFound: '**',
+  root: '',
   login: 'login',
   projects: 'projects',
   project: 'projects/:projectId',
@@ -19,6 +20,7 @@ export const paths = {
 };
 
 export const routes: Routes = [
+  { path: paths.root, redirectTo: paths.projects, pathMatch: 'full' },
   { path: paths.login, component: LoginComponent },
   {
     path: paths.projects,
