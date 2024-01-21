@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTableModule } from '@angular/material/table';
+import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute } from '@angular/router';
 import { edenTreaty } from '@elysiajs/eden';
 import { App } from '@ftoggle/api';
@@ -28,6 +29,7 @@ import { LocalStorageService } from '../../services/local-storage.service';
     MatIconModule,
     MatSlideToggleModule,
     MatTableModule,
+    MatTabsModule,
   ],
   templateUrl: './project.component.html',
   styleUrl: './project.component.scss',
