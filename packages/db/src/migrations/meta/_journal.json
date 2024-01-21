@@ -141,6 +141,13 @@
       "when": 1705205912276,
       "tag": "0019_slim_nuke",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "5",
+      "when": 1705878029020,
+      "tag": "0020_slim_thing",
+      "breakpoints": true
     }
   ]
 }

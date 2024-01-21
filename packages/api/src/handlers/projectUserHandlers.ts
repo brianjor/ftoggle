@@ -21,7 +21,7 @@ export const projectUserHandlers = new Elysia().use(hooks).delete(
   },
   {
     params: t.Object({
-      projectId: t.Numeric(),
+      projectId: t.String(),
       userId: t.String(),
     }),
     response: {

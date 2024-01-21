@@ -30,7 +30,7 @@ export const featureEnvironmentHandler = new Elysia().use(hooks).put(
   },
   {
     params: t.Object({
-      projectId: t.Numeric(),
+      projectId: t.String(),
       featureId: t.Numeric(),
       environmentId: t.Numeric(),
     }),

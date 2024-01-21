@@ -7,7 +7,7 @@ import { ApiService } from './api.service';
 export class EnvironmentsService {
   constructor(private apiService: ApiService) {}
 
-  async createEnvironment(projectId: number, environment: { name: string }) {
+  async createEnvironment(projectId: string, environment: { name: string }) {
     try {
       await this.apiService.api.projects[projectId].environments.post({
         $query: {

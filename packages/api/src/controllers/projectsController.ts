@@ -35,7 +35,7 @@ export class ProjectsController {
    * @param projectId Id of project to get users of
    * @returns List of users of the project
    */
-  public async getUsersOfProject(projectId: number) {
+  public async getUsersOfProject(projectId: string) {
     return await dbClient
       .select({
         id: users.id,
@@ -53,7 +53,7 @@ export class ProjectsController {
    * @returns the project
    * @throws A {@link RecordDoesNotExistError} if the project does not exist
    */
-  public async getProjectById(projectId: number) {
+  public async getProjectById(projectId: string) {
     const project = await dbClient.query.projects.findFirst({
       where: eq(projects.id, projectId),
       with: {
@@ -77,14 +77,17 @@ export class ProjectsController {
     return project;
   }
 
-  public async createProject(projectName: string) {
+  public async createProject(projectId: string, projectName: string) {
     return (
-      await dbClient.insert(projects).values({ name: projectName }).returning()
+      await dbClient
+        .insert(projects)
+        .values({ id: projectId, name: projectName })
+        .returning()
     )[0];
   }
 
   public async updateProject(
-    projectId: number,
+    projectId: string,
     updateFields: { name?: string },
   ) {
     await dbClient
@@ -93,7 +96,7 @@ export class ProjectsController {
       .where(eq(projects.id, projectId));
   }
 
-  public async addUser(projectId: number, userId: string) {
+  public async addUser(projectId: string, userId: string) {
     return (
       await dbClient
         .insert(projectsUsers)
@@ -103,7 +106,7 @@ export class ProjectsController {
   }
 
   public async addRoleToUser(
-    projectId: number,
+    projectId: string,
     userId: string,
     roleName: ProjectRole,
   ) {
@@ -119,7 +122,7 @@ export class ProjectsController {
       .values({ projectId, userId, roleId: role.id });
   }
 
-  public async getEnvironments(projectId: number) {
+  public async getEnvironments(projectId: string) {
     return await dbClient.query.environments.findMany({
       where: eq(environments.projectId, projectId),
     });
@@ -132,7 +135,7 @@ export class ProjectsController {
    * @returns the environment
    * @throws An {@link RecordDoesNotExistError} if there is no environment with that id
    */
-  public async getEnvironmentById(projectId: number, enviromentId: number) {
+  public async getEnvironmentById(projectId: string, enviromentId: number) {
     const env = await dbClient.query.environments.findFirst({
       where: and(
         eq(environments.id, enviromentId),
@@ -154,7 +157,7 @@ export class ProjectsController {
    * @param projectId id of the project
    * @returns the newly created environment
    */
-  public async addEnvironment(envName: string, projectId: number) {
+  public async addEnvironment(envName: string, projectId: string) {
     const env = await dbClient.transaction(async (tx) => {
       // Create the environment
       const env = (
@@ -189,7 +192,7 @@ export class ProjectsController {
    * @param environmentId id of environment
    * @throws A {@link RecordDoesNotExistError} if the environment does not have a relation to the project
    */
-  public async deleteEnvironment(projectId: number, environmentId: number) {
+  public async deleteEnvironment(projectId: string, environmentId: number) {
     const project = await this.getProjectById(projectId);
     const env = await this.getEnvironmentById(projectId, environmentId);
     if (project.id !== env.projectId) {
@@ -212,7 +215,7 @@ export class ProjectsController {
    * @param userId Id of the user to get roles for
    * @returns list of the users permissions for the project
    */
-  public async getUsersPermissions(projectId: number, userId: string) {
+  public async getUsersPermissions(projectId: string, userId: string) {
     return (
       await dbClient
         .select({ permission: permissions.name })
@@ -239,7 +242,7 @@ export class ProjectsController {
    * @returns The project and user if the relation exists
    * @throws A {@link RecordDoesNotExistError} if no relation exists
    */
-  async getProjectsUsersRelation(projectId: number, userId: string) {
+  async getProjectsUsersRelation(projectId: string, userId: string) {
     const projectUserRelation = await dbClient.query.projectsUsers.findFirst({
       where: and(
         eq(projectsUsers.projectId, projectId),
@@ -268,7 +271,7 @@ export class ProjectsController {
    * @throws A {@link RecordDoesNotExistError} if no relation exists
    */
   async getProjectsEnvironmentsRelation(
-    projectId: number,
+    projectId: string,
     environmentId: number,
   ) {
     const projectEnvironmentRelation =
@@ -293,7 +296,7 @@ export class ProjectsController {
    * Removes a user from a project. Will not error if user is not a user on the project.
    * @param userId Id of user to remove
    */
-  public async removeUserFromProject(projectId: number, userId: string) {
+  public async removeUserFromProject(projectId: string, userId: string) {
     await dbClient
       .delete(projectsUsersRoles)
       .where(
@@ -316,7 +319,7 @@ export class ProjectsController {
    * Archives a project.
    * @param projectId Id of project to be archived
    */
-  public async archiveProject(projectId: number) {
+  public async archiveProject(projectId: string) {
     await dbClient
       .update(projects)
       .set({ isArchived: true, modifiedAt: new Date() })

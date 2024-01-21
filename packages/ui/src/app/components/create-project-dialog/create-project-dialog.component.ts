@@ -47,7 +47,12 @@ export class CreateProjectDialogComponent {
       noBlank: true,
     }),
   ]);
+  id = new FormControl('', [
+    Validators.required,
+    Validators.pattern(/^[a-zA-Z0-9_-]*$/),
+  ]);
   createProjectForm = this.formBuilder.group({
+    id: this.id,
     name: this.name,
   });
   inFlight = signal(false);
@@ -64,10 +69,11 @@ export class CreateProjectDialogComponent {
 
   createProject() {
     if (!this.createProjectForm.valid || this.inFlight()) return;
+    const id = this.id.value as string;
     const name = this.name.value as string;
     this.inFlight.set(true);
     this.projectService
-      .createProject({ name })
+      .createProject({ id, name })
       .then(() => this.closeDialog())
       .catch((err) => console.error('Error creating project', err))
       .finally(() => this.inFlight.set(false));

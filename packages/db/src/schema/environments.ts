@@ -1,11 +1,4 @@
-import {
-  integer,
-  pgTable,
-  serial,
-  text,
-  timestamp,
-  unique,
-} from 'drizzle-orm/pg-core';
+import { pgTable, serial, text, timestamp, unique } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm/relations';
 import { projects } from '.';
 import { featuresEnvironments } from './featuresEnvironments';
@@ -21,7 +14,7 @@ export const environments = pgTable(
     modifiedAt: timestamp('modified_at', { withTimezone: true })
       .notNull()
       .defaultNow(),
-    projectId: integer('project_id')
+    projectId: text('project_id')
       .notNull()
       .references(() => projects.id),
   },

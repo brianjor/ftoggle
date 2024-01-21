@@ -22,7 +22,7 @@ import { FeaturesService } from '../../services/features.service';
 import { createNoExtraWhitespaceValidator } from '../../validators/noExtraWhitespaceValidator';
 
 export interface CreateFeatureDialogData {
-  projectId: number;
+  projectId: string;
 }
 
 @Component({
