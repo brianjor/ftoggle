@@ -15,22 +15,20 @@ export class ApiService {
     private router: Router,
   ) {}
 
-  treaty = edenTreaty<App>(environment.apiBaseUrl, {
-    $fetch: {
-      headers: {
-        Authorization: `Bearer ${this.local.getApiToken()}`,
-      },
-    },
-    transform: (response) => {
-      // Fails authentication, old/invalid token. Clear token and send to login
-      if (response.status === 401) {
-        this.local.clearApiToken();
-        this.router.navigate([paths.login]);
-      }
-    },
-  });
-
   get api() {
-    return this.treaty.api;
+    return edenTreaty<App>(environment.apiBaseUrl, {
+      $fetch: {
+        headers: {
+          Authorization: `Bearer ${this.local.getApiToken()}`,
+        },
+      },
+      transform: (response) => {
+        // Fails authentication, old/invalid token. Clear token and send to login
+        if (response.status === 401) {
+          this.local.clearApiToken();
+          this.router.navigate([paths.login]);
+        }
+      },
+    }).api;
   }
 }
