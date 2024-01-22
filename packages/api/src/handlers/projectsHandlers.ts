@@ -61,12 +61,19 @@ export const projectsHandlers = new Elysia()
     {
       body: t.Object({
         projectId: t.String(),
-        projectName: t.String(),
+        projectName: t.String({
+          maxLength: 50,
+          minLength: 3,
+        }),
       }),
       beforeHandle: [
         ({ isSignedIn }) => isSignedIn(),
         ({ hasUserPermissions: hasPermissions }) =>
           hasPermissions([UserPermission.CREATE_PROJECT]),
       ],
+      transform({ body }) {
+        const { projectName } = body;
+        body.projectName = projectName.trim();
+      },
     },
   );
