@@ -1,3 +1,7 @@
+import {
+  projectIdReqs,
+  projectNameReqs,
+} from '@ftoggle/common/validations/projectsValidations';
 import Elysia, { t } from 'elysia';
 import { FeaturesController } from '../controllers/featuresController';
 import { ProjectsController } from '../controllers/projectsController';
@@ -60,10 +64,14 @@ export const projectsHandlers = new Elysia()
     },
     {
       body: t.Object({
-        projectId: t.String(),
+        projectId: t.String({
+          maxLength: projectIdReqs.maxLength,
+          minLength: projectIdReqs.minLength,
+          pattern: projectIdReqs.pattern,
+        }),
         projectName: t.String({
-          maxLength: 50,
-          minLength: 3,
+          maxLength: projectNameReqs.maxLength,
+          minLength: projectNameReqs.minLength,
         }),
       }),
       beforeHandle: [
@@ -73,7 +81,7 @@ export const projectsHandlers = new Elysia()
       ],
       transform({ body }) {
         const { projectName } = body;
-        body.projectName = projectName.trim();
+        body.projectName = projectNameReqs.transforms(projectName);
       },
     },
   );

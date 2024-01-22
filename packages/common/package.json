@@ -1,0 +1,10 @@
+{
+  "name": "@ftoggle/common",
+  "type": "module",
+  "exports": {
+    "./validations/*": "./src/validations/*.ts"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

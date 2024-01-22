@@ -17,6 +17,10 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import {
+  projectIdReqs,
+  projectNameReqs,
+} from '@ftoggle/common/validations/projectsValidations';
 import { ProjectsService } from '../../services/projects.service';
 import { createNoExtraWhitespaceValidator } from '../../validators/noExtraWhitespaceValidator';
 
@@ -41,15 +45,15 @@ import { createNoExtraWhitespaceValidator } from '../../validators/noExtraWhites
 export class CreateProjectDialogComponent {
   name = new FormControl('', [
     Validators.required,
-    createNoExtraWhitespaceValidator({
-      noLeading: true,
-      noTrailing: true,
-      noBlank: true,
-    }),
+    Validators.maxLength(projectNameReqs.maxLength),
+    Validators.minLength(projectNameReqs.minLength),
+    createNoExtraWhitespaceValidator({ noBlank: true }),
   ]);
   id = new FormControl('', [
     Validators.required,
-    Validators.pattern(/^[a-zA-Z0-9_-]*$/),
+    Validators.maxLength(projectIdReqs.maxLength),
+    Validators.minLength(projectIdReqs.minLength),
+    Validators.pattern(projectIdReqs.pattern),
   ]);
   createProjectForm = this.formBuilder.group({
     id: this.id,
