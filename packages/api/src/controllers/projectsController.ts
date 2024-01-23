@@ -2,9 +2,9 @@ import { dbClient } from '@ftoggle/db/connection';
 import {
   environments,
   features,
-  featuresEnvironments,
   permissions,
   projects,
+  projectsFeaturesEnvironments,
   projectsUsers,
   projectsUsersRoles,
   roles,
@@ -175,11 +175,13 @@ export class ProjectsController {
       ).map((f) => f.id);
       // Attach all features to the environment
       if (featIds.length > 0) {
-        await tx
-          .insert(featuresEnvironments)
-          .values(
-            featIds.map((fId) => ({ featureId: fId, environmentId: env.id })),
-          );
+        await tx.insert(projectsFeaturesEnvironments).values(
+          featIds.map((fId) => ({
+            featureId: fId,
+            environmentId: env.id,
+            projectId: projectId,
+          })),
+        );
       }
       return env;
     });
@@ -202,8 +204,8 @@ export class ProjectsController {
     }
     await dbClient.transaction(async (tx) => {
       await tx
-        .delete(featuresEnvironments)
-        .where(eq(featuresEnvironments.environmentId, environmentId));
+        .delete(projectsFeaturesEnvironments)
+        .where(eq(projectsFeaturesEnvironments.environmentId, environmentId));
       await tx.delete(environments).where(eq(environments.id, environmentId));
     });
     return env;
@@ -266,7 +268,6 @@ export class ProjectsController {
    * Gets a project environment relation.
    * @param projectId id of project
    * @param environmentId id of environment
-   * @param options extra options
    * @returns The project and environment relation
    * @throws A {@link RecordDoesNotExistError} if no relation exists
    */
@@ -294,6 +295,7 @@ export class ProjectsController {
 
   /**
    * Removes a user from a project. Will not error if user is not a user on the project.
+   * @param projectId id of project
    * @param userId Id of user to remove
    */
   public async removeUserFromProject(projectId: string, userId: string) {

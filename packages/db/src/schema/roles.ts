@@ -1,6 +1,6 @@
+import { relations } from 'drizzle-orm';
 import { pgTable, serial, text } from 'drizzle-orm/pg-core';
 import { rolesPermissions } from './rolesPermissions';
-import { relations } from 'drizzle-orm';
 import { usersRoles } from './usersRoles';
 
 export const roles = pgTable('roles', {

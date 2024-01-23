@@ -17,11 +17,16 @@ export const featureEnvironmentHandler = new Elysia().use(hooks).put(
   async ({ params }) => {
     const { projectId, featureId, environmentId } = params;
     await projectsController.getProjectById(projectId);
-    await featuresEnvironmentsController.getRelation(featureId, environmentId);
+    await featuresEnvironmentsController.getRelation(
+      featureId,
+      environmentId,
+      projectId,
+    );
 
     const relation = await featuresEnvironmentsController.toggleFeature(
       featureId,
       environmentId,
+      projectId,
     );
 
     return {

@@ -1,1 +1,0 @@
-ALTER TABLE "features" ADD CONSTRAINT "features_name_project_id_unique" UNIQUE("name","project_id");

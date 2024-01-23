@@ -1,4 +1,4 @@
-import { pgTable, primaryKey, text, varchar } from 'drizzle-orm/pg-core';
+import { pgTable, primaryKey, text } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm/relations';
 import { projects } from './projects';
 import { projectsUsersRoles } from './projectsUsersRoles';
@@ -10,7 +10,7 @@ export const projectsUsers = pgTable(
     projectId: text('project_id')
       .notNull()
       .references(() => projects.id),
-    userId: varchar('userId', { length: 15 })
+    userId: text('user_id')
       .notNull()
       .references(() => users.id),
   },

@@ -1,11 +1,4 @@
-import {
-  foreignKey,
-  integer,
-  pgTable,
-  primaryKey,
-  text,
-  varchar,
-} from 'drizzle-orm/pg-core';
+import { integer, pgTable, primaryKey, text } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm/relations';
 import { projects } from './projects';
 import { projectsUsers } from './projectsUsers';
@@ -18,16 +11,15 @@ export const projectsUsersRoles = pgTable(
     roleId: integer('role_id')
       .notNull()
       .references(() => roles.id),
-    projectId: text('project_id').notNull(),
-    userId: varchar('user_id', { length: 15 }).notNull(),
+    projectId: text('project_id')
+      .notNull()
+      .references(() => projects.id),
+    userId: text('user_id')
+      .notNull()
+      .references(() => users.id),
   },
   (t) => ({
     pk: primaryKey({ columns: [t.roleId, t.projectId, t.userId] }),
-    projectsUsersForeignKey: foreignKey({
-      columns: [t.projectId, t.userId],
-      foreignColumns: [projectsUsers.projectId, projectsUsers.userId],
-      name: 'projects_users_fk',
-    }),
   }),
 );
 

@@ -1,11 +1,11 @@
 import { relations } from 'drizzle-orm';
-import { pgTable, varchar } from 'drizzle-orm/pg-core';
+import { pgTable, text } from 'drizzle-orm/pg-core';
 import { projectsUsers } from './projectsUsers';
 import { usersRoles } from './usersRoles';
 
 export const users = pgTable('users', {
-  id: varchar('id', { length: 15 }).primaryKey(),
-  username: varchar('username', { length: 30 }).unique().notNull(),
+  id: text('id').primaryKey(),
+  username: text('username').unique().notNull(),
 });
 
 export const usersRelations = relations(users, ({ many }) => ({
