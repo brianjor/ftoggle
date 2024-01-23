@@ -1,7 +1,7 @@
 import { pgTable, serial, text, timestamp, unique } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm/relations';
-import { projectsFeaturesEnvironments } from './featuresEnvironments';
 import { projects } from './projects';
+import { projectsFeaturesEnvironments } from './projectsFeaturesEnvironments';
 
 export const features = pgTable(
   'features',

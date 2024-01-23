@@ -41,7 +41,8 @@ export class FeaturesEnvironmentsController {
    * Toggles the 'isEnabled' column of a feature environment relation.
    * If 'isEnabled' is true, sets to false. If 'isEnabled' is false, sets to true.
    * @param featureId id of feature
-   * @param userId id of environment
+   * @param environmentId id of environment
+   * @param projectId id of project
    * @returns The feature environment relation after toggling
    * @throws A {@link RecordDoesNotExistError} if no relation exists
    */

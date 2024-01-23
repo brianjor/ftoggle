@@ -268,7 +268,6 @@ export class ProjectsController {
    * Gets a project environment relation.
    * @param projectId id of project
    * @param environmentId id of environment
-   * @param options extra options
    * @returns The project and environment relation
    * @throws A {@link RecordDoesNotExistError} if no relation exists
    */
@@ -296,6 +295,7 @@ export class ProjectsController {
 
   /**
    * Removes a user from a project. Will not error if user is not a user on the project.
+   * @param projectId id of project
    * @param userId Id of user to remove
    */
   public async removeUserFromProject(projectId: string, userId: string) {
