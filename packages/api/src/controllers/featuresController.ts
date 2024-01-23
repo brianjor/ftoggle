@@ -1,5 +1,5 @@
 import { dbClient } from '@ftoggle/db/connection';
-import { features, featuresEnvironments } from '@ftoggle/db/schema';
+import { features, projectsFeaturesEnvironments } from '@ftoggle/db/schema';
 import { and, eq } from 'drizzle-orm';
 import { RecordDoesNotExistError } from '../errors/dbErrors';
 import { FeaturesTableItem } from '../typeboxes';
@@ -22,10 +22,11 @@ export class FeaturesController {
       await dbClient.insert(features).values({ name, projectId }).returning()
     )[0];
     if (envs.length > 0) {
-      await dbClient.insert(featuresEnvironments).values(
+      await dbClient.insert(projectsFeaturesEnvironments).values(
         envs.map((env) => ({
           featureId: feature.id,
           environmentId: env.id,
+          projectId: projectId,
         })),
       );
     }

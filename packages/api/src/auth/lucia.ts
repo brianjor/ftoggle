@@ -1,16 +1,15 @@
-import 'dotenv';
+import { postgresConnection } from '@ftoggle/db/connection';
+import { postgres as postgresAdapter } from '@lucia-auth/adapter-postgresql';
 import { lucia } from 'lucia';
 import { elysia } from 'lucia/middleware';
-import { postgres as postgresAdapter } from '@lucia-auth/adapter-postgresql';
-import { postgresConnection } from '@ftoggle/db/connection';
 
 export const auth = lucia({
-  env: process.env.ENVIRONMENT === 'prod' ? 'PROD' : 'DEV',
+  env: Bun.env.ENVIRONMENT === 'prod' ? 'PROD' : 'DEV',
   middleware: elysia(),
   adapter: postgresAdapter(postgresConnection, {
     user: 'users',
-    key: 'user_keys',
-    session: 'user_sessions',
+    key: 'users_keys',
+    session: 'users_sessions',
   }),
   getUserAttributes: (data) => {
     return {

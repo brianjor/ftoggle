@@ -5,148 +5,22 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1702255000786,
-      "tag": "0000_bright_jimmy_woo",
+      "when": 1705988063715,
+      "tag": "0000_harsh_valkyrie",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "5",
-      "when": 1702353563552,
-      "tag": "0001_bumpy_the_renegades",
+      "when": 1705988067184,
+      "tag": "0001_adorable_harpoon",
       "breakpoints": true
     },
     {
       "idx": 2,
       "version": "5",
-      "when": 1702443987754,
-      "tag": "0002_robust_goliath",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1702788291981,
-      "tag": "0003_hesitant_kitty_pryde",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1702873560643,
-      "tag": "0004_closed_charles_xavier",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "5",
-      "when": 1702873602948,
-      "tag": "0005_familiar_william_stryker",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "5",
-      "when": 1703136072771,
-      "tag": "0006_unique_mastermind",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "5",
-      "when": 1703215778432,
-      "tag": "0007_regular_shotgun",
-      "breakpoints": true
-    },
-    {
-      "idx": 8,
-      "version": "5",
-      "when": 1703645622629,
-      "tag": "0008_woozy_skaar",
-      "breakpoints": true
-    },
-    {
-      "idx": 9,
-      "version": "5",
-      "when": 1703824785219,
-      "tag": "0009_huge_black_bird",
-      "breakpoints": true
-    },
-    {
-      "idx": 10,
-      "version": "5",
-      "when": 1703915752618,
-      "tag": "0010_warm_guardian",
-      "breakpoints": true
-    },
-    {
-      "idx": 11,
-      "version": "5",
-      "when": 1703916117240,
-      "tag": "0011_public_pride",
-      "breakpoints": true
-    },
-    {
-      "idx": 12,
-      "version": "5",
-      "when": 1703916531463,
-      "tag": "0012_omniscient_joshua_kane",
-      "breakpoints": true
-    },
-    {
-      "idx": 13,
-      "version": "5",
-      "when": 1703975518692,
-      "tag": "0013_closed_kang",
-      "breakpoints": true
-    },
-    {
-      "idx": 14,
-      "version": "5",
-      "when": 1703979946569,
-      "tag": "0014_military_fenris",
-      "breakpoints": true
-    },
-    {
-      "idx": 15,
-      "version": "5",
-      "when": 1703982512570,
-      "tag": "0015_thankful_dreadnoughts",
-      "breakpoints": true
-    },
-    {
-      "idx": 16,
-      "version": "5",
-      "when": 1703983270244,
-      "tag": "0016_violet_exodus",
-      "breakpoints": true
-    },
-    {
-      "idx": 17,
-      "version": "5",
-      "when": 1704259996306,
-      "tag": "0017_friendly_leo",
-      "breakpoints": true
-    },
-    {
-      "idx": 18,
-      "version": "5",
-      "when": 1704334481566,
-      "tag": "0018_whole_dagger",
-      "breakpoints": true
-    },
-    {
-      "idx": 19,
-      "version": "5",
-      "when": 1705205912276,
-      "tag": "0019_slim_nuke",
-      "breakpoints": true
-    },
-    {
-      "idx": 20,
-      "version": "5",
-      "when": 1705878029020,
-      "tag": "0020_slim_thing",
+      "when": 1705988068657,
+      "tag": "0002_conscious_lionheart",
       "breakpoints": true
     }
   ]

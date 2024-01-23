@@ -1,5 +1,5 @@
 import { dbClient } from '@ftoggle/db/connection';
-import { featuresEnvironments } from '@ftoggle/db/schema';
+import { projectsFeaturesEnvironments } from '@ftoggle/db/schema';
 import { and, eq } from 'drizzle-orm';
 import { RecordDoesNotExistError } from '../errors/dbErrors';
 
@@ -8,15 +8,21 @@ export class FeaturesEnvironmentsController {
    * Gets a feature environment relation.
    * @param featureId id of feature
    * @param userId id of environment
+   * @param projectId id of project
    * @returns The feature environment relation
    * @throws A {@link RecordDoesNotExistError} if no relation exists
    */
-  public async getRelation(featureId: number, environmentId: number) {
+  public async getRelation(
+    featureId: number,
+    environmentId: number,
+    projectId: string,
+  ) {
     const featureEnvironmentRelation =
-      await dbClient.query.featuresEnvironments.findFirst({
+      await dbClient.query.projectsFeaturesEnvironments.findFirst({
         where: and(
-          eq(featuresEnvironments.featureId, featureId),
-          eq(featuresEnvironments.environmentId, environmentId),
+          eq(projectsFeaturesEnvironments.featureId, featureId),
+          eq(projectsFeaturesEnvironments.environmentId, environmentId),
+          eq(projectsFeaturesEnvironments.projectId, projectId),
         ),
         with: {
           environment: true,
@@ -39,16 +45,25 @@ export class FeaturesEnvironmentsController {
    * @returns The feature environment relation after toggling
    * @throws A {@link RecordDoesNotExistError} if no relation exists
    */
-  public async toggleFeature(featureId: number, environmentId: number) {
-    const currentRelation = await this.getRelation(featureId, environmentId);
+  public async toggleFeature(
+    featureId: number,
+    environmentId: number,
+    projectId: string,
+  ) {
+    const currentRelation = await this.getRelation(
+      featureId,
+      environmentId,
+      projectId,
+    );
     return (
       await dbClient
-        .update(featuresEnvironments)
+        .update(projectsFeaturesEnvironments)
         .set({ isEnabled: !currentRelation.isEnabled })
         .where(
           and(
-            eq(featuresEnvironments.featureId, featureId),
-            eq(featuresEnvironments.environmentId, environmentId),
+            eq(projectsFeaturesEnvironments.featureId, featureId),
+            eq(projectsFeaturesEnvironments.environmentId, environmentId),
+            eq(projectsFeaturesEnvironments.projectId, projectId),
           ),
         )
         .returning()

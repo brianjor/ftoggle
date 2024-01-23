@@ -1,11 +1,21 @@
-import { boolean, integer, pgTable, primaryKey } from 'drizzle-orm/pg-core';
+import {
+  boolean,
+  integer,
+  pgTable,
+  primaryKey,
+  text,
+} from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm/relations';
 import { environments } from './environments';
 import { features } from './features';
+import { projects } from './projects';
 
-export const featuresEnvironments = pgTable(
-  'features_environments',
+export const projectsFeaturesEnvironments = pgTable(
+  'projects_features_environments',
   {
+    projectId: text('project_id')
+      .notNull()
+      .references(() => projects.id),
     featureId: integer('feature_id')
       .notNull()
       .references(() => features.id),
@@ -15,20 +25,24 @@ export const featuresEnvironments = pgTable(
     isEnabled: boolean('is_enabled').notNull().default(false),
   },
   (t) => ({
-    pk: primaryKey({ columns: [t.featureId, t.environmentId] }),
+    pk: primaryKey({ columns: [t.featureId, t.environmentId, t.projectId] }),
   }),
 );
 
 export const featuresEnvironmentsRelations = relations(
-  featuresEnvironments,
+  projectsFeaturesEnvironments,
   ({ one }) => ({
     feature: one(features, {
-      fields: [featuresEnvironments.featureId],
+      fields: [projectsFeaturesEnvironments.featureId],
       references: [features.id],
     }),
     environment: one(environments, {
-      fields: [featuresEnvironments.environmentId],
+      fields: [projectsFeaturesEnvironments.environmentId],
       references: [environments.id],
+    }),
+    project: one(projects, {
+      fields: [projectsFeaturesEnvironments.projectId],
+      references: [projects.id],
     }),
   }),
 );

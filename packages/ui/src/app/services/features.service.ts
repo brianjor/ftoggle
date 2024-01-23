@@ -10,9 +10,7 @@ export class FeaturesService {
   async createFeature(projectId: string, feature: { name: string }) {
     try {
       await this.apiService.api.projects[projectId].features.post({
-        $query: {
-          projectId: projectId.toString(),
-        },
+        $query: { projectId },
         name: feature.name,
       });
     } catch (err) {
