@@ -3,7 +3,7 @@ import { relations } from 'drizzle-orm/relations';
 import { environments, projects } from '.';
 
 export const apiTokens = pgTable('api_tokens', {
-  id: uuid('id').primaryKey(),
+  id: uuid('id').primaryKey().defaultRandom(),
   projectId: text('project_id')
     .notNull()
     .references(() => projects.id),

@@ -36,6 +36,13 @@
       "when": 1706067703048,
       "tag": "0004_tired_alex_power",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1706069811811,
+      "tag": "0005_small_rogue",
+      "breakpoints": true
     }
   ]
 }
