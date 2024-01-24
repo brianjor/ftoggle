@@ -44,4 +44,6 @@ export enum ProjectPermission {
   DELETE_ENVIRONMENT = 'DELETE_PROJECT_ENVIRONMENT',
   /** Allows viewing environments of a project. */
   VIEW_ENVIRONMENTS = 'VIEW_PROJECT_ENVIRONMENTS',
+  /** Allows creating project API tokens. */
+  CREATE_API_TOKEN = 'CREATE_PROJECT_API_TOKEN',
 }
