@@ -50,6 +50,13 @@
       "when": 1706069946519,
       "tag": "0006_fresh_terror",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1706154789711,
+      "tag": "0007_charming_victor_mancha",
+      "breakpoints": true
     }
   ]
 }
