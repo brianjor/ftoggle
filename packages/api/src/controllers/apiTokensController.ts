@@ -1,5 +1,6 @@
 import { dbClient } from '@ftoggle/db/connection';
-import { apiTokens } from '@ftoggle/db/schema';
+import { apiTokens, projects } from '@ftoggle/db/schema';
+import { eq, getTableColumns } from 'drizzle-orm';
 import { ApiTokenType } from '../enums/apiTokens';
 import { ApiTokensTableItem } from '../typeboxes/apiTokensTypes';
 
@@ -17,5 +18,20 @@ export class ApiTokensController {
     userId: string;
   }): Promise<ApiTokensTableItem> {
     return (await dbClient.insert(apiTokens).values(fields).returning())[0];
+  }
+
+  /**
+   * Gets the projects API tokens
+   * @param projectId id of the project
+   * @returns API tokens for the project
+   */
+  public async getApiTokensForProject(
+    projectId: string,
+  ): Promise<ApiTokensTableItem[]> {
+    return await dbClient
+      .select(getTableColumns(apiTokens))
+      .from(apiTokens)
+      .leftJoin(projects, eq(apiTokens.projectId, projects.id))
+      .where(eq(apiTokens.projectId, projectId));
   }
 }

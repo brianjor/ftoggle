@@ -46,4 +46,6 @@ export enum ProjectPermission {
   VIEW_ENVIRONMENTS = 'VIEW_PROJECT_ENVIRONMENTS',
   /** Allows creating project API tokens. */
   CREATE_API_TOKEN = 'CREATE_PROJECT_API_TOKEN',
+  /** Allows viewing project API tokens. */
+  VIEW_API_TOKENS = 'VIEW_PROJECT_API_TOKENS',
 }
