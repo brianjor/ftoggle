@@ -11,40 +11,71 @@ const projectsController = new ProjectsController();
 const environmentsController = new EnvironmentsController();
 const apiTokensController = new ApiTokensController();
 
-export const apiTokensHandlers = new Elysia().use(hooks).post(
-  '',
-  async ({ body, params, getRequestUser }) => {
-    const { projectId } = params;
-    const { environmentId, type, name } = body;
-    const user = await getRequestUser();
-    await projectsController.getProjectById(projectId);
-    await environmentsController.getEnvironmentById(environmentId);
-    const apiToken = await apiTokensController.createApiToken({
-      projectId,
-      environmentId,
-      type,
-      name,
-      userId: user.userId,
-    });
+export const apiTokensHandlers = new Elysia()
+  .use(hooks)
+  .post(
+    '',
+    async ({ body, params, getRequestUser }) => {
+      const { projectId } = params;
+      const { environmentId, type, name } = body;
+      const user = await getRequestUser();
+      await projectsController.getProjectById(projectId);
+      await environmentsController.getEnvironmentById(environmentId);
+      const apiToken = await apiTokensController.createApiToken({
+        projectId,
+        environmentId,
+        type,
+        name,
+        userId: user.userId,
+      });
 
-    return {
-      apiToken,
-    };
-  },
-  {
-    response: {
-      200: t.Object({ apiToken: apiTokensTableItem }),
+      return {
+        apiToken,
+      };
     },
-    params: t.Object({ projectId: t.String() }),
-    body: t.Object({
-      environmentId: t.Number(),
-      type: t.Enum(ApiTokenType),
-      name: t.String(),
-    }),
-    beforeHandle: [
-      ({ isSignedIn }) => isSignedIn(),
-      ({ hasProjectPermissions }) =>
-        hasProjectPermissions([ProjectPermission.CREATE_API_TOKEN]),
-    ],
-  },
-);
+    {
+      response: {
+        200: t.Object({ apiToken: apiTokensTableItem }),
+      },
+      params: t.Object({ projectId: t.String() }),
+      body: t.Object({
+        environmentId: t.Number(),
+        type: t.Enum(ApiTokenType),
+        name: t.String(),
+      }),
+      beforeHandle: [
+        ({ isSignedIn }) => isSignedIn(),
+        ({ hasProjectPermissions }) =>
+          hasProjectPermissions([ProjectPermission.CREATE_API_TOKEN]),
+      ],
+    },
+  )
+  .get(
+    '',
+    async ({ params }) => {
+      const { projectId } = params;
+      await projectsController.getProjectById(projectId);
+
+      const tokens =
+        await apiTokensController.getApiTokensForProject(projectId);
+
+      return {
+        tokens,
+      };
+    },
+    {
+      response: {
+        200: t.Object({
+          tokens: t.Array(apiTokensTableItem),
+        }),
+      },
+      params: t.Object({
+        projectId: t.String(),
+      }),
+      beforeHandle: [
+        ({ isSignedIn }) => isSignedIn(),
+        ({ hasProjectPermissions }) =>
+          hasProjectPermissions([ProjectPermission.VIEW_API_TOKENS]),
+      ],
+    },
+  );
