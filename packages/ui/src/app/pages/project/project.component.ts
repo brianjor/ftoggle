@@ -1,3 +1,4 @@
+import { ClipboardModule } from '@angular/cdk/clipboard';
 import { CommonModule } from '@angular/common';
 import { Component, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,6 +11,7 @@ import { ActivatedRoute } from '@angular/router';
 import { edenTreaty } from '@elysiajs/eden';
 import { App } from '@ftoggle/api';
 import {
+  ApiTokensTableItem,
   EnvironmentsTableItem,
   FeatureWithEnvironments,
 } from '@ftoggle/api/types';
@@ -18,11 +20,13 @@ import { CreateEnvironmentDialogComponent } from '../../components/create-enviro
 import { CreateFeatureDialogComponent } from '../../components/create-feature-dialog/create-feature-dialog.component';
 import { FeaturesService } from '../../services/features.service';
 import { LocalStorageService } from '../../services/local-storage.service';
+import { ProjectsService } from '../../services/projects.service';
 
 @Component({
   selector: 'app-project',
   standalone: true,
   imports: [
+    ClipboardModule,
     CreateFeatureDialogComponent,
     CommonModule,
     MatButtonModule,
@@ -39,11 +43,14 @@ export class ProjectComponent {
   private projectId = '';
   features = signal<FeatureWithEnvironments[]>([]);
   environments = signal<EnvironmentsTableItem[]>([]);
+  apiTokens = signal<ApiTokensTableItem[]>([]);
+  apiTokenColumns = ['name', 'created', 'type', 'copy'];
   BASE_COLUMNS = ['name', 'created'];
   displayedColumns = [...this.BASE_COLUMNS];
   toggleFeatureInFlight = false;
 
   constructor(
+    private projectsService: ProjectsService,
     private featuresService: FeaturesService,
     private local: LocalStorageService,
     private route: ActivatedRoute,
@@ -59,6 +66,7 @@ export class ProjectComponent {
     } else {
       this.projectId = projectId;
       this.getProject();
+      this.getApiTokens();
     }
   }
 
@@ -77,6 +85,11 @@ export class ProjectComponent {
           this.displayedColumns.push(...this.environments().map((e) => e.name));
         }
       });
+  }
+
+  async getApiTokens() {
+    const data = await this.projectsService.getApiTokens(this.projectId);
+    this.apiTokens.set(data?.tokens ?? []);
   }
 
   findEnvironment(

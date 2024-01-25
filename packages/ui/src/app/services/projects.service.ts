@@ -29,4 +29,17 @@ export class ProjectsService {
       console.error('Error creating project', err);
     }
   }
+
+  async getApiTokens(projectId: string) {
+    try {
+      const response =
+        await this.apiService.api.projects[projectId].apiTokens.get();
+      if (response.status === 200) {
+        return response.data;
+      }
+    } catch (err) {
+      console.error('Error getting api tokens', err);
+    }
+    return { tokens: [] };
+  }
 }
