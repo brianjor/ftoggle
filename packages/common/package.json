@@ -2,6 +2,7 @@
   "name": "@ftoggle/common",
   "type": "module",
   "exports": {
+    "./enums/*": "./src/enums/*.ts",
     "./validations/*": "./src/validations/*.ts"
   },
   "peerDependencies": {

@@ -16,6 +16,7 @@ import {
   FeatureWithEnvironments,
 } from '@ftoggle/api/types';
 import { environment } from '../../../environments/environment';
+import { CreateApiTokenDialogComponent } from '../../components/create-api-token-dialog/create-api-token-dialog.component';
 import { CreateEnvironmentDialogComponent } from '../../components/create-environment-dialog/create-environment-dialog.component';
 import { CreateFeatureDialogComponent } from '../../components/create-feature-dialog/create-feature-dialog.component';
 import { FeaturesService } from '../../services/features.service';
@@ -87,9 +88,10 @@ export class ProjectComponent {
       });
   }
 
-  async getApiTokens() {
-    const data = await this.projectsService.getApiTokens(this.projectId);
-    this.apiTokens.set(data?.tokens ?? []);
+  getApiTokens() {
+    this.projectsService.getApiTokens(this.projectId).then((res) => {
+      this.apiTokens.set(res?.tokens ?? []);
+    });
   }
 
   findEnvironment(
@@ -105,6 +107,16 @@ export class ProjectComponent {
       { data: { projectId: this.projectId } },
     );
     createFeatureDialogRef.afterClosed().subscribe(() => this.getProject());
+  }
+
+  openCreateApiTokenDialog() {
+    const createApiTokenDialogRef = this.dialog.open(
+      CreateApiTokenDialogComponent,
+      {
+        data: { projectId: this.projectId, environments: this.environments() },
+      },
+    );
+    createApiTokenDialogRef.afterClosed().subscribe(() => this.getApiTokens());
   }
 
   openCreateEnvironmentDialog() {

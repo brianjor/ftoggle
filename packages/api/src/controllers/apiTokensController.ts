@@ -1,7 +1,7 @@
+import { ApiTokenType } from '@ftoggle/common/enums/apiTokens';
 import { dbClient } from '@ftoggle/db/connection';
 import { apiTokens, projects } from '@ftoggle/db/schema';
 import { eq, getTableColumns } from 'drizzle-orm';
-import { ApiTokenType } from '../enums/apiTokens';
 import { ApiTokensTableItem } from '../typeboxes/apiTokensTypes';
 
 export class ApiTokensController {

@@ -44,6 +44,15 @@
   </mat-tab>
 
   <mat-tab label="API Tokens">
+    <button
+      mat-fab
+      extended
+      color="primary"
+      (click)="openCreateApiTokenDialog()"
+    >
+      <mat-icon>add</mat-icon>
+      API Token
+    </button>
     <table
       mat-table
       [dataSource]="apiTokens()"
