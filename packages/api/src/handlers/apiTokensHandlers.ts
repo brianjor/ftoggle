@@ -1,8 +1,8 @@
+import { ApiTokenType } from '@ftoggle/common/enums/apiTokens';
 import Elysia, { t } from 'elysia';
 import { ApiTokensController } from '../controllers/apiTokensController';
 import { EnvironmentsController } from '../controllers/environmentsController';
 import { ProjectsController } from '../controllers/projectsController';
-import { ApiTokenType } from '../enums/apiTokens';
 import { ProjectPermission } from '../enums/permissions';
 import { hooks } from '../hooks';
 import { apiTokensTableItem } from '../typeboxes/apiTokensTypes';
