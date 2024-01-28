@@ -2,7 +2,11 @@ import { ApiTokenType } from '@ftoggle/common/enums/apiTokens';
 import { dbClient } from '@ftoggle/db/connection';
 import { apiTokens, projects } from '@ftoggle/db/schema';
 import { eq, getTableColumns } from 'drizzle-orm';
-import { ApiTokensTableItem } from '../typeboxes/apiTokensTypes';
+import { RecordDoesNotExistError } from '../errors/dbErrors';
+import {
+  ApiTokenWithProjectAndEnvironment,
+  ApiTokensTableItem,
+} from '../typeboxes/apiTokensTypes';
 
 export class ApiTokensController {
   /**
@@ -18,6 +22,30 @@ export class ApiTokensController {
     userId: string;
   }): Promise<ApiTokensTableItem> {
     return (await dbClient.insert(apiTokens).values(fields).returning())[0];
+  }
+
+  /**
+   * Gets an API token by it's id
+   * @param apiTokenId id of the API token
+   * @returns the API token
+   * @throws A {@link RecordDoesNotExistError} if the API token does not exist
+   */
+  public async getApiTokenById(
+    apiTokenId: string,
+  ): Promise<ApiTokenWithProjectAndEnvironment> {
+    const apiToken = await dbClient.query.apiTokens.findFirst({
+      where: eq(apiTokens.id, apiTokenId),
+      with: {
+        project: true,
+        environment: true,
+      },
+    });
+    if (apiToken === undefined) {
+      throw new RecordDoesNotExistError(
+        `ApiToken with id: ${apiTokenId} does not exist`,
+      );
+    }
+    return apiToken;
   }
 
   /**
