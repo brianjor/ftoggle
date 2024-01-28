@@ -1,0 +1,27 @@
+{
+  "name": "@ftoggle/clients-web",
+  "module": "index.ts",
+  "type": "module",
+  "main": "./build/index.js",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./build/index.d.ts",
+        "default": "./build/index.js"
+      }
+    }
+  },
+  "types": "./build/index.d.ts",
+  "scripts": {
+    "build": "bun run ./build.ts && bun run build:declaration",
+    "build:declaration": "tsc ./index.ts --outFile ./build/index.d.ts --module es6 --declaration --emitDeclarationOnly --skipLibCheck",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier . --check",
+    "format:fix": "prettier . --write",
+    "typecheck": "tsc"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

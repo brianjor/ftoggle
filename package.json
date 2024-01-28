@@ -2,7 +2,8 @@
   "name": "ftoggle",
   "type": "module",
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "packages/clients/*"
   ],
   "scripts": {
     "lint": "nx run-many --target=lint",
