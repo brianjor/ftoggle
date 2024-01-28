@@ -4,7 +4,12 @@
   "type": "module",
   "main": "./build/index.js",
   "scripts": {
-    "build": "bun run ./build.ts"
+    "build": "bun run ./build.ts",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier . --check",
+    "format:fix": "prettier . --write",
+    "typecheck": "tsc"
   },
   "devDependencies": {
     "@types/bun": "latest"
