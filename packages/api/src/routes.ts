@@ -6,6 +6,7 @@ import {
   logoutHandler,
   signupHandler,
 } from './handlers/authHandlers';
+import { clientFeaturesHandler } from './handlers/clientFeaturesHandlers';
 import { environmentHandlers } from './handlers/environementHandlers';
 import { environmentsHandlers } from './handlers/environementsHandlers';
 import { featureEnvironmentHandler } from './handlers/featureEnvironmentHandlers';
@@ -23,6 +24,10 @@ import { usersHandlers } from './handlers/usersHandlers';
 // prettier-ignore
 export const routes = new Elysia()
   .group('/api', _ => _
+    .group('/client', _ => _
+      .group('/features', _ => _.use(clientFeaturesHandler)
+      ) // /features
+    ) // /client
     .group('/auth', _ => _
       .group('/login', _ => _.use(loginHandler))
       .group('/signup', _ => _.use(signupHandler))
