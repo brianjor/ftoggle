@@ -1,0 +1,23 @@
+{
+  "name": "demo-api",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "start": "bun run ./index.ts",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier . --check",
+    "format:fix": "prettier . --write",
+    "typecheck": "tsc"
+  },
+  "dependencies": {
+    "@ftoggle/clients/bun": "../../packages/clients/bun:*",
+    "elysia": "^0.8.14"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

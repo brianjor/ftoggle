@@ -1,0 +1,15 @@
+{
+  "name": "@ftoggle/clients/bun",
+  "module": "index.ts",
+  "type": "module",
+  "main": "./build/index.js",
+  "scripts": {
+    "build": "bun run ./build.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "overrides": [
+    {
+      "files": ["*.html"],
+      "plugins": ["html"],
+    },
+  ],
+}
