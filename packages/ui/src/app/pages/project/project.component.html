@@ -75,7 +75,7 @@
       <ng-container matColumnDef="copy">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let apiToken">
-          <button mat-icon-button [cdkCopyToClipboard]="apiToken.id">
+          <button mat-icon-button (click)="copyApiToken(apiToken)">
             <mat-icon>content_copy</mat-icon>
           </button>
         </td>
