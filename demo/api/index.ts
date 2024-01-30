@@ -1,4 +1,4 @@
-import { FToggle } from '@ftoggle/clients/bun';
+import { FToggle } from '@ftoggle/clients-bun';
 import { Elysia } from 'elysia';
 
 const ftoggle = new FToggle({
