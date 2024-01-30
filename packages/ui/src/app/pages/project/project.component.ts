@@ -1,4 +1,4 @@
-import { ClipboardModule } from '@angular/cdk/clipboard';
+import { Clipboard } from '@angular/cdk/clipboard';
 import { CommonModule } from '@angular/common';
 import { Component, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -27,7 +27,6 @@ import { ProjectsService } from '../../services/projects.service';
   selector: 'app-project',
   standalone: true,
   imports: [
-    ClipboardModule,
     CreateFeatureDialogComponent,
     CommonModule,
     MatButtonModule,
@@ -51,6 +50,7 @@ export class ProjectComponent {
   toggleFeatureInFlight = false;
 
   constructor(
+    private clipboard: Clipboard,
     private projectsService: ProjectsService,
     private featuresService: FeaturesService,
     private local: LocalStorageService,
@@ -92,6 +92,17 @@ export class ProjectComponent {
     this.projectsService.getApiTokens(this.projectId).then((res) => {
       this.apiTokens.set(res?.tokens ?? []);
     });
+  }
+
+  copyApiToken(apiToken: ApiTokensTableItem) {
+    const env = this.environments().find(
+      (e) => e.id === apiToken.environmentId,
+    );
+    if (env === undefined) {
+      console.error('Unable to find environment for the token');
+    } else {
+      this.clipboard.copy(`${this.projectId}:${env.name}:${apiToken.id}`);
+    }
   }
 
   findEnvironment(
