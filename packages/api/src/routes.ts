@@ -1,4 +1,5 @@
 import Elysia from 'elysia';
+import { apiTokenHandlers } from './handlers/apiTokenHandlers';
 import { apiTokensHandlers } from './handlers/apiTokensHandlers';
 import {
   changePasswordHandler,
@@ -37,6 +38,8 @@ export const routes = new Elysia()
     .group('/projects', _ => _.use(projectsHandlers)
       .group('/:projectId', _ => _.use(projectHandlers)
         .group('/apiTokens', _ => _.use(apiTokensHandlers)
+          .group('/:apiTokenId', _ => _.use(apiTokenHandlers)
+          ) // /:apiToken
         ) // /apiTokens
         .group('/environments', _ => _.use(environmentsHandlers)
           .group('/:environmentId', _ => _.use(environmentHandlers)

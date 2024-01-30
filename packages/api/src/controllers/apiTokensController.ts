@@ -62,4 +62,12 @@ export class ApiTokensController {
       .leftJoin(projects, eq(apiTokens.projectId, projects.id))
       .where(eq(apiTokens.projectId, projectId));
   }
+
+  /**
+   * Deletes an api token for the given API token id.
+   * @param apiTokenId id of the API token
+   */
+  public async deleteApiTokenById(apiTokenId: string): Promise<void> {
+    await dbClient.delete(apiTokens).where(eq(apiTokens.id, apiTokenId));
+  }
 }

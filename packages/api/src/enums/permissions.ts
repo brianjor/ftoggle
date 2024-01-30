@@ -48,4 +48,6 @@ export enum ProjectPermission {
   CREATE_API_TOKEN = 'CREATE_PROJECT_API_TOKEN',
   /** Allows viewing project API tokens. */
   VIEW_API_TOKENS = 'VIEW_PROJECT_API_TOKENS',
+  /** Allows deleting project API tokens. */
+  DELETE_API_TOKEN = 'DELETE_PROJECT_API_TOKEN',
 }
