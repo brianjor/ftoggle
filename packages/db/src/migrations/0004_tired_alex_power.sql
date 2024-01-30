@@ -1,3 +1,4 @@
+-- Custom SQL migration file, put you code below! --
 -- Create new permission
 INSERT INTO "permissions"
   ("name", "description")
