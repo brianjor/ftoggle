@@ -87,4 +87,26 @@ export const featureHandlers = new Elysia()
           hasProjectPermissions([ProjectPermission.EDIT_FEATURE_TOGGLE]),
       ],
     },
+  )
+  .delete(
+    '',
+    async ({ params }) => {
+      const { projectId, featureId } = params;
+      await featuresController.deleteProjectFeature(featureId, projectId);
+
+      return {
+        message: 'Feature deleted',
+      };
+    },
+    {
+      params: t.Object({
+        projectId: t.String(),
+        featureId: t.Numeric(),
+      }),
+      beforeHandle: [
+        ({ isSignedIn }) => isSignedIn(),
+        ({ hasProjectPermissions }) =>
+          hasProjectPermissions([ProjectPermission.DELETE_FEATURE_TOGGLE]),
+      ],
+    },
   );

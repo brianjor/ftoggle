@@ -94,4 +94,23 @@ export class FeaturesController {
         .returning()
     )[0];
   }
+
+  /**
+   * Deletes the feature.
+   * @param featureId id of the feature
+   * @param projectId id of the project
+   */
+  async deleteProjectFeature(featureId: number, projectId: string) {
+    await dbClient.transaction(async (tx) => {
+      await tx
+        .delete(projectsFeaturesEnvironments)
+        .where(
+          and(
+            eq(projectsFeaturesEnvironments.projectId, projectId),
+            eq(projectsFeaturesEnvironments.featureId, featureId),
+          ),
+        );
+      await tx.delete(features).where(eq(features.id, featureId));
+    });
+  }
 }
