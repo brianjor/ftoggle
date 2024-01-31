@@ -54,16 +54,19 @@ export const projectHandlers = new Elysia()
     '',
     async ({ params }) => {
       const { projectId } = params;
-      const project = await projectsController.getProjectById(projectId);
-      await projectsController.archiveProject(projectId);
-      return `Archived project: "${project.name}"`;
+      await projectsController.deleteProject(projectId);
+      return {
+        message: 'Deleted project',
+      };
     },
     {
       params: t.Object({
         projectId: t.String(),
       }),
       response: {
-        200: t.String(),
+        200: t.Object({
+          message: t.String(),
+        }),
       },
       beforeHandle: [
         ({ isSignedIn }) => isSignedIn(),

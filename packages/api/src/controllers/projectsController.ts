@@ -318,6 +318,14 @@ export class ProjectsController {
   }
 
   /**
+   * Deletes a project.
+   * @param projectId id of the project to delete
+   */
+  public async deleteProject(projectId: string) {
+    await dbClient.delete(projects).where(eq(projects.id, projectId));
+  }
+
+  /**
    * Archives a project.
    * @param projectId Id of project to be archived
    */
