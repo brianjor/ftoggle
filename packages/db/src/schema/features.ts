@@ -16,7 +16,7 @@ export const features = pgTable(
       .defaultNow(),
     projectId: text('project_id')
       .notNull()
-      .references(() => projects.id),
+      .references(() => projects.id, { onDelete: 'cascade' }),
   },
   (t) => ({
     unq: unique().on(t.name, t.projectId),

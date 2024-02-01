@@ -1,9 +1,103 @@
 {
-  "id": "5c0bd227-2b4b-4f61-8cc0-dbe635e6f2b6",
-  "prevId": "9dc56288-28e9-4964-9a56-d4ef7891cbab",
+  "id": "a88fa38e-c4a0-43ab-bf36-bae6ea2e9f02",
+  "prevId": "3c523e15-b345-41d9-bd0d-8cfdb1e8f44e",
   "version": "5",
   "dialect": "pg",
   "tables": {
+    "api_tokens": {
+      "name": "api_tokens",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "project_id": {
+          "name": "project_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "environment_id": {
+          "name": "environment_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "api_tokens_project_id_projects_id_fk": {
+          "name": "api_tokens_project_id_projects_id_fk",
+          "tableFrom": "api_tokens",
+          "columnsFrom": [
+            "project_id"
+          ],
+          "tableTo": "projects",
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "cascade"
+        },
+        "api_tokens_environment_id_environments_id_fk": {
+          "name": "api_tokens_environment_id_environments_id_fk",
+          "tableFrom": "api_tokens",
+          "columnsFrom": [
+            "environment_id"
+          ],
+          "tableTo": "environments",
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "cascade"
+        },
+        "api_tokens_user_id_users_id_fk": {
+          "name": "api_tokens_user_id_users_id_fk",
+          "tableFrom": "api_tokens",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "tableTo": "users",
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "environments": {
       "name": "environments",
       "schema": "",
@@ -54,7 +148,7 @@
             "id"
           ],
           "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -119,7 +213,7 @@
             "id"
           ],
           "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -133,90 +227,6 @@
           "nullsNotDistinct": false
         }
       }
-    },
-    "projects_features_environments": {
-      "name": "projects_features_environments",
-      "schema": "",
-      "columns": {
-        "project_id": {
-          "name": "project_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "feature_id": {
-          "name": "feature_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "environment_id": {
-          "name": "environment_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "is_enabled": {
-          "name": "is_enabled",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "projects_features_environments_project_id_projects_id_fk": {
-          "name": "projects_features_environments_project_id_projects_id_fk",
-          "tableFrom": "projects_features_environments",
-          "columnsFrom": [
-            "project_id"
-          ],
-          "tableTo": "projects",
-          "columnsTo": [
-            "id"
-          ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
-        },
-        "projects_features_environments_feature_id_features_id_fk": {
-          "name": "projects_features_environments_feature_id_features_id_fk",
-          "tableFrom": "projects_features_environments",
-          "columnsFrom": [
-            "feature_id"
-          ],
-          "tableTo": "features",
-          "columnsTo": [
-            "id"
-          ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
-        },
-        "projects_features_environments_environment_id_environments_id_fk": {
-          "name": "projects_features_environments_environment_id_environments_id_fk",
-          "tableFrom": "projects_features_environments",
-          "columnsFrom": [
-            "environment_id"
-          ],
-          "tableTo": "environments",
-          "columnsTo": [
-            "id"
-          ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "projects_features_environments_feature_id_environment_id_project_id_pk": {
-          "name": "projects_features_environments_feature_id_environment_id_project_id_pk",
-          "columns": [
-            "feature_id",
-            "environment_id",
-            "project_id"
-          ]
-        }
-      },
-      "uniqueConstraints": {}
     },
     "permissions": {
       "name": "permissions",
@@ -306,6 +316,91 @@
         }
       }
     },
+    "projects_features_environments": {
+      "name": "projects_features_environments",
+      "schema": "",
+      "columns": {
+        "project_id": {
+          "name": "project_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "feature_id": {
+          "name": "feature_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "environment_id": {
+          "name": "environment_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_enabled": {
+          "name": "is_enabled",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "projects_features_environments_project_id_projects_id_fk": {
+          "name": "projects_features_environments_project_id_projects_id_fk",
+          "tableFrom": "projects_features_environments",
+          "columnsFrom": [
+            "project_id"
+          ],
+          "tableTo": "projects",
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "cascade"
+        },
+        "projects_features_environments_feature_id_features_id_fk": {
+          "name": "projects_features_environments_feature_id_features_id_fk",
+          "tableFrom": "projects_features_environments",
+          "columnsFrom": [
+            "feature_id"
+          ],
+          "tableTo": "features",
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "cascade"
+        },
+        "projects_features_environments_environment_id_environments_id_fk": {
+          "name": "projects_features_environments_environment_id_environments_id_fk",
+          "tableFrom": "projects_features_environments",
+          "columnsFrom": [
+            "environment_id"
+          ],
+          "tableTo": "environments",
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "projects_features_environments_feature_id_environment_id_project_id_unique": {
+          "name": "projects_features_environments_feature_id_environment_id_project_id_unique",
+          "columns": [
+            "feature_id",
+            "environment_id",
+            "project_id"
+          ],
+          "nullsNotDistinct": false
+        }
+      }
+    },
     "projects_users": {
       "name": "projects_users",
       "schema": "",
@@ -336,7 +431,7 @@
             "id"
           ],
           "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "cascade"
         },
         "projects_users_user_id_users_id_fk": {
           "name": "projects_users_user_id_users_id_fk",
@@ -412,7 +507,7 @@
             "id"
           ],
           "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "cascade"
         },
         "projects_users_roles_user_id_users_id_fk": {
           "name": "projects_users_roles_user_id_users_id_fk",

@@ -58,7 +58,7 @@ VALUES
 
 -- Give Admin user ADMIN role --
 WITH
-	adminId AS (SELECT id FROM "users" WHERE "username" = 'Admin'),
+	adminUserId AS (SELECT id FROM "users" WHERE "username" = 'Admin'),
 	adminRoleId AS (SELECT id FROM "roles" WHERE "name" = 'ADMIN')
 INSERT INTO "users_roles"
 	("user_id", "role_id")

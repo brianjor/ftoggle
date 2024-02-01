@@ -101,16 +101,21 @@ export class FeaturesController {
    * @param projectId id of the project
    */
   async deleteProjectFeature(featureId: number, projectId: string) {
-    await dbClient.transaction(async (tx) => {
-      await tx
-        .delete(projectsFeaturesEnvironments)
-        .where(
-          and(
-            eq(projectsFeaturesEnvironments.projectId, projectId),
-            eq(projectsFeaturesEnvironments.featureId, featureId),
-          ),
-        );
-      await tx.delete(features).where(eq(features.id, featureId));
-    });
+    await dbClient
+      .delete(features)
+      .where(
+        and(eq(features.id, featureId), eq(features.projectId, projectId)),
+      );
+    // await dbClient.transaction(async (tx) => {
+    //   await tx
+    //     .delete(projectsFeaturesEnvironments)
+    //     .where(
+    //       and(
+    //         eq(projectsFeaturesEnvironments.projectId, projectId),
+    //         eq(projectsFeaturesEnvironments.featureId, featureId),
+    //       ),
+    //     );
+    //   await tx.delete(features).where(eq(features.id, featureId));
+    // });
   }
 }
