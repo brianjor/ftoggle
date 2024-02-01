@@ -15,7 +15,10 @@ VALUES
   ('CREATE_PROJECT_ENVIRONMENT', 'Allows creating an environment for a project'),
   ('EDIT_PROJECT_ENVIRONMENT', 'Allows editing an environment for a project'),
   ('DELETE_PROJECT_ENVIRONMENT', 'Allows deleting an environment from a project'),
-  ('VIEW_PROJECT_ENVIRONMENTS', 'Allows viewing environments of a project');
+  ('VIEW_PROJECT_ENVIRONMENTS', 'Allows viewing environments of a project'),
+  ('CREATE_PROJECT_API_TOKEN', 'Allows creating project API tokens'),
+  ('VIEW_PROJECT_API_TOKENS', 'Allows viewing project API tokens'),
+  ('DELETE_PROJECT_API_TOKEN', 'Allows deleting project API tokens');
 --> statement-breakpoint
 -- Add project level roles
 INSERT INTO "roles"
@@ -40,7 +43,10 @@ WITH
   createEnvironmentId   AS (SELECT id FROM "permissions" WHERE "name" = 'CREATE_PROJECT_ENVIRONMENT'),
   editEnvironmentId     AS (SELECT id FROM "permissions" WHERE "name" = 'EDIT_PROJECT_ENVIRONMENT'),
   deleteEnvironmentId   AS (SELECT id FROM "permissions" WHERE "name" = 'DELETE_PROJECT_ENVIRONMENT'),
-  viewEnvironmentsId    AS (SELECT id FROM "permissions" WHERE "name" = 'VIEW_PROJECT_ENVIRONMENTS')
+  viewEnvironmentsId    AS (SELECT id FROM "permissions" WHERE "name" = 'VIEW_PROJECT_ENVIRONMENTS'),
+  createApiTokenId      AS (SELECT id FROM "permissions" WHERE "name" = 'CREATE_PROJECT_API_TOKEN'),
+  viewProjectApiTokens  AS (SELECT id FROM "permissions" WHERE "name" = 'VIEW_PROJECT_API_TOKENS'),
+  deleteApiTokenId      AS (SELECT id FROM "permissions" WHERE "name" = 'DELETE_PROJECT_API_TOKEN')
 INSERT INTO "roles_permissions"
   ("role_id", "permission_id")
 VALUES
@@ -56,7 +62,10 @@ VALUES
   ((SELECT id FROM projectOwnerRole), (SELECT id from createEnvironmentId)),
   ((SELECT id FROM projectOwnerRole), (SELECT id from editEnvironmentId)),
   ((SELECT id FROM projectOwnerRole), (SELECT id from deleteEnvironmentId)),
-  ((SELECT id FROM projectOwnerRole), (SELECT id from viewEnvironmentsId));
+  ((SELECT id FROM projectOwnerRole), (SELECT id from viewEnvironmentsId)),
+  ((SELECT id FROM projectOwnerRole), (SELECT id from createApiTokenId)),
+  ((SELECT id FROM projectOwnerRole), (SELECT id from viewProjectApiTokens)),
+  ((SELECT id FROM projectOwnerRole), (SELECT id from deleteApiTokenId));
 --> statement-breakpoint
 -- Add permissions to PROJECT_MEMBER role
 WITH
@@ -69,7 +78,10 @@ WITH
   createEnvironmentId   AS (SELECT id FROM "permissions" WHERE "name" = 'CREATE_PROJECT_ENVIRONMENT'),
   editEnvironmentId     AS (SELECT id FROM "permissions" WHERE "name" = 'EDIT_PROJECT_ENVIRONMENT'),
   deleteEnvironmentId   AS (SELECT id FROM "permissions" WHERE "name" = 'DELETE_PROJECT_ENVIRONMENT'),
-  viewEnvironmentsId    AS (SELECT id FROM "permissions" WHERE "name" = 'VIEW_PROJECT_ENVIRONMENTS')
+  viewEnvironmentsId    AS (SELECT id FROM "permissions" WHERE "name" = 'VIEW_PROJECT_ENVIRONMENTS'),
+  createApiTokenId      AS (SELECT id FROM "permissions" WHERE "name" = 'CREATE_PROJECT_API_TOKEN'),
+  viewProjectApiTokens  AS (SELECT id FROM "permissions" WHERE "name" = 'VIEW_PROJECT_API_TOKENS'),
+  deleteApiTokenId      AS (SELECT id FROM "permissions" WHERE "name" = 'DELETE_PROJECT_API_TOKEN')
 INSERT INTO "roles_permissions"
   ("role_id", "permission_id")
 VALUES
@@ -81,7 +93,10 @@ VALUES
   ((SELECT id FROM projectMemberRole), (SELECT id from createEnvironmentId)),
   ((SELECT id FROM projectMemberRole), (SELECT id from editEnvironmentId)),
   ((SELECT id FROM projectMemberRole), (SELECT id from deleteEnvironmentId)),
-  ((SELECT id FROM projectMemberRole), (SELECT id from viewEnvironmentsId));
+  ((SELECT id FROM projectMemberRole), (SELECT id from viewEnvironmentsId)),
+  ((SELECT id FROM projectMemberRole), (SELECT id from createApiTokenId)),
+  ((SELECT id FROM projectMemberRole), (SELECT id from viewProjectApiTokens)),
+  ((SELECT id FROM projectMemberRole), (SELECT id from deleteApiTokenId));
 --> statement-breakpoint
 -- Add permisions to PROJECT_VIEWER role
 WITH
