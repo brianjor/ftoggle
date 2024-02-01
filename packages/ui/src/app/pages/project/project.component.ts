@@ -21,6 +21,7 @@ import { paths } from '../../app.routes';
 import { CreateApiTokenDialogComponent } from '../../components/create-api-token-dialog/create-api-token-dialog.component';
 import { CreateEnvironmentDialogComponent } from '../../components/create-environment-dialog/create-environment-dialog.component';
 import { CreateFeatureDialogComponent } from '../../components/create-feature-dialog/create-feature-dialog.component';
+import { EnvironmentsService } from '../../services/environments.service';
 import { FeaturesService } from '../../services/features.service';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { ProjectsService } from '../../services/projects.service';
@@ -47,17 +48,19 @@ export class ProjectComponent {
   environments = signal<EnvironmentsTableItem[]>([]);
   apiTokens = signal<ApiTokensTableItem[]>([]);
   apiTokenColumns = ['name', 'created', 'type', 'copy'];
-  envColumns = ['name', 'createdAt'];
+  envColumns = ['name', 'createdAt', 'delete'];
   BASE_COLUMNS = ['name', 'created'];
   featureColumns = [...this.BASE_COLUMNS];
   toggleFeatureInFlight = false;
   deleteProjectInFlight = false;
   deleteFeatureInFlight = false;
+  deleteEnvironmentInFlight = false;
 
   constructor(
     private clipboard: Clipboard,
     private projectsService: ProjectsService,
     private featuresService: FeaturesService,
+    private environmentsService: EnvironmentsService,
     private local: LocalStorageService,
     private route: ActivatedRoute,
     private router: Router,
@@ -179,5 +182,14 @@ export class ProjectComponent {
       .deleteFeature(feature.id, this.projectId)
       .then(() => this.getProject())
       .finally(() => (this.deleteFeatureInFlight = false));
+  }
+
+  deleteEnvironment(environment: EnvironmentsTableItem) {
+    if (this.deleteEnvironmentInFlight) return;
+    this.deleteEnvironmentInFlight = true;
+    this.environmentsService
+      .deleteEnvironment(this.projectId, environment.id)
+      .then(() => this.getProject())
+      .finally(() => (this.deleteEnvironmentInFlight = false));
   }
 }

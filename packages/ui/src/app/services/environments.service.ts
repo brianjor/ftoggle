@@ -17,4 +17,14 @@ export class EnvironmentsService {
       console.error('Error creating feature', err);
     }
   }
+
+  async deleteEnvironment(projectId: string, environmentId: number) {
+    try {
+      await this.apiService.api.projects[projectId].environments[
+        environmentId
+      ].delete();
+    } catch (err) {
+      console.error('Error deleting environment', err);
+    }
+  }
 }
