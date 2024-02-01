@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { edenTreaty } from '@elysiajs/eden';
 import { App } from '@ftoggle/api';
 import {
@@ -16,6 +16,7 @@ import {
   FeatureWithEnvironments,
 } from '@ftoggle/api/types';
 import { environment } from '../../../environments/environment';
+import { paths } from '../../app.routes';
 import { CreateApiTokenDialogComponent } from '../../components/create-api-token-dialog/create-api-token-dialog.component';
 import { CreateEnvironmentDialogComponent } from '../../components/create-environment-dialog/create-environment-dialog.component';
 import { CreateFeatureDialogComponent } from '../../components/create-feature-dialog/create-feature-dialog.component';
@@ -49,6 +50,7 @@ export class ProjectComponent {
   BASE_COLUMNS = ['name', 'created'];
   displayedColumns = [...this.BASE_COLUMNS];
   toggleFeatureInFlight = false;
+  deleteProjectInFlight = false;
 
   constructor(
     private clipboard: Clipboard,
@@ -56,6 +58,7 @@ export class ProjectComponent {
     private featuresService: FeaturesService,
     private local: LocalStorageService,
     private route: ActivatedRoute,
+    private router: Router,
     public dialog: MatDialog,
   ) {}
 
@@ -153,5 +156,12 @@ export class ProjectComponent {
       })
       .catch((err) => console.error('Error toggling feature', err))
       .finally(() => (this.toggleFeatureInFlight = false));
+  }
+
+  deleteProject() {
+    if (this.deleteProjectInFlight) return;
+    this.projectsService
+      .deleteProject(this.projectId)
+      .then(() => this.router.navigate([paths.projects]));
   }
 }

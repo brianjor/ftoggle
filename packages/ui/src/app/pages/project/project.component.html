@@ -115,4 +115,10 @@
       <tr mat-row *matRowDef="let row; columns: envColumns"></tr>
     </table>
   </mat-tab>
+
+  <mat-tab label="Settings">
+    <button mat-fab extended color="warn" (click)="deleteProject()">
+      Delete Project
+    </button>
+  </mat-tab>
 </mat-tab-group>
