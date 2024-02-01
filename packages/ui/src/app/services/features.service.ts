@@ -37,4 +37,14 @@ export class FeaturesService {
       console.error('Error toggling feature', err);
     }
   }
+
+  async deleteFeature(featureId: number, projectId: string) {
+    try {
+      await this.apiService.api.projects[projectId].features[
+        featureId
+      ].delete();
+    } catch (error) {
+      console.error('Error deleting feature', error);
+    }
+  }
 }

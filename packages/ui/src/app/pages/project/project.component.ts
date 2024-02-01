@@ -14,6 +14,7 @@ import {
   ApiTokensTableItem,
   EnvironmentsTableItem,
   FeatureWithEnvironments,
+  FeaturesTableItem,
 } from '@ftoggle/api/types';
 import { environment } from '../../../environments/environment';
 import { paths } from '../../app.routes';
@@ -48,9 +49,10 @@ export class ProjectComponent {
   apiTokenColumns = ['name', 'created', 'type', 'copy'];
   envColumns = ['name', 'createdAt'];
   BASE_COLUMNS = ['name', 'created'];
-  displayedColumns = [...this.BASE_COLUMNS];
+  featureColumns = [...this.BASE_COLUMNS];
   toggleFeatureInFlight = false;
   deleteProjectInFlight = false;
+  deleteFeatureInFlight = false;
 
   constructor(
     private clipboard: Clipboard,
@@ -76,7 +78,7 @@ export class ProjectComponent {
   }
 
   getProject() {
-    this.displayedColumns = [...this.BASE_COLUMNS];
+    this.featureColumns = [...this.BASE_COLUMNS];
     this.api.api.projects[this.projectId]
       .get({
         $headers: {
@@ -87,7 +89,10 @@ export class ProjectComponent {
         if (res.status === 200) {
           this.features.set(res.data?.project.features ?? []);
           this.environments.set(res.data?.project.environments ?? []);
-          this.displayedColumns.push(...this.environments().map((e) => e.name));
+          this.featureColumns.push(
+            ...this.environments().map((e) => e.name),
+            'delete',
+          );
         }
       });
   }
@@ -160,8 +165,19 @@ export class ProjectComponent {
 
   deleteProject() {
     if (this.deleteProjectInFlight) return;
+    this.deleteFeatureInFlight = true;
     this.projectsService
       .deleteProject(this.projectId)
-      .then(() => this.router.navigate([paths.projects]));
+      .then(() => this.router.navigate([paths.projects]))
+      .finally(() => (this.deleteProjectInFlight = false));
+  }
+
+  deleteFeature(feature: FeaturesTableItem) {
+    if (this.deleteFeatureInFlight) return;
+    this.deleteFeatureInFlight = true;
+    this.featuresService
+      .deleteFeature(feature.id, this.projectId)
+      .then(() => this.getProject())
+      .finally(() => (this.deleteFeatureInFlight = false));
   }
 }
