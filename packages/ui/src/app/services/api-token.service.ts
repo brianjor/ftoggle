@@ -25,4 +25,14 @@ export class ApiTokenService {
       console.error('Error creating api token', err);
     }
   }
+
+  async deleteApiToken(projectId: string, apiTokenId: string) {
+    try {
+      await this.apiService.api.projects[projectId].apiTokens[
+        apiTokenId
+      ].delete();
+    } catch (err) {
+      console.error('Error creating api token', err);
+    }
+  }
 }

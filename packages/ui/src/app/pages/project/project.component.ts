@@ -21,6 +21,7 @@ import { paths } from '../../app.routes';
 import { CreateApiTokenDialogComponent } from '../../components/create-api-token-dialog/create-api-token-dialog.component';
 import { CreateEnvironmentDialogComponent } from '../../components/create-environment-dialog/create-environment-dialog.component';
 import { CreateFeatureDialogComponent } from '../../components/create-feature-dialog/create-feature-dialog.component';
+import { ApiTokenService } from '../../services/api-token.service';
 import { EnvironmentsService } from '../../services/environments.service';
 import { FeaturesService } from '../../services/features.service';
 import { LocalStorageService } from '../../services/local-storage.service';
@@ -47,7 +48,7 @@ export class ProjectComponent {
   features = signal<FeatureWithEnvironments[]>([]);
   environments = signal<EnvironmentsTableItem[]>([]);
   apiTokens = signal<ApiTokensTableItem[]>([]);
-  apiTokenColumns = ['name', 'created', 'type', 'copy'];
+  apiTokenColumns = ['name', 'created', 'type', 'copy', 'delete'];
   envColumns = ['name', 'createdAt', 'delete'];
   BASE_COLUMNS = ['name', 'created'];
   featureColumns = [...this.BASE_COLUMNS];
@@ -55,12 +56,14 @@ export class ProjectComponent {
   deleteProjectInFlight = false;
   deleteFeatureInFlight = false;
   deleteEnvironmentInFlight = false;
+  deleteApiTokenInFlight = false;
 
   constructor(
     private clipboard: Clipboard,
     private projectsService: ProjectsService,
     private featuresService: FeaturesService,
     private environmentsService: EnvironmentsService,
+    private apiTokenService: ApiTokenService,
     private local: LocalStorageService,
     private route: ActivatedRoute,
     private router: Router,
@@ -191,5 +194,14 @@ export class ProjectComponent {
       .deleteEnvironment(this.projectId, environment.id)
       .then(() => this.getProject())
       .finally(() => (this.deleteEnvironmentInFlight = false));
+  }
+
+  deleteApiToken(apiToken: ApiTokensTableItem) {
+    if (this.deleteApiTokenInFlight) return;
+    this.deleteApiTokenInFlight = true;
+    this.apiTokenService
+      .deleteApiToken(this.projectId, apiToken.id)
+      .then(() => this.getApiTokens())
+      .finally(() => (this.deleteApiTokenInFlight = false));
   }
 }
