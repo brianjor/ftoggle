@@ -45,6 +45,7 @@ export class ProjectComponent {
   environments = signal<EnvironmentsTableItem[]>([]);
   apiTokens = signal<ApiTokensTableItem[]>([]);
   apiTokenColumns = ['name', 'created', 'type', 'copy'];
+  envColumns = ['name', 'createdAt'];
   BASE_COLUMNS = ['name', 'created'];
   displayedColumns = [...this.BASE_COLUMNS];
   toggleFeatureInFlight = false;

@@ -96,12 +96,23 @@
       <mat-icon>add</mat-icon>
       Environment
     </button>
-    <ul>
-      @for (env of environments(); track env.id) {
-        <li>
-          {{ env.name }}
-        </li>
-      }
-    </ul>
+    <table
+      mat-table
+      [dataSource]="environments()"
+      aria-describedby="Table of environments"
+    >
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let environment">{{ environment.name }}</td>
+      </ng-container>
+      <ng-container matColumnDef="createdAt">
+        <th mat-header-cell *matHeaderCellDef>Created</th>
+        <td mat-cell *matCellDef="let environment">
+          {{ environment.createdAt | date: 'mediumDate' }}
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="envColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: envColumns"></tr>
+    </table>
   </mat-tab>
 </mat-tab-group>
