@@ -1,0 +1,49 @@
+<button mat-fab extended color="primary" (click)="openCreateFeatureDialog()">
+  <mat-icon>add</mat-icon>
+  Feature
+</button>
+<table
+  mat-table
+  [dataSource]="features"
+  aria-describedby="Table of features and their environment states"
+>
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef>Name</th>
+    <td mat-cell *matCellDef="let feature">{{ feature.name }}</td>
+  </ng-container>
+  <ng-container matColumnDef="created">
+    <th mat-header-cell *matHeaderCellDef>Created</th>
+    <td mat-cell *matCellDef="let feature">
+      {{ feature.createdAt | date: 'mediumDate' }}
+    </td>
+  </ng-container>
+  @for (env of environments; track env.id) {
+    <ng-container matColumnDef="{{ env.name }}">
+      <th mat-header-cell *matHeaderCellDef>{{ env.name }}</th>
+      <td mat-cell *matCellDef="let feature">
+        <mat-slide-toggle
+          id="{{ feature.id }}-{{ env.id }}-toggle"
+          hideIcon="true"
+          (change)="toggleFeature(feature, env)"
+          [checked]="findEnvironment(feature, env)?.isEnabled ?? false"
+        ></mat-slide-toggle>
+      </td>
+    </ng-container>
+  }
+  <ng-container matColumnDef="delete">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let feature">
+      <button
+        [disabled]="deleteFeatureInFlight"
+        mat-icon-button
+        color="warn"
+        (click)="deleteFeature(feature)"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="featureColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: featureColumns"></tr>
+</table>

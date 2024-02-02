@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
+import { ApiTokensTableItem } from '@ftoggle/api/types';
 import { ApiTokenType } from '@ftoggle/common/enums/apiTokens';
 import { ApiService } from './api.service';
 
@@ -6,6 +7,9 @@ import { ApiService } from './api.service';
   providedIn: 'root',
 })
 export class ApiTokenService {
+  private _apiTokens = signal<ApiTokensTableItem[]>([]);
+  public apiTokens = this._apiTokens.asReadonly();
+
   constructor(private apiService: ApiService) {}
 
   public async createApiToken(fields: {
@@ -23,6 +27,16 @@ export class ApiTokenService {
       });
     } catch (err) {
       console.error('Error creating api token', err);
+    }
+  }
+
+  async getApiTokens(projectId: string) {
+    try {
+      const response =
+        await this.apiService.api.projects[projectId].apiTokens.get();
+      this._apiTokens.set(response.data?.tokens ?? []);
+    } catch (err) {
+      console.error('Error getting api tokens', err);
     }
   }
 

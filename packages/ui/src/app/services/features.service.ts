@@ -1,10 +1,14 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
+import { FeatureWithEnvironments } from '@ftoggle/api/types';
 import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FeaturesService {
+  private _features = signal<FeatureWithEnvironments[]>([]);
+  public features = this._features.asReadonly();
+
   constructor(private apiService: ApiService) {}
 
   async createFeature(projectId: string, feature: { name: string }) {
@@ -15,6 +19,17 @@ export class FeaturesService {
       });
     } catch (err) {
       console.error('Error creating feature', err);
+    }
+  }
+
+  async getFeatures(projectId: string) {
+    try {
+      const response =
+        await this.apiService.api.projects[projectId].features.get();
+      this._features.set(response.data?.features ?? []);
+      return;
+    } catch (error) {
+      console.log('Error getting features');
     }
   }
 
