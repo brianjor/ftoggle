@@ -1,10 +1,14 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
+import { EnvironmentsTableItem } from '@ftoggle/api/types';
 import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EnvironmentsService {
+  private _environments = signal<EnvironmentsTableItem[]>([]);
+  public environments = this._environments.asReadonly();
+
   constructor(private apiService: ApiService) {}
 
   async createEnvironment(projectId: string, environment: { name: string }) {
@@ -15,6 +19,18 @@ export class EnvironmentsService {
       });
     } catch (err) {
       console.error('Error creating feature', err);
+    }
+  }
+
+  async getEnvironments(projectId: string) {
+    try {
+      const response =
+        await this.apiService.api.projects[projectId].environments.get();
+
+      console.log('gotting environments');
+      this._environments.set(response.data?.data.environments ?? []);
+    } catch (err) {
+      console.error('Error getting enviroments', err);
     }
   }
 

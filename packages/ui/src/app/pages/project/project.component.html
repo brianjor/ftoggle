@@ -1,164 +1,31 @@
 <mat-tab-group>
   <mat-tab label="Features">
-    <button
-      mat-fab
-      extended
-      color="primary"
-      (click)="openCreateFeatureDialog()"
-    >
-      <mat-icon>add</mat-icon>
-      Feature
-    </button>
-    <table
-      mat-table
-      [dataSource]="features()"
-      aria-describedby="Table of features and their environment states"
-    >
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef>Name</th>
-        <td mat-cell *matCellDef="let feature">{{ feature.name }}</td>
-      </ng-container>
-      <ng-container matColumnDef="created">
-        <th mat-header-cell *matHeaderCellDef>Created</th>
-        <td mat-cell *matCellDef="let feature">
-          {{ feature.createdAt | date: 'mediumDate' }}
-        </td>
-      </ng-container>
-      @for (env of environments(); track env.id) {
-        <ng-container matColumnDef="{{ env.name }}">
-          <th mat-header-cell *matHeaderCellDef>{{ env.name }}</th>
-          <td mat-cell *matCellDef="let feature">
-            <mat-slide-toggle
-              id="{{ feature.id }}-{{ env.id }}-toggle"
-              hideIcon="true"
-              (change)="toggleFeature(feature, env)"
-              [checked]="findEnvironment(feature, env)!.isEnabled"
-            ></mat-slide-toggle>
-          </td>
-        </ng-container>
-      }
-      <ng-container matColumnDef="delete">
-        <th mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell *matCellDef="let feature">
-          <button
-            [disabled]="deleteFeatureInFlight"
-            mat-icon-button
-            color="warn"
-            (click)="deleteFeature(feature)"
-          >
-            <mat-icon>delete</mat-icon>
-          </button>
-        </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="featureColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: featureColumns"></tr>
-    </table>
+    <app-project-features
+      [projectId]="projectId"
+      [features]="features()"
+      [environments]="environments()"
+      (getFeaturesEvent)="getFeatures()"
+    ></app-project-features>
   </mat-tab>
 
   <mat-tab label="API Tokens">
-    <button
-      mat-fab
-      extended
-      color="primary"
-      (click)="openCreateApiTokenDialog()"
-    >
-      <mat-icon>add</mat-icon>
-      API Token
-    </button>
-    <table
-      mat-table
-      [dataSource]="apiTokens()"
-      aria-describedby="Table of api tokens"
-    >
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef>Name</th>
-        <td mat-cell *matCellDef="let apiToken">{{ apiToken.name }}</td>
-      </ng-container>
-      <ng-container matColumnDef="created">
-        <th mat-header-cell *matHeaderCellDef>Created</th>
-        <td mat-cell *matCellDef="let apiToken">
-          {{ apiToken.createdAt | date: 'mediumDate' }}
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="type">
-        <th mat-header-cell *matHeaderCellDef>Type</th>
-        <td mat-cell *matCellDef="let apiToken">{{ apiToken.type }}</td>
-      </ng-container>
-      <ng-container matColumnDef="copy">
-        <th mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell *matCellDef="let apiToken">
-          <button mat-icon-button (click)="copyApiToken(apiToken)">
-            <mat-icon>content_copy</mat-icon>
-          </button>
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="delete">
-        <th mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell *matCellDef="let apiToken">
-          <button
-            [disabled]="deleteApiTokenInFlight"
-            mat-icon-button
-            color="warn"
-            (click)="deleteApiToken(apiToken)"
-          >
-            <mat-icon>delete</mat-icon>
-          </button>
-        </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="apiTokenColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: apiTokenColumns"></tr>
-    </table>
+    <app-project-api-tokens
+      [projectId]="projectId"
+      [apiTokens]="apiTokens()"
+      [environments]="environments()"
+      (getApiTokensEvent)="getApiTokens()"
+    ></app-project-api-tokens>
   </mat-tab>
 
   <mat-tab label="Environments">
-    <button
-      mat-fab
-      extended
-      color="primary"
-      (click)="openCreateEnvironmentDialog()"
-    >
-      <mat-icon>add</mat-icon>
-      Environment
-    </button>
-    <table
-      mat-table
-      [dataSource]="environments()"
-      aria-describedby="Table of environments"
-    >
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef>Name</th>
-        <td mat-cell *matCellDef="let environment">{{ environment.name }}</td>
-      </ng-container>
-      <ng-container matColumnDef="createdAt">
-        <th mat-header-cell *matHeaderCellDef>Created</th>
-        <td mat-cell *matCellDef="let environment">
-          {{ environment.createdAt | date: 'mediumDate' }}
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="delete">
-        <th mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell *matCellDef="let environment">
-          <button
-            [disabled]="deleteEnvironmentInFlight"
-            mat-icon-button
-            color="warn"
-            (click)="deleteEnvironment(environment)"
-          >
-            <mat-icon>delete</mat-icon>
-          </button>
-        </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="envColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: envColumns"></tr>
-    </table>
+    <app-project-environments
+      [projectId]="projectId"
+      [environments]="environments()"
+      (getEnvironmentsEvent)="getEnvironments()"
+    ></app-project-environments>
   </mat-tab>
 
   <mat-tab label="Settings">
-    <button mat-fab extended color="warn" (click)="deleteProject()">
-      Delete Project
-    </button>
+    <app-project-settings [projectId]="projectId"></app-project-settings>
   </mat-tab>
 </mat-tab-group>
