@@ -1,6 +1,7 @@
 import Elysia, { t } from 'elysia';
 import { FeaturesController } from '../controllers/featuresController';
 import { ProjectsController } from '../controllers/projectsController';
+import { ProjectPermission } from '../enums/permissions';
 import { hooks } from '../hooks';
 import { featureWithEnvironments } from '../typeboxes/featuresTypes';
 
@@ -28,7 +29,11 @@ export const featuresHandlers = new Elysia()
       response: {
         200: getResponse,
       },
-      beforeHandle: [({ isSignedIn }) => isSignedIn()],
+      beforeHandle: [
+        ({ isSignedIn }) => isSignedIn(),
+        ({ hasProjectPermissions }) =>
+          hasProjectPermissions([ProjectPermission.VIEW_FEATURE_TOGGLES]),
+      ],
     },
   )
   .post(

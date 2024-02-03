@@ -45,7 +45,11 @@ export const featureHandlers = new Elysia()
         }),
         404: t.String(),
       },
-      beforeHandle: [({ isSignedIn }) => isSignedIn()],
+      beforeHandle: [
+        ({ isSignedIn }) => isSignedIn(),
+        ({ hasProjectPermissions }) =>
+          hasProjectPermissions([ProjectPermission.VIEW_FEATURE_TOGGLES]),
+      ],
     },
   )
   .put(

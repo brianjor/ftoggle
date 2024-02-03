@@ -39,6 +39,7 @@ export const projectsHandlers = new Elysia()
           ),
         }),
       }),
+      beforeHandle: [({ isSignedIn }) => isSignedIn()],
     },
   )
   .post(
@@ -76,11 +77,12 @@ export const projectsHandlers = new Elysia()
       }),
       beforeHandle: [
         ({ isSignedIn }) => isSignedIn(),
-        ({ hasUserPermissions: hasPermissions }) =>
-          hasPermissions([UserPermission.CREATE_PROJECT]),
+        ({ hasUserPermissions }) =>
+          hasUserPermissions([UserPermission.CREATE_PROJECT]),
       ],
       transform({ body }) {
-        const { projectName } = body;
+        const { projectName, projectId } = body;
+        body.projectId = projectIdReqs.transforms(projectId);
         body.projectName = projectNameReqs.transforms(projectName);
       },
     },
