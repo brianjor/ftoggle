@@ -26,7 +26,11 @@ export const projectHandlers = new Elysia()
         }),
         404: NotFoundResponse,
       },
-      beforeHandle: [({ isSignedIn }) => isSignedIn()],
+      beforeHandle: [
+        ({ isSignedIn }) => isSignedIn(),
+        ({ hasProjectPermissions }) =>
+          hasProjectPermissions([ProjectPermission.VIEW_PROJECT]),
+      ],
     },
   )
   .put(
