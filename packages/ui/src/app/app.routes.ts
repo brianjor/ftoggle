@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 import { isSignedIn } from './guards/isSignedIn';
 import { LoginComponent } from './pages/login/login.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
-import { ProjectFeaturesComponent } from './pages/project-features/project-features.component';
 import { ProjectComponent } from './pages/project/project.component';
 import { ProjectsComponent } from './pages/projects/projects.component';
 
@@ -30,11 +29,6 @@ export const routes: Routes = [
   {
     path: paths.project,
     component: ProjectComponent,
-    canActivate: [isSignedIn],
-  },
-  {
-    path: paths.projectFeatures,
-    component: ProjectFeaturesComponent,
     canActivate: [isSignedIn],
   },
   { path: paths.notFound, component: PageNotFoundComponent },
