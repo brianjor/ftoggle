@@ -18,7 +18,7 @@ export const apiTokensHandlers = new Elysia()
     async ({ body, params, getRequestUser }) => {
       const { projectId } = params;
       const { environmentId, type, name } = body;
-      const user = await getRequestUser();
+      const { user } = await getRequestUser();
       await projectsController.getProjectById(projectId);
       await environmentsController.getEnvironmentById(environmentId);
       const apiToken = await apiTokensController.createApiToken({
@@ -26,7 +26,7 @@ export const apiTokensHandlers = new Elysia()
         environmentId,
         type,
         name,
-        userId: user.userId,
+        userId: user.id,
       });
 
       return {

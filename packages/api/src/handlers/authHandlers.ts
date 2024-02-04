@@ -1,20 +1,23 @@
 import Elysia, { t } from 'elysia';
-import { auth } from '../auth/lucia';
+import { lucia } from '../auth/lucia';
+import { UsersController } from '../controllers/usersController';
 import { UserPermission } from '../enums/permissions';
-import { AuthenticationError } from '../errors/apiErrors';
 import { hooks } from '../hooks';
+
+const usersController = new UsersController();
 
 export const loginHandler = new Elysia().post(
   '',
   async (context) => {
     const { body } = context;
     const { username, password } = body;
-    const key = await auth.useKey('username', username.toLowerCase(), password);
-    const session = await auth.createSession({
-      userId: key.userId,
-      attributes: {},
-    });
-    return { accessToken: session.sessionId };
+    const user = await usersController.validateUsernamePasswordLogin(
+      username,
+      password,
+    );
+    await lucia.invalidateUserSessions(user.id);
+    const session = await lucia.createSession(user.id, {});
+    return { accessToken: session.id };
   },
   {
     body: t.Object({
@@ -30,16 +33,11 @@ export const loginHandler = new Elysia().post(
 export const signupHandler = new Elysia().use(hooks).post(
   '',
   async ({ body }) => {
-    const user = await auth.createUser({
-      key: {
-        providerId: 'username',
-        providerUserId: body.username.toLowerCase(),
-        password: body.password,
-      },
-      attributes: {
-        username: body.username,
-      },
-    });
+    const { username, password } = body;
+    const user = await usersController.createUsernameAndPasswordUser(
+      username,
+      password,
+    );
     return `Created user: ${user.username}`;
   },
   {
@@ -59,8 +57,8 @@ export const signupHandler = new Elysia().use(hooks).post(
 export const logoutHandler = new Elysia().use(hooks).post(
   '',
   async (context) => {
-    const user = await context.getRequestUser();
-    await auth.invalidateAllUserSessions(user.userId);
+    const { user } = await context.getRequestUser();
+    await lucia.invalidateUserSessions(user.id);
 
     return `Logged out user: ${user.username}`;
   },
@@ -77,18 +75,9 @@ export const changePasswordHandler = new Elysia().use(hooks).post(
   '',
   async (context) => {
     const { oldPassword, newPassword } = context.body;
-    const user = await context.getRequestUser();
-    try {
-      await auth.useKey('username', user.username.toLowerCase(), oldPassword);
-    } catch (e) {
-      throw new AuthenticationError('Unable to validate password');
-    }
-    await auth.updateKeyPassword(
-      'username',
-      user.username.toLowerCase(),
-      newPassword,
-    );
-    await auth.invalidateAllUserSessions(user.userId);
+    const { user } = await context.getRequestUser();
+    await usersController.updatePassword(user, oldPassword, newPassword);
+    await lucia.invalidateUserSessions(user.id);
   },
   {
     body: t.Object({

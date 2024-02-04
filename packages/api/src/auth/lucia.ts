@@ -1,16 +1,23 @@
 import { postgresConnection } from '@ftoggle/db/connection';
-import { postgres as postgresAdapter } from '@lucia-auth/adapter-postgresql';
-import { lucia } from 'lucia';
-import { elysia } from 'lucia/middleware';
+import { PostgresJsAdapter } from '@lucia-auth/adapter-postgresql';
+import { Lucia } from 'lucia';
 
-export const auth = lucia({
-  env: Bun.env.ENVIRONMENT === 'prod' ? 'PROD' : 'DEV',
-  middleware: elysia(),
-  adapter: postgresAdapter(postgresConnection, {
-    user: 'users',
-    key: 'users_keys',
-    session: 'users_sessions',
-  }),
+declare module 'lucia' {
+  interface Register {
+    Lucia: typeof lucia;
+    DatabaseSessionAttributes: object;
+    DatabaseUserAttributes: {
+      username: string;
+    };
+  }
+}
+
+const adapter = new PostgresJsAdapter(postgresConnection, {
+  user: 'users',
+  session: 'users_sessions',
+});
+
+export const lucia = new Lucia(adapter, {
   getUserAttributes: (data) => {
     return {
       username: data.username,
@@ -18,4 +25,4 @@ export const auth = lucia({
   },
 });
 
-export type Auth = typeof auth;
+export type Auth = typeof lucia;

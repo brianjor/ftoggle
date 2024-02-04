@@ -8,7 +8,7 @@ export * from './projectsUsers';
 export * from './projectsUsersRoles';
 export * from './roles';
 export * from './rolesPermissions';
-export * from './userKeys';
 export * from './userSessions';
 export * from './users';
+export * from './usersPasswords';
 export * from './usersRoles';

@@ -4,11 +4,13 @@ import {
   roles,
   rolesPermissions,
   users,
+  usersPasswords,
   usersRoles,
 } from '@ftoggle/db/schema';
 import { and, eq } from 'drizzle-orm';
-import { User } from 'lucia';
+import { User, generateId } from 'lucia';
 import { UserRole } from '../enums/roles';
+import { AuthenticationError, BadRequestError } from '../errors/apiErrors';
 import {
   DuplicateRecordError,
   RecordDoesNotExistError,
@@ -19,6 +21,122 @@ import { RolesController } from './rolesController';
 const rolesController = new RolesController();
 
 export class UsersController {
+  /**
+   * Updates a users password.
+   * @param user the user to update their password
+   * @param oldPassword old password
+   * @param newPassword new password
+   * @throws An error if user is not a password user
+   */
+  async updatePassword(user: User, oldPassword: string, newPassword: string) {
+    const usersPassword = await dbClient.query.usersPasswords.findFirst({
+      where: eq(usersPasswords.userId, user.id),
+    });
+    if (usersPassword === undefined) {
+      throw new BadRequestError('User is not a password user.');
+    }
+    const validPassword = await Bun.password.verify(
+      oldPassword,
+      usersPassword.hashedPassword,
+    );
+    if (!validPassword) {
+      throw new AuthenticationError('Invalid password');
+    }
+    const newHashedPassword = await Bun.password.hash(newPassword);
+    await dbClient
+      .update(usersPasswords)
+      .set({ hashedPassword: newHashedPassword })
+      .where(eq(usersPasswords.userId, user.id));
+  }
+
+  /**
+   * Validates a username password users login.
+   * @param username users username
+   * @param password users password
+   * @returns if valid credentials are provided: the user is returned
+   * @throws A generic error to hide at which point the validation failed
+   */
+  public async validateUsernamePasswordLogin(
+    username: string,
+    password: string,
+  ) {
+    try {
+      const user = await this.getUserByUsername(username);
+      const usersPassword = await dbClient.query.usersPasswords.findFirst({
+        where: eq(usersPasswords.userId, user.id),
+      });
+      if (usersPassword === undefined) {
+        throw new BadRequestError(
+          `User: ${user.username} is not a password user.`,
+        );
+      }
+      const validPassword = await Bun.password.verify(
+        password,
+        usersPassword.hashedPassword,
+      );
+      if (!validPassword) {
+        throw new AuthenticationError('Invalid password');
+      }
+      return user;
+    } catch (err) {
+      // Catch any errors thrown and log them
+      console.error(err);
+      // Throw a generic validation error
+      throw new AuthenticationError('Invalid user credentials');
+    }
+  }
+
+  /**
+   * Creates a new username and password user.
+   * @param username users username
+   * @param password users password
+   * @returns the newly created user
+   * @throw A {@link DuplicateRecordError} if username is already taken
+   */
+  public async createUsernameAndPasswordUser(
+    username: string,
+    password: string,
+  ) {
+    const exists = await this.usernameExists(username);
+    if (exists) {
+      throw new DuplicateRecordError(
+        `Username "${username}" is already taken.`,
+      );
+    }
+
+    const hashedPassword = await Bun.password.hash(password);
+    const userId = generateId(15);
+    const user = await dbClient.transaction(async (tx) => {
+      const user = (
+        await tx
+          .insert(users)
+          .values({
+            id: userId,
+            username,
+          })
+          .returning()
+      )[0];
+      await tx.insert(usersPasswords).values({
+        hashedPassword,
+        userId,
+      });
+      return user;
+    });
+    return user;
+  }
+
+  /**
+   * Checks if a username exists.
+   * @param username username to check exists
+   * @returns true if username exists, false otherwise
+   */
+  public async usernameExists(username: string) {
+    const user = await dbClient.query.users.findFirst({
+      where: eq(users.username, username),
+    });
+    return user !== undefined;
+  }
+
   /** Gets users. */
   public async getUsers() {
     return await dbClient.query.users.findMany({
@@ -41,7 +159,7 @@ export class UsersController {
           permissions,
           eq(rolesPermissions.permissionId, permissions.id),
         )
-        .where(eq(users.id, user.userId))
+        .where(eq(users.id, user.id))
     )
       .map((r) => r.permission)
       .filter(notNull);

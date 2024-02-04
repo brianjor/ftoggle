@@ -1,4 +1,4 @@
-import { bigint, pgTable, text } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { users } from './users';
 
 export const usersSessions = pgTable('users_sessions', {
@@ -6,6 +6,5 @@ export const usersSessions = pgTable('users_sessions', {
   userId: text('user_id')
     .notNull()
     .references(() => users.id),
-  activeExpires: bigint('active_expires', { mode: 'number' }).notNull(),
-  idleExpires: bigint('idle_expires', { mode: 'number' }).notNull(),
+  expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
 });

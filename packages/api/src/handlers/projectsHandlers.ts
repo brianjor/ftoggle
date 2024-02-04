@@ -17,8 +17,8 @@ export const projectsHandlers = new Elysia()
   .get(
     '',
     async (context) => {
-      const user = await context.getRequestUser();
-      const projects = await projectsController.getProjects(user.userId);
+      const { user } = await context.getRequestUser();
+      const projects = await projectsController.getProjects(user.id);
 
       return {
         data: {
@@ -46,16 +46,16 @@ export const projectsHandlers = new Elysia()
     '',
     async (context) => {
       const { body } = context;
-      const user = await context.getRequestUser();
+      const { user } = await context.getRequestUser();
       const { projectId, projectName } = body;
       const project = await projectsController.createProject(
         projectId,
         projectName,
       );
-      await projectsController.addUser(project.id, user.userId);
+      await projectsController.addUser(project.id, user.id);
       await projectsController.addRoleToUser(
         project.id,
-        user.userId,
+        user.id,
         ProjectRole.OWNER,
       );
       await projectsController.addEnvironment('dev', project.id);

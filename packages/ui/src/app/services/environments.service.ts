@@ -27,7 +27,6 @@ export class EnvironmentsService {
       const response =
         await this.apiService.api.projects[projectId].environments.get();
 
-      console.log('gotting environments');
       this._environments.set(response.data?.data.environments ?? []);
     } catch (err) {
       console.error('Error getting enviroments', err);

@@ -1,5 +1,5 @@
 import Elysia, { Context } from 'elysia';
-import { auth } from '../auth/lucia';
+import { lucia } from '../auth/lucia';
 import { AuthenticationError } from '../errors/apiErrors';
 
 /**
@@ -8,15 +8,17 @@ import { AuthenticationError } from '../errors/apiErrors';
  * @returns The user making the request
  * @throws An {@link AuthenticationError} if user cannot be validated
  */
-const validateUserToken = async (
-  context: Context<{ params: { [key: string]: unknown } }>,
-) => {
-  const authRequest = auth.handleRequest(context);
-  const session = await authRequest.validateBearerToken();
-  if (session?.user === undefined) {
+const validateUserToken = async (context: Context) => {
+  const authHeader = context.headers['authorization'];
+  const sessionId = lucia.readBearerToken(authHeader ?? '');
+  if (!sessionId) {
     throw new AuthenticationError('Unable to authenticate user');
   }
-  return session.user;
+  const { session, user } = await lucia.validateSession(sessionId);
+  if (!user || !session) {
+    throw new AuthenticationError('Unable to authenticate user');
+  }
+  return { user, session };
 };
 
 export const requestUserHooks = new Elysia({
