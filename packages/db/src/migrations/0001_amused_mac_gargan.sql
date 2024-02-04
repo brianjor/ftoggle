@@ -1,7 +1,7 @@
 -- Custom SQL migration file, put you code below! --
 -- Create Admin user, with password 'FToggle' --
 INSERT INTO "users" ("id", "username") VALUES ('34topp0yykzitqw', 'Admin');--> statement-breakpoint
-INSERT INTO "users_keys" ("id", "user_id", "hashed_password") VALUES ('username:admin', '34topp0yykzitqw', 's2:1pjjy70m3xchop67:60e67a6c055daf12dd54e080d4beebee218f870f86d780cbe28bba73b657180ca390504a80880950a2ec4c40e703a158e5419b66161392e1c4bc7cd1cdbf4061')--> statement-breakpoint
+INSERT INTO "users_passwords" ("user_id", "hashed_password") VALUES ('34topp0yykzitqw', '$argon2id$v=19$m=65536,t=2,p=1$sQXu6euyIHB38+y9o7XbWcMhGeZCilQqeXme+oZcVFk$JHagtUYW8JY6fZDGYGZNmJ2MGkYSP9UY70zq4E6xmCY');--> statement-breakpoint
 
 -- Create user permissions --
 INSERT INTO "permissions"
@@ -63,4 +63,4 @@ WITH
 INSERT INTO "users_roles"
 	("user_id", "role_id")
 VALUES
-	((SELECT id FROM adminId), (SELECT id FROM adminRoleId))
+	((SELECT id FROM adminUserId), (SELECT id FROM adminRoleId))

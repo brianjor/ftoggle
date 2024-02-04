@@ -1,6 +1,10 @@
 import { ErrorHandler } from 'elysia';
 import postgres from 'postgres';
-import { AuthenticationError, AuthorizationError } from '../errors/apiErrors';
+import {
+  AuthenticationError,
+  AuthorizationError,
+  BadRequestError,
+} from '../errors/apiErrors';
 import {
   DuplicateRecordError,
   RecordDoesNotExistError,
@@ -9,7 +13,11 @@ import {
 /** Hook to handle errors thrown by the api. */
 export const errorHook: ErrorHandler = (context) => {
   const { code, error } = context;
-  if (code === 'VALIDATION' || error instanceof DuplicateRecordError) {
+  if (
+    code === 'VALIDATION' ||
+    error instanceof DuplicateRecordError ||
+    error instanceof BadRequestError
+  ) {
     return new Response(error.message, { status: 400 });
   } else if (error instanceof AuthenticationError) {
     return new Response(error.message, { status: 401 });

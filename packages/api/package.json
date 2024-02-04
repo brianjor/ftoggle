@@ -26,10 +26,10 @@
     "@elysiajs/cors": "^0.7.2",
     "@ftoggle/common": "workspace:*",
     "@ftoggle/db": "workspace:*",
-    "@lucia-auth/adapter-postgresql": "^2.0.2",
+    "@lucia-auth/adapter-postgresql": "^3.0.0",
     "dotenv": "^16.3.1",
     "drizzle-orm": "^0.29.1",
     "elysia": "^0.7.30",
-    "lucia": "^2.7.4"
+    "lucia": "^3.0.1"
   }
 }

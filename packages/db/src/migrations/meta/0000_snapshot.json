@@ -1,5 +1,5 @@
 {
-  "id": "26e7d41f-52b8-428e-bce1-c11f72754cfb",
+  "id": "c36e84cb-1e80-497a-bed5-a7a4befcaefb",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -224,6 +224,56 @@
           "columns": [
             "name",
             "project_id"
+          ]
+        }
+      }
+    },
+    "users_passwords": {
+      "name": "users_passwords",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "hashed_password": {
+          "name": "hashed_password",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "users_passwords_user_id_users_id_fk": {
+          "name": "users_passwords_user_id_users_id_fk",
+          "tableFrom": "users_passwords",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "users_passwords_user_id_unique": {
+          "name": "users_passwords_user_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "user_id"
           ]
         }
       }
@@ -628,48 +678,6 @@
       },
       "uniqueConstraints": {}
     },
-    "users_keys": {
-      "name": "users_keys",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "hashed_password": {
-          "name": "hashed_password",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "users_keys_user_id_users_id_fk": {
-          "name": "users_keys_user_id_users_id_fk",
-          "tableFrom": "users_keys",
-          "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
     "users_sessions": {
       "name": "users_sessions",
       "schema": "",
@@ -686,15 +694,9 @@
           "primaryKey": false,
           "notNull": true
         },
-        "active_expires": {
-          "name": "active_expires",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "idle_expires": {
-          "name": "idle_expires",
-          "type": "bigint",
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": true
         }
