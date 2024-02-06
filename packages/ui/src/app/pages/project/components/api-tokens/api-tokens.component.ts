@@ -5,7 +5,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
-import { ApiTokensTableItem, EnvironmentsTableItem } from '@ftoggle/api/types';
+import { ApiTokensTableItem } from '@ftoggle/api/types/apiTokensTypes';
+import { EnvironmentsTableItem } from '@ftoggle/api/types/environmentTypes';
 import { CreateApiTokenDialogComponent } from '../../../../components/create-api-token-dialog/create-api-token-dialog.component';
 import { ApiTokenService } from '../../../../services/api-token.service';
 

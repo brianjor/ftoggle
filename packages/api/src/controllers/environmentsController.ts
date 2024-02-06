@@ -2,7 +2,7 @@ import { dbClient } from '@ftoggle/db/connection';
 import { environments } from '@ftoggle/db/schema';
 import { eq } from 'drizzle-orm';
 import { RecordDoesNotExistError } from '../errors/dbErrors';
-import { EnvironmentsTableItem } from '../typeboxes';
+import { EnvironmentsTableItem } from '../typeboxes/environmentTypes';
 
 export class EnvironmentsController {
   /**

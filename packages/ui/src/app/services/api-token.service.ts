@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { ApiTokensTableItem } from '@ftoggle/api/types';
+import { ApiTokensTableItem } from '@ftoggle/api/types/apiTokensTypes';
 import { ApiTokenType } from '@ftoggle/common/enums/apiTokens';
 import { ApiService } from './api.service';
 

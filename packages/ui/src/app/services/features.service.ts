@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { FeatureWithEnvironments } from '@ftoggle/api/types';
+import { FeatureWithEnvironments } from '@ftoggle/api/types/featuresTypes';
 import { ApiService } from './api.service';
 
 @Injectable({

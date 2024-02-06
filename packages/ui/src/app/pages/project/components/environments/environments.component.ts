@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
-import { EnvironmentsTableItem } from '@ftoggle/api/types';
+import { EnvironmentsTableItem } from '@ftoggle/api/types/environmentTypes';
 import { CreateEnvironmentDialogComponent } from '../../../../components/create-environment-dialog/create-environment-dialog.component';
 import { EnvironmentsService } from '../../../../services/environments.service';
 
