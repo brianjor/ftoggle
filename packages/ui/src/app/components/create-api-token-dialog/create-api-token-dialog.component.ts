@@ -20,7 +20,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
-import { EnvironmentsTableItem } from '@ftoggle/api/types';
+import { EnvironmentsTableItem } from '@ftoggle/api/types/environmentTypes';
 import { ApiTokenType } from '@ftoggle/common/enums/apiTokens';
 import { ApiTokenService } from '../../services/api-token.service';
 import { createNoExtraWhitespaceValidator } from '../../validators/noExtraWhitespaceValidator';

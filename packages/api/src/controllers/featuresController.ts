@@ -2,7 +2,7 @@ import { dbClient } from '@ftoggle/db/connection';
 import { features, projectsFeaturesEnvironments } from '@ftoggle/db/schema';
 import { and, eq } from 'drizzle-orm';
 import { RecordDoesNotExistError } from '../errors/dbErrors';
-import { FeaturesTableItem } from '../typeboxes';
+import { FeaturesTableItem } from '../typeboxes/featuresTypes';
 import { ProjectsController } from './projectsController';
 
 export class FeaturesController {

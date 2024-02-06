@@ -5,10 +5,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTableModule } from '@angular/material/table';
-import {
-  EnvironmentsTableItem,
-  FeatureWithEnvironments,
-} from '@ftoggle/api/types';
+import { EnvironmentsTableItem } from '@ftoggle/api/types/environmentTypes';
+import { FeatureWithEnvironments } from '@ftoggle/api/types/featuresTypes';
 import { CreateFeatureDialogComponent } from '../../../../components/create-feature-dialog/create-feature-dialog.component';
 import { FeaturesService } from '../../../../services/features.service';
 

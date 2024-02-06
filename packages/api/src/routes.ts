@@ -21,6 +21,7 @@ import { userHandlers } from './handlers/userHandlers';
 import { userRoleHandlers } from './handlers/userRoleHandlers';
 import { userRolesHandlers } from './handlers/userRolesHandlers';
 import { usersHandlers } from './handlers/usersHandlers';
+import { usersRolesHandlers } from './handlers/usersRolesHandlers';
 
 // prettier-ignore
 export const routes = new Elysia()
@@ -60,6 +61,8 @@ export const routes = new Elysia()
       ) // /:projectId
     ) // /projects
     .group('/users', _ => _.use(usersHandlers)
+      .group('/roles', _ => _.use(usersRolesHandlers)
+      ) // /roles
       .group('/:userId', _ => _.use(userHandlers)
         .group('/roles', _ => _.use(userRolesHandlers)
           .group('/:roleId', _ => _.use(userRoleHandlers)

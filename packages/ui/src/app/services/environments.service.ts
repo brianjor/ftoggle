@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { EnvironmentsTableItem } from '@ftoggle/api/types';
+import { EnvironmentsTableItem } from '@ftoggle/api/types/environmentTypes';
 import { ApiService } from './api.service';
 
 @Injectable({

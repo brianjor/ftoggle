@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
-import { UsersTableItem } from '@ftoggle/api/types';
 import { ApiService } from './api.service';
+import { UsersTableItem } from '@ftoggle/api/types/usersTypes';
 
 @Injectable({
   providedIn: 'root',
