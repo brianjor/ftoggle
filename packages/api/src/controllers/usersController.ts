@@ -147,6 +147,19 @@ export class UsersController {
     });
   }
 
+  /** Gets users and their roles */
+  public async getUsersAndRoles() {
+    return await dbClient.query.users.findMany({
+      with: {
+        usersRoles: {
+          with: {
+            role: true,
+          },
+        },
+      },
+    });
+  }
+
   public async getUserPermissions(user: User) {
     return (
       await dbClient
