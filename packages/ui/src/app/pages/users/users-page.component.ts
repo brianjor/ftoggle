@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
+import { UserWithRoles } from '@ftoggle/api/types/usersTypes';
 import { UsersService } from '../../services/users.service';
 
 @Component({
@@ -11,7 +12,7 @@ import { UsersService } from '../../services/users.service';
 })
 export class UsersPageComponent {
   users = this.usersService.users;
-  displayedColumns = ['name'];
+  displayedColumns = ['name', 'roles'];
 
   constructor(private usersService: UsersService) {}
 
@@ -21,5 +22,9 @@ export class UsersPageComponent {
 
   getUsers() {
     this.usersService.getUsers();
+  }
+
+  getUsersRoleNames(user: UserWithRoles) {
+    return user.usersRoles.map((r) => r.role.name);
   }
 }
