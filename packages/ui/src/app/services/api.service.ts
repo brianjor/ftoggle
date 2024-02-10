@@ -15,7 +15,7 @@ export class ApiService {
     private router: Router,
   ) {}
 
-  get api() {
+  newTreaty() {
     return edenTreaty<App>(environment.apiBaseUrl, {
       $fetch: {
         headers: {
@@ -30,5 +30,9 @@ export class ApiService {
         }
       },
     }).api;
+  }
+
+  get api() {
+    return this.newTreaty();
   }
 }

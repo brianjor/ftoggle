@@ -8,7 +8,18 @@
   <ng-container matColumnDef="roles">
     <th mat-header-cell *matHeaderCellDef>Roles</th>
     <td mat-cell *matCellDef="let user">
-      {{ getUsersRoleNames(user) }}
+      <mat-chip-set>
+        @for (role of allRoles; track role) {
+          <mat-chip-option
+            [class.mdc-evolution-chip--selected]="userHasRole(user, role)"
+            [class.mat-mdc-chip-selected]="userHasRole(user, role)"
+            (selectionChange)="onSelectionChange(user, role)"
+            [disabled]="user.username === 'Admin'"
+          >
+            {{ role }}
+          </mat-chip-option>
+        }
+      </mat-chip-set>
     </td>
   </ng-container>
 

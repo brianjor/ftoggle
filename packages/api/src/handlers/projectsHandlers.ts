@@ -1,3 +1,4 @@
+import { ProjectRole } from '@ftoggle/common/enums/roles';
 import {
   projectIdReqs,
   projectNameReqs,
@@ -6,7 +7,6 @@ import Elysia, { t } from 'elysia';
 import { FeaturesController } from '../controllers/featuresController';
 import { ProjectsController } from '../controllers/projectsController';
 import { UserPermission } from '../enums/permissions';
-import { ProjectRole } from '../enums/roles';
 import { hooks } from '../hooks';
 
 const projectsController = new ProjectsController();

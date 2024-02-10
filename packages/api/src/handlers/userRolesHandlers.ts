@@ -1,7 +1,7 @@
+import { UserRole } from '@ftoggle/common/enums/roles';
 import Elysia, { t } from 'elysia';
 import { UsersController } from '../controllers/usersController';
 import { UserPermission } from '../enums/permissions';
-import { UserRole } from '../enums/roles';
 import { hooks } from '../hooks';
 
 const usersController = new UsersController();
