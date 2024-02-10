@@ -1,8 +1,8 @@
+import { UserRole } from '@ftoggle/common/enums/roles';
 import Elysia from 'elysia';
 import { ProjectsController } from '../controllers/projectsController';
 import { UsersController } from '../controllers/usersController';
 import { ProjectPermission, UserPermission } from '../enums/permissions';
-import { UserRole } from '../enums/roles';
 import { AuthorizationError, InternalServerError } from '../errors/apiErrors';
 import { requestUserHooks } from './requestUserHooks';
 

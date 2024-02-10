@@ -1,7 +1,7 @@
+import { UserRole } from '@ftoggle/common/enums/roles';
 import { dbClient } from '@ftoggle/db/connection';
 import { roles } from '@ftoggle/db/schema';
 import { eq } from 'drizzle-orm';
-import { UserRole } from '../enums/roles';
 import { RecordDoesNotExistError } from '../errors/dbErrors';
 
 export class RolesController {

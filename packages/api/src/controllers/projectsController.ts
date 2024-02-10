@@ -1,3 +1,4 @@
+import { ProjectRole } from '@ftoggle/common/enums/roles';
 import { dbClient } from '@ftoggle/db/connection';
 import {
   environments,
@@ -12,7 +13,6 @@ import {
   users,
 } from '@ftoggle/db/schema';
 import { and, eq } from 'drizzle-orm';
-import { ProjectRole } from '../enums/roles';
 import { RecordDoesNotExistError } from '../errors/dbErrors';
 
 export class ProjectsController {

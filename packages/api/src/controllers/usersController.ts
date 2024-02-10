@@ -1,3 +1,4 @@
+import { UserRole } from '@ftoggle/common/enums/roles';
 import { dbClient } from '@ftoggle/db/connection';
 import {
   permissions,
@@ -9,7 +10,6 @@ import {
 } from '@ftoggle/db/schema';
 import { and, eq } from 'drizzle-orm';
 import { User, generateId } from 'lucia';
-import { UserRole } from '../enums/roles';
 import { AuthenticationError, BadRequestError } from '../errors/apiErrors';
 import {
   DuplicateRecordError,
