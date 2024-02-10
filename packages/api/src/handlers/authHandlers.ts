@@ -17,7 +17,11 @@ export const loginHandler = new Elysia().post(
     );
     await lucia.invalidateUserSessions(user.id);
     const session = await lucia.createSession(user.id, {});
-    return { accessToken: session.id };
+    return {
+      accessToken: session.id,
+      id: user.id,
+      username: user.username,
+    };
   },
   {
     body: t.Object({
@@ -26,6 +30,8 @@ export const loginHandler = new Elysia().post(
     }),
     response: t.Object({
       accessToken: t.String(),
+      id: t.String(),
+      username: t.String(),
     }),
   },
 );
