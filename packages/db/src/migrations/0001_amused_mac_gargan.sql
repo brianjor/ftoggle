@@ -56,11 +56,15 @@ VALUES
 --> statement-breakpoint
 -- VIEWER role has no user permissions :(
 
--- Give Admin user ADMIN role --
+-- Give Admin user ADMIN, EDITOR, VIEWER roles --
 WITH
-	adminUserId AS (SELECT id FROM "users" WHERE "username" = 'Admin'),
-	adminRoleId AS (SELECT id FROM "roles" WHERE "name" = 'ADMIN')
+	adminUserId  AS (SELECT id FROM "users" WHERE "username" = 'Admin'),
+	adminRoleId  AS (SELECT id FROM "roles" WHERE "name" = 'ADMIN'),
+	editorRoleId AS (SELECT id FROM "roles" WHERE "name" = 'EDITOR'),
+  viewerRoleId AS (SELECT id fomr "roles" WHERE "name" = 'VEIWER')
 INSERT INTO "users_roles"
 	("user_id", "role_id")
 VALUES
-	((SELECT id FROM adminUserId), (SELECT id FROM adminRoleId))
+	((SELECT id FROM adminUserId), (SELECT id FROM adminRoleId)),
+	((SELECT id FROM adminUserId), (SELECT id FROM editorRoleId)),
+	((SELECT id FROM adminUserId), (SELECT id FROM viewerRoleId))
