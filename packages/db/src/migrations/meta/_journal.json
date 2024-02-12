@@ -29,6 +29,13 @@
       "when": 1707712212888,
       "tag": "0003_opposite_rockslide",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1707712875349,
+      "tag": "0004_useful_omega_red",
+      "breakpoints": true
     }
   ]
 }
