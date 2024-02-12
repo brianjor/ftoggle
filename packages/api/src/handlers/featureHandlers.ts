@@ -1,7 +1,7 @@
 import Elysia, { t } from 'elysia';
 import { FeaturesController } from '../controllers/featuresController';
 import { ProjectsController } from '../controllers/projectsController';
-import { ProjectPermission } from '../enums/permissions';
+import { UserPermission } from '../enums/permissions';
 import { hooks } from '../hooks';
 import { featuresTableItem } from '../typeboxes/featuresTypes';
 
@@ -47,8 +47,8 @@ export const featureHandlers = new Elysia()
       },
       beforeHandle: [
         ({ isSignedIn }) => isSignedIn(),
-        ({ hasProjectPermissions }) =>
-          hasProjectPermissions([ProjectPermission.VIEW_FEATURE_TOGGLES]),
+        ({ hasUserPermissions }) =>
+          hasUserPermissions([UserPermission.VIEW_FEATURE_TOGGLES]),
       ],
     },
   )
@@ -87,8 +87,8 @@ export const featureHandlers = new Elysia()
       },
       beforeHandle: [
         ({ isSignedIn }) => isSignedIn(),
-        ({ hasProjectPermissions }) =>
-          hasProjectPermissions([ProjectPermission.EDIT_FEATURE_TOGGLE]),
+        ({ hasUserPermissions }) =>
+          hasUserPermissions([UserPermission.EDIT_FEATURE_TOGGLE]),
       ],
     },
   )
@@ -109,8 +109,8 @@ export const featureHandlers = new Elysia()
       }),
       beforeHandle: [
         ({ isSignedIn }) => isSignedIn(),
-        ({ hasProjectPermissions }) =>
-          hasProjectPermissions([ProjectPermission.DELETE_FEATURE_TOGGLE]),
+        ({ hasUserPermissions }) =>
+          hasUserPermissions([UserPermission.DELETE_FEATURE_TOGGLE]),
       ],
     },
   );

@@ -14,8 +14,6 @@ import { featureEnvironmentHandler } from './handlers/featureEnvironmentHandlers
 import { featureHandlers } from './handlers/featureHandlers';
 import { featuresHandlers } from './handlers/featuresHandlers';
 import { projectHandlers } from './handlers/projectHandlers';
-import { projectUserHandlers } from './handlers/projectUserHandlers';
-import { projectUsersHandlers } from './handlers/projectUsersHandlers';
 import { projectsHandlers } from './handlers/projectsHandlers';
 import { userHandlers } from './handlers/userHandlers';
 import { userRoleHandlers } from './handlers/userRoleHandlers';
@@ -54,10 +52,6 @@ export const routes = new Elysia()
             ) // /environments
           ) // /:featureId
         ) // /features
-        .group('/users', _ => _.use(projectUsersHandlers)
-          .group('/:userId', _ => _.use(projectUserHandlers)
-          ) // /:userId
-        ) // /users
       ) // /:projectId
     ) // /projects
     .group('/users', _ => _.use(usersHandlers)

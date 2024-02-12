@@ -4,8 +4,6 @@ export * from './features';
 export * from './permissions';
 export * from './projects';
 export * from './projectsFeaturesEnvironments';
-export * from './projectsUsers';
-export * from './projectsUsersRoles';
 export * from './roles';
 export * from './rolesPermissions';
 export * from './userSessions';

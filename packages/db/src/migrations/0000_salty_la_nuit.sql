@@ -26,13 +26,6 @@ CREATE TABLE IF NOT EXISTS "features" (
 	CONSTRAINT "features_name_project_id_unique" UNIQUE("name","project_id")
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "users_passwords" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"hashed_password" text NOT NULL,
-	"user_id" text NOT NULL,
-	CONSTRAINT "users_passwords_user_id_unique" UNIQUE("user_id")
-);
---> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "permissions" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"name" text NOT NULL,
@@ -92,12 +85,20 @@ CREATE TABLE IF NOT EXISTS "users_sessions" (
 CREATE TABLE IF NOT EXISTS "users" (
 	"id" text PRIMARY KEY NOT NULL,
 	"username" text NOT NULL,
+	"is_approved" boolean DEFAULT false NOT NULL,
 	CONSTRAINT "users_username_unique" UNIQUE("username")
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "users_passwords" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"hashed_password" text NOT NULL,
+	"user_id" text NOT NULL,
+	CONSTRAINT "users_passwords_user_id_unique" UNIQUE("user_id")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "users_roles" (
 	"role_id" integer NOT NULL,
-	"user_id" varchar(15) NOT NULL,
+	"user_id" text NOT NULL,
 	CONSTRAINT "users_roles_role_id_user_id_pk" PRIMARY KEY("role_id","user_id")
 );
 --> statement-breakpoint
@@ -127,12 +128,6 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "features" ADD CONSTRAINT "features_project_id_projects_id_fk" FOREIGN KEY ("project_id") REFERENCES "projects"("id") ON DELETE cascade ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "users_passwords" ADD CONSTRAINT "users_passwords_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -199,6 +194,12 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "users_sessions" ADD CONSTRAINT "users_sessions_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "users_passwords" ADD CONSTRAINT "users_passwords_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

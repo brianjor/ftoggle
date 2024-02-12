@@ -1,6 +1,6 @@
 import Elysia, { t } from 'elysia';
 import { ApiTokensController } from '../controllers/apiTokensController';
-import { ProjectPermission } from '../enums/permissions';
+import { UserPermission } from '../enums/permissions';
 import { hooks } from '../hooks';
 
 const apiTokensController = new ApiTokensController();
@@ -28,8 +28,8 @@ export const apiTokenHandlers = new Elysia().use(hooks).delete(
     }),
     beforeHandle: [
       ({ isSignedIn }) => isSignedIn(),
-      ({ hasProjectPermissions }) =>
-        hasProjectPermissions([ProjectPermission.DELETE_API_TOKEN]),
+      ({ hasUserPermissions }) =>
+        hasUserPermissions([UserPermission.DELETE_PROJECT_API_TOKEN]),
     ],
   },
 );

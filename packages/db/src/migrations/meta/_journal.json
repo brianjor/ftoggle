@@ -5,36 +5,15 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1707028114258,
-      "tag": "0000_luxuriant_pepper_potts",
+      "when": 1707715912184,
+      "tag": "0000_salty_la_nuit",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "5",
-      "when": 1707028121220,
-      "tag": "0001_amused_mac_gargan",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1707028122060,
-      "tag": "0002_safe_kat_farrell",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1707712212888,
-      "tag": "0003_opposite_rockslide",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1707712875349,
-      "tag": "0004_useful_omega_red",
+      "when": 1707715917446,
+      "tag": "0001_lumpy_loki",
       "breakpoints": true
     }
   ]
