@@ -1,6 +1,6 @@
 import Elysia, { t } from 'elysia';
 import { ProjectsController } from '../controllers/projectsController';
-import { ProjectPermission } from '../enums/permissions';
+import { UserPermission } from '../enums/permissions';
 import { NotFoundResponse } from '../helpers/responses';
 import { hooks } from '../hooks';
 import { projectWithFeaturesAndEnvironments } from '../typeboxes/projectsTypes';
@@ -28,8 +28,8 @@ export const projectHandlers = new Elysia()
       },
       beforeHandle: [
         ({ isSignedIn }) => isSignedIn(),
-        ({ hasProjectPermissions }) =>
-          hasProjectPermissions([ProjectPermission.VIEW_PROJECT]),
+        ({ hasUserPermissions }) =>
+          hasUserPermissions([UserPermission.VIEW_PROJECTS]),
       ],
     },
   )
@@ -49,8 +49,8 @@ export const projectHandlers = new Elysia()
       }),
       beforeHandle: [
         ({ isSignedIn }) => isSignedIn(),
-        ({ hasProjectPermissions }) =>
-          hasProjectPermissions([ProjectPermission.EDIT_PROJECT]),
+        ({ hasUserPermissions }) =>
+          hasUserPermissions([UserPermission.EDIT_PROJECT]),
       ],
     },
   )
@@ -74,8 +74,8 @@ export const projectHandlers = new Elysia()
       },
       beforeHandle: [
         ({ isSignedIn }) => isSignedIn(),
-        ({ hasProjectPermissions }) =>
-          hasProjectPermissions([ProjectPermission.DELETE_PROJECT]),
+        ({ hasUserPermissions }) =>
+          hasUserPermissions([UserPermission.DELETE_PROJECT]),
       ],
     },
   );

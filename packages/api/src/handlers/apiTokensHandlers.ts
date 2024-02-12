@@ -3,7 +3,7 @@ import Elysia, { t } from 'elysia';
 import { ApiTokensController } from '../controllers/apiTokensController';
 import { EnvironmentsController } from '../controllers/environmentsController';
 import { ProjectsController } from '../controllers/projectsController';
-import { ProjectPermission } from '../enums/permissions';
+import { UserPermission } from '../enums/permissions';
 import { hooks } from '../hooks';
 import { apiTokensTableItem } from '../typeboxes/apiTokensTypes';
 
@@ -45,8 +45,8 @@ export const apiTokensHandlers = new Elysia()
       }),
       beforeHandle: [
         ({ isSignedIn }) => isSignedIn(),
-        ({ hasProjectPermissions }) =>
-          hasProjectPermissions([ProjectPermission.CREATE_API_TOKEN]),
+        ({ hasUserPermissions }) =>
+          hasUserPermissions([UserPermission.CREATE_PROJECT_API_TOKEN]),
       ],
     },
   )
@@ -74,8 +74,8 @@ export const apiTokensHandlers = new Elysia()
       }),
       beforeHandle: [
         ({ isSignedIn }) => isSignedIn(),
-        ({ hasProjectPermissions }) =>
-          hasProjectPermissions([ProjectPermission.VIEW_API_TOKENS]),
+        ({ hasUserPermissions }) =>
+          hasUserPermissions([UserPermission.VIEW_PROJECT_API_TOKENS]),
       ],
     },
   );

@@ -1,6 +1,6 @@
 import Elysia, { t } from 'elysia';
 import { ProjectsController } from '../controllers/projectsController';
-import { ProjectPermission } from '../enums/permissions';
+import { UserPermission } from '../enums/permissions';
 import { hooks } from '../hooks';
 
 const projectsController = new ProjectsController();
@@ -41,8 +41,8 @@ export const environmentHandlers = new Elysia()
       },
       beforeHandle: [
         ({ isSignedIn }) => isSignedIn(),
-        ({ hasProjectPermissions }) =>
-          hasProjectPermissions([ProjectPermission.VIEW_ENVIRONMENTS]),
+        ({ hasUserPermissions }) =>
+          hasUserPermissions([UserPermission.VIEW_ENVIRONMENTS]),
       ],
     },
   )
@@ -66,8 +66,8 @@ export const environmentHandlers = new Elysia()
       }),
       beforeHandle: [
         ({ isSignedIn }) => isSignedIn(),
-        ({ hasProjectPermissions }) =>
-          hasProjectPermissions([ProjectPermission.DELETE_ENVIRONMENT]),
+        ({ hasUserPermissions }) =>
+          hasUserPermissions([UserPermission.DELETE_ENVIRONMENT]),
       ],
     },
   );

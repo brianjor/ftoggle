@@ -3,7 +3,6 @@ import { relations } from 'drizzle-orm/relations';
 import { apiTokens } from '.';
 import { environments } from './environments';
 import { features } from './features';
-import { projectsUsers } from './projectsUsers';
 
 export const projects = pgTable(
   'projects',
@@ -26,6 +25,5 @@ export const projects = pgTable(
 export const projectsRelations = relations(projects, ({ many }) => ({
   environments: many(environments),
   features: many(features),
-  projectsUsers: many(projectsUsers),
   apiTokens: many(apiTokens),
 }));

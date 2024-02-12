@@ -1,7 +1,7 @@
 import Elysia, { t } from 'elysia';
 import { FeaturesEnvironmentsController } from '../controllers/featuresEnvironmentsController';
 import { ProjectsController } from '../controllers/projectsController';
-import { ProjectPermission } from '../enums/permissions';
+import { UserPermission } from '../enums/permissions';
 import { hooks } from '../hooks';
 import { featuresEnvironmentsTableItem } from '../typeboxes/featuresEnvironmentsTypes';
 
@@ -42,8 +42,8 @@ export const featureEnvironmentHandler = new Elysia().use(hooks).put(
     response: toggleFeatureDataContract,
     beforeHandle: [
       ({ isSignedIn }) => isSignedIn(),
-      ({ hasProjectPermissions }) =>
-        hasProjectPermissions([ProjectPermission.EDIT_FEATURE_TOGGLE]),
+      ({ hasUserPermissions }) =>
+        hasUserPermissions([UserPermission.EDIT_FEATURE_TOGGLE]),
     ],
   },
 );

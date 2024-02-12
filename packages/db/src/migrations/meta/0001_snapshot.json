@@ -1,6 +1,6 @@
 {
-  "id": "a66e13e1-269b-4097-916e-14d52218846f",
-  "prevId": "c36e84cb-1e80-497a-bed5-a7a4befcaefb",
+  "id": "77489b4c-2271-447a-a2db-384e2c0f1c22",
+  "prevId": "1183cb21-7bb8-411c-9f70-e00a160673f9",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -223,56 +223,6 @@
           "columns": [
             "name",
             "project_id"
-          ],
-          "nullsNotDistinct": false
-        }
-      }
-    },
-    "users_passwords": {
-      "name": "users_passwords",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "hashed_password": {
-          "name": "hashed_password",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "users_passwords_user_id_users_id_fk": {
-          "name": "users_passwords_user_id_users_id_fk",
-          "tableFrom": "users_passwords",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "tableTo": "users",
-          "columnsTo": [
-            "id"
-          ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "users_passwords_user_id_unique": {
-          "name": "users_passwords_user_id_unique",
-          "columns": [
-            "user_id"
           ],
           "nullsNotDistinct": false
         }
@@ -735,6 +685,13 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "is_approved": {
+          "name": "is_approved",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
         }
       },
       "indexes": {},
@@ -745,6 +702,56 @@
           "name": "users_username_unique",
           "columns": [
             "username"
+          ],
+          "nullsNotDistinct": false
+        }
+      }
+    },
+    "users_passwords": {
+      "name": "users_passwords",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "hashed_password": {
+          "name": "hashed_password",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "users_passwords_user_id_users_id_fk": {
+          "name": "users_passwords_user_id_users_id_fk",
+          "tableFrom": "users_passwords",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "tableTo": "users",
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "users_passwords_user_id_unique": {
+          "name": "users_passwords_user_id_unique",
+          "columns": [
+            "user_id"
           ],
           "nullsNotDistinct": false
         }
@@ -762,7 +769,7 @@
         },
         "user_id": {
           "name": "user_id",
-          "type": "varchar(15)",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         }

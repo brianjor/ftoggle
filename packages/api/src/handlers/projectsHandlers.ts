@@ -1,4 +1,3 @@
-import { ProjectRole } from '@ftoggle/common/enums/roles';
 import {
   projectIdReqs,
   projectNameReqs,
@@ -16,9 +15,8 @@ export const projectsHandlers = new Elysia()
   .use(hooks)
   .get(
     '',
-    async (context) => {
-      const { user } = await context.getRequestUser();
-      const projects = await projectsController.getProjects(user.id);
+    async () => {
+      const projects = await projectsController.getProjects();
 
       return {
         data: {
@@ -46,17 +44,10 @@ export const projectsHandlers = new Elysia()
     '',
     async (context) => {
       const { body } = context;
-      const { user } = await context.getRequestUser();
       const { projectId, projectName } = body;
       const project = await projectsController.createProject(
         projectId,
         projectName,
-      );
-      await projectsController.addUser(project.id, user.id);
-      await projectsController.addRoleToUser(
-        project.id,
-        user.id,
-        ProjectRole.OWNER,
       );
       await projectsController.addEnvironment('dev', project.id);
       await projectsController.addEnvironment('prod', project.id);
