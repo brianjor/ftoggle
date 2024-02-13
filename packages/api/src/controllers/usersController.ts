@@ -50,6 +50,27 @@ export class UsersController {
   }
 
   /**
+   * Patch fields of the user, only specific fields are updatable. See {@link patchValues} for accepted fields.
+   * @param userId id of the user to patch
+   * @param patchValues values to patch the user with
+   */
+  async patchUser(
+    userId: string,
+    patchValues: {
+      isApproved: boolean | undefined;
+    },
+  ) {
+    // Needs to have at least one defined property
+    // Drizzle will throw an error if there are no defined properties to set
+    const hasDefined = Object.values(patchValues).some((v) => v !== undefined);
+    if (!hasDefined) {
+      // Only has undefined values. Nothing to change, return early.
+      return;
+    }
+    await dbClient.update(users).set(patchValues).where(eq(users.id, userId));
+  }
+
+  /**
    * Validates a username password users login.
    * @param username users username
    * @param password users password
