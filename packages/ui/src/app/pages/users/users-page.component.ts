@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
@@ -11,15 +12,22 @@ import { UsersService } from '../../services/users.service';
 @Component({
   selector: 'app-users-page',
   standalone: true,
-  imports: [MatButtonModule, MatChipsModule, MatIconModule, MatTableModule],
+  imports: [
+    MatButtonModule,
+    MatCheckboxModule,
+    MatChipsModule,
+    MatIconModule,
+    MatTableModule,
+  ],
   templateUrl: './users-page.component.html',
   styleUrl: './users-page.component.scss',
 })
 export class UsersPageComponent {
   users = this.usersService.users;
-  displayedColumns = ['name', 'roles'];
+  displayedColumns = ['name', 'roles', 'approval'];
   allRoles = UserRoleValues;
   roleChangeInFlight = false;
+  approvalChangeInFlight = false;
 
   constructor(private usersService: UsersService) {}
 
@@ -41,6 +49,15 @@ export class UsersPageComponent {
     } else {
       this.addRole(user, userRole);
     }
+  }
+
+  onApprovalChange(user: UserWithRoles, approval: boolean) {
+    if (this.approvalChangeInFlight) return;
+    this.approvalChangeInFlight = true;
+    this.usersService
+      .setApproval(user, approval)
+      .then(() => this.getUsers())
+      .finally(() => (this.approvalChangeInFlight = false));
   }
 
   addRole(user: UserWithRoles, role: UserRole) {

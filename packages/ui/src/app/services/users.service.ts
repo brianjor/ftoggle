@@ -22,6 +22,15 @@ export class UsersService {
     this._users.set(data?.users ?? []);
   }
 
+  async setApproval(user: UsersTableItem, approval: boolean) {
+    const { response, data } = await this.apiService.api.users[user.id].patch({
+      isApproved: approval,
+    });
+    if (!response.ok) {
+      console.error('Error setting user approval', data);
+    }
+  }
+
   async addRole(user: UsersTableItem, role: UserRole) {
     const { response, error } = await this.apiService.api.users[
       user.id
