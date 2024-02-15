@@ -28,6 +28,7 @@
       <mat-checkbox
         [checked]="user.isApproved"
         (change)="onApprovalChange(user, $event.checked)"
+        [disabled]="user.username === 'Admin'"
       ></mat-checkbox>
     </td>
   </ng-container>
