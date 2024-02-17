@@ -2,6 +2,7 @@ import Elysia, { t } from 'elysia';
 import { lucia } from '../auth/lucia';
 import { UsersController } from '../controllers/usersController';
 import { UserPermission } from '../enums/permissions';
+import { ErrorResponseBox } from '../helpers/responses';
 import { hooks } from '../hooks';
 
 const usersController = new UsersController();
@@ -28,11 +29,15 @@ export const loginHandler = new Elysia().post(
       username: t.String(),
       password: t.String(),
     }),
-    response: t.Object({
-      accessToken: t.String(),
-      id: t.String(),
-      username: t.String(),
-    }),
+    response: {
+      200: t.Object({
+        accessToken: t.String(),
+        id: t.String(),
+        username: t.String(),
+      }),
+      400: ErrorResponseBox.BadRequest,
+      401: ErrorResponseBox.Unauthorized,
+    },
   },
 );
 

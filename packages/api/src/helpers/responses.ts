@@ -12,14 +12,30 @@ export enum HttpStatus {
   InternalServerError = 500,
 }
 
+export class ErrorResponseBox {
+  static get BadRequest() {
+    return BadRequestResponse;
+  }
+  static get Unauthorized() {
+    return UnauthorizedResponse;
+  }
+  static get Forbidden() {
+    return ForbiddenResponse;
+  }
+  static get NotFound() {
+    return NotFoundResponse;
+  }
+}
+
 export const errorResponseObject = (options: {
   status: HttpStatus;
   error?: string;
+  message?: string;
 }) =>
   t.Object({
     status: t.Number({ example: options.status }),
-    error: t.String({ example: options.error ?? '' }),
-    message: t.String({ example: '' }),
+    error: t.String({ example: options.error }),
+    message: t.String({ example: options.message }),
   });
 
 /** Response schema for 400 errors */
@@ -28,9 +44,9 @@ export const BadRequestResponse = errorResponseObject({
   error: 'Bad Request',
 });
 /** Response schema for 401 errors. Ex: Unable to authenticate the user. */
-export const UnathorizedResponse = errorResponseObject({
+export const UnauthorizedResponse = errorResponseObject({
   status: HttpStatus.Unauthorized,
-  error: 'Unathorized',
+  error: 'Unauthorized',
 });
 /** Response schema for 403 errors. Ex: User is missing permissions. */
 export const ForbiddenResponse = errorResponseObject({

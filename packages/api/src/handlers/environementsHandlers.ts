@@ -4,7 +4,7 @@ import { UserPermission } from '../enums/permissions';
 import {
   BadRequestResponse,
   ForbiddenResponse,
-  UnathorizedResponse,
+  UnauthorizedResponse,
 } from '../helpers/responses';
 import { hooks } from '../hooks';
 
@@ -36,7 +36,7 @@ export const environmentsHandlers = new Elysia()
       response: {
         200: t.String(),
         400: BadRequestResponse,
-        401: UnathorizedResponse,
+        401: UnauthorizedResponse,
         403: ForbiddenResponse,
       },
       beforeHandle: [
