@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { paths } from '../app.routes';
 import { ApiService } from './api.service';
-import { LocalStorageService } from './local-storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +9,6 @@ import { LocalStorageService } from './local-storage.service';
 export class LoginService {
   constructor(
     private apiService: ApiService,
-    private local: LocalStorageService,
     private router: Router,
   ) {}
 
@@ -22,7 +20,6 @@ export class LoginService {
       });
       if (response.status === 200) {
         console.info('Successful login');
-        this.local.setApiToken(response.data?.accessToken ?? '');
         this.router.navigate([paths.projects]);
       }
     } catch (err) {

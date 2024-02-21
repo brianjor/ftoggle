@@ -5,7 +5,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router, RouterLink } from '@angular/router';
 import { paths } from '../../app.routes';
-import { LocalStorageService } from '../../services/local-storage.service';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-header',
@@ -24,12 +24,12 @@ export class HeaderComponent {
   paths = paths;
 
   constructor(
-    private local: LocalStorageService,
+    private apiService: ApiService,
     private router: Router,
   ) {}
 
-  handleLogout() {
-    this.local.clearApiToken();
+  async handleLogout() {
+    await this.apiService.api.auth.logout.post();
     this.router.navigate([paths.login]);
   }
 }

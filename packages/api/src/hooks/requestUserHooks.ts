@@ -9,12 +9,12 @@ import { AuthenticationError } from '../errors/apiErrors';
  * @throws An {@link AuthenticationError} if user cannot be validated
  */
 const validateUserToken = async (context: Context) => {
-  const authHeader = context.headers['authorization'];
-  const sessionId = lucia.readBearerToken(authHeader ?? '');
-  if (!sessionId) {
-    throw new AuthenticationError('Unable to authenticate user');
+  const accessToken = context.cookie['accessToken'].get();
+
+  if (!accessToken) {
+    throw new AuthenticationError('Missing cookie: "accessToken"');
   }
-  const { session, user } = await lucia.validateSession(sessionId);
+  const { session, user } = await lucia.validateSession(accessToken);
   if (!user || !session) {
     throw new AuthenticationError('Unable to authenticate user');
   }

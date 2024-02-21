@@ -6,6 +6,7 @@ import { usersRolesTableItem } from './usersRolesTypes';
 export const usersTableItem = t.Object({
   id: t.String(),
   username: t.String(),
+  githubId: t.Nullable(t.Number()),
 });
 
 /** DTO of a user from the `users` table. */

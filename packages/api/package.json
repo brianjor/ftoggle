@@ -28,6 +28,8 @@
     "@ftoggle/common": "workspace:*",
     "@ftoggle/db": "workspace:*",
     "@lucia-auth/adapter-postgresql": "^3.0.0",
+    "arctic": "^1.1.6",
+    "dotenv": "^16.4.4",
     "drizzle-orm": "^0.29.1",
     "elysia": "^0.8.17",
     "lucia": "^3.0.1"
