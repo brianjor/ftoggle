@@ -3,6 +3,7 @@ import { t } from 'elysia';
 export enum HttpStatus {
   Ok = 200,
   Created = 201,
+  Redirect = 302,
   BadRequest = 400,
   /** Unable to authenticate the user */
   Unauthorized = 401,

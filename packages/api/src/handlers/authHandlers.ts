@@ -10,7 +10,7 @@ const usersController = new UsersController();
 export const loginHandler = new Elysia().post(
   '',
   async (context) => {
-    const { body } = context;
+    const { body, cookie } = context;
     const { username, password } = body;
     const user = await usersController.validateUsernamePasswordLogin(
       username,
@@ -18,8 +18,20 @@ export const loginHandler = new Elysia().post(
     );
     await lucia.invalidateUserSessions(user.id);
     const session = await lucia.createSession(user.id, {});
+    const sessionCookie = lucia.createSessionCookie(session.id);
+    cookie['accessToken'].set({
+      value: sessionCookie.value,
+      path: '/',
+      ...sessionCookie.attributes,
+    });
+    cookie['signedIn'].set({
+      value: 'yes',
+      path: '/',
+      maxAge: sessionCookie.attributes.maxAge,
+      sameSite: sessionCookie.attributes.sameSite,
+      httpOnly: false,
+    });
     return {
-      accessToken: session.id,
       id: user.id,
       username: user.username,
     };
@@ -31,7 +43,6 @@ export const loginHandler = new Elysia().post(
     }),
     response: {
       200: t.Object({
-        accessToken: t.String(),
         id: t.String(),
         username: t.String(),
       }),
@@ -67,10 +78,18 @@ export const signupHandler = new Elysia().use(hooks).post(
 
 export const logoutHandler = new Elysia().use(hooks).post(
   '',
-  async (context) => {
-    const { user } = await context.getRequestUser();
+  async ({ cookie, getRequestUser }) => {
+    const { user } = await getRequestUser();
     await lucia.invalidateUserSessions(user.id);
 
+    cookie['accessToken'].set({
+      ...lucia.createBlankSessionCookie(),
+      path: '/',
+    });
+    cookie['signedIn'].set({
+      ...lucia.createBlankSessionCookie(),
+      path: '/',
+    });
     return `Logged out user: ${user.username}`;
   },
   {

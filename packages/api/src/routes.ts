@@ -13,6 +13,7 @@ import { environmentsHandlers } from './handlers/environementsHandlers';
 import { featureEnvironmentHandler } from './handlers/featureEnvironmentHandlers';
 import { featureHandlers } from './handlers/featureHandlers';
 import { featuresHandlers } from './handlers/featuresHandlers';
+import { githubLoginHandler } from './handlers/githubLoginHandlers';
 import { projectHandlers } from './handlers/projectHandlers';
 import { projectsHandlers } from './handlers/projectsHandlers';
 import { userHandlers } from './handlers/userHandlers';
@@ -29,7 +30,10 @@ export const routes = new Elysia()
       ) // /features
     ) // /client
     .group('/auth', _ => _
-      .group('/login', _ => _.use(loginHandler))
+      .group('/login', _ => _.use(loginHandler)
+        .group('/github', _ => _.use(githubLoginHandler)
+        ) // /github
+      ) // /login
       .group('/signup', _ => _.use(signupHandler))
       .group('/logout', _ => _.use(logoutHandler))
       .group('/change-password', _ => _.use(changePasswordHandler))

@@ -15,6 +15,13 @@
       "when": 1707715917446,
       "tag": "0001_lumpy_loki",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1708239088287,
+      "tag": "0002_flashy_roulette",
+      "breakpoints": true
     }
   ]
 }
