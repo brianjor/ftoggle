@@ -1,6 +1,7 @@
 import { boolean, pgTable, text, timestamp, unique } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm/relations';
 import { apiTokens } from '.';
+import { contextFields } from './contextFields';
 import { environments } from './environments';
 import { features } from './features';
 
@@ -26,4 +27,5 @@ export const projectsRelations = relations(projects, ({ many }) => ({
   environments: many(environments),
   features: many(features),
   apiTokens: many(apiTokens),
+  contextFields: many(contextFields),
 }));
