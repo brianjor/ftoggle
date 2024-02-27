@@ -29,6 +29,13 @@
       "when": 1708834302406,
       "tag": "0003_uneven_starbolt",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1709006699456,
+      "tag": "0004_lively_guardian",
+      "breakpoints": true
     }
   ]
 }
