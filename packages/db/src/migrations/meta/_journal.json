@@ -36,6 +36,20 @@
       "when": 1709006699456,
       "tag": "0004_lively_guardian",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1709423971726,
+      "tag": "0005_gorgeous_wendigo",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1709424772414,
+      "tag": "0006_overjoyed_living_mummy",
+      "breakpoints": true
     }
   ]
 }
