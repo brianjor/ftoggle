@@ -5,7 +5,7 @@ import { projects } from './projects';
 export const contextFields = pgTable(
   'context_fields',
   {
-    id: uuid('id').primaryKey(),
+    id: uuid('id').primaryKey().defaultRandom(),
     projectId: text('project_id')
       .notNull()
       .references(() => projects.id, { onDelete: 'cascade' }),

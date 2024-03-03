@@ -44,4 +44,6 @@ export enum UserPermission {
   VIEW_PROJECT_API_TOKENS = 'VIEW_PROJECT_API_TOKENS',
   /** Allows deleting project API token */
   DELETE_PROJECT_API_TOKEN = 'DELETE_PROJECT_API_TOKEN',
+  /** Allows create a context field on a project */
+  CREATE_PROJECT_CONTEXT_FIELD = 'CREATE_PROJECT_CONTEXT_FIELD',
 }
