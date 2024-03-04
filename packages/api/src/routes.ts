@@ -8,6 +8,7 @@ import {
   signupHandler,
 } from './handlers/authHandlers';
 import { clientFeaturesHandler } from './handlers/clientFeaturesHandlers';
+import { conditionsHandlers } from './handlers/conditionsHandlers';
 import { contextFieldsHandlers } from './handlers/contextFieldsHandlers';
 import { environmentHandlers } from './handlers/environementHandlers';
 import { environmentsHandlers } from './handlers/environementsHandlers';
@@ -43,7 +44,7 @@ export const routes = new Elysia()
       .group('/:projectId', _ => _.use(projectHandlers)
         .group('/apiTokens', _ => _.use(apiTokensHandlers)
           .group('/:apiTokenId', _ => _.use(apiTokenHandlers)
-          ) // /:apiToken
+          ) // /:apiTokenId
         ) // /apiTokens
         .group('/context-fields', _ => _.use(contextFieldsHandlers)
         ) // /context-fields
@@ -55,6 +56,8 @@ export const routes = new Elysia()
           .group('/:featureId', _ => _.use(featureHandlers)
             .group('/environments', _ => _
               .group('/:environmentId', _ => _.use(featureEnvironmentHandler)
+                .group('/conditions', _ => _.use(conditionsHandlers)
+                ) // /conditions
               ) // /:environmentId
             ) // /environments
           ) // /:featureId

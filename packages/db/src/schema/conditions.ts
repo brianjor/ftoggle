@@ -3,7 +3,7 @@ import { integer, pgTable, text, uuid } from 'drizzle-orm/pg-core';
 import { contextFields, environments, features, projects } from '.';
 
 export const conditions = pgTable('conditions', {
-  id: uuid('id').primaryKey(),
+  id: uuid('id').primaryKey().defaultRandom(),
   projectId: text('project_id')
     .notNull()
     .references(() => projects.id, { onDelete: 'cascade' }),

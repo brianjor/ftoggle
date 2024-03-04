@@ -5,11 +5,9 @@ import { RecordDoesNotExistError } from '../errors/dbErrors';
 import { FeaturesTableItem } from '../typeboxes/featuresTypes';
 import { ProjectsController } from './projectsController';
 
-export class FeaturesController {
-  constructor(private projectsController: ProjectsController) {
-    this.projectsController = new ProjectsController();
-  }
+const projectsController = new ProjectsController();
 
+export class FeaturesController {
   /**
    * Creates a feature and adds it to the projects environments.
    * @param name Name of the feature
@@ -17,7 +15,7 @@ export class FeaturesController {
    * @returns the created feature
    */
   public async addFeature(name: string, projectId: string) {
-    const envs = await this.projectsController.getEnvironments(projectId);
+    const envs = await projectsController.getEnvironments(projectId);
     const feature = (
       await dbClient.insert(features).values({ name, projectId }).returning()
     )[0];
