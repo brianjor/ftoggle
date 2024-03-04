@@ -46,4 +46,6 @@ export enum UserPermission {
   DELETE_PROJECT_API_TOKEN = 'DELETE_PROJECT_API_TOKEN',
   /** Allows create a context field on a project */
   CREATE_PROJECT_CONTEXT_FIELD = 'CREATE_PROJECT_CONTEXT_FIELD',
+  /** Allows creating a condition for a feature toggle */
+  CREATE_FEATURE_TOGGLE_CONDITION = 'CREATE_FEATURE_TOGGLE_CONDITION',
 }

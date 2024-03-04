@@ -6,7 +6,7 @@ import { hooks } from '../hooks';
 import { featuresTableItem } from '../typeboxes/featuresTypes';
 
 const projectsController = new ProjectsController();
-const featuresController = new FeaturesController(projectsController);
+const featuresController = new FeaturesController();
 
 export const featureHandlers = new Elysia()
   .use(hooks)
