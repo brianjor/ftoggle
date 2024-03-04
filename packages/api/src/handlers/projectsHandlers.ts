@@ -9,7 +9,7 @@ import { UserPermission } from '../enums/permissions';
 import { hooks } from '../hooks';
 
 const projectsController = new ProjectsController();
-const featuresController = new FeaturesController(projectsController);
+const featuresController = new FeaturesController();
 
 export const projectsHandlers = new Elysia()
   .use(hooks)

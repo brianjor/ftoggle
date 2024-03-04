@@ -1,12 +1,10 @@
 import Elysia, { t } from 'elysia';
 import { FeaturesController } from '../controllers/featuresController';
-import { ProjectsController } from '../controllers/projectsController';
 import { UserPermission } from '../enums/permissions';
 import { hooks } from '../hooks';
 import { featureWithEnvironments } from '../typeboxes/featuresTypes';
 
-const projectsController = new ProjectsController();
-const featuresController = new FeaturesController(projectsController);
+const featuresController = new FeaturesController();
 
 const getResponse = t.Object({
   features: t.Array(featureWithEnvironments),
