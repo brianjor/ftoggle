@@ -48,4 +48,6 @@ export enum UserPermission {
   CREATE_PROJECT_CONTEXT_FIELD = 'CREATE_PROJECT_CONTEXT_FIELD',
   /** Allows creating a condition for a feature toggle */
   CREATE_FEATURE_TOGGLE_CONDITION = 'CREATE_FEATURE_TOGGLE_CONDITION',
+  /** Allows viewing feature toggle conditions */
+  VIEW_FEATURE_TOGGLE_CONDITIONS = 'VIEW_FEATURE_TOGGLE_CONDITIONS',
 }

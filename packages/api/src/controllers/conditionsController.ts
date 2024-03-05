@@ -45,4 +45,28 @@ export class ConditionsController {
       })),
     );
   }
+
+  /**
+   * Gets all conditions for a project -> feature -> environment.
+   * @param projectId id of the project
+   * @param featureId id of the feature
+   * @param environmentId id of the environment
+   * @returns all conditions for the provided project, feature, environment
+   */
+  getProjectFeatureEnvironmentConditions(
+    projectId: string,
+    featureId: number,
+    environmentId: number,
+  ) {
+    return dbClient.query.conditions.findMany({
+      where: and(
+        eq(conditionsTable.projectId, projectId),
+        eq(conditionsTable.featureId, featureId),
+        eq(conditionsTable.environmentId, environmentId),
+      ),
+      with: {
+        contextField: true,
+      },
+    });
+  }
 }

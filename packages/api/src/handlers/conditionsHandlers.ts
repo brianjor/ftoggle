@@ -17,55 +17,88 @@ const projectsController = new ProjectsController();
 const featuresController = new FeaturesController();
 const environmentsController = new EnvironmentsController();
 
-export const conditionsHandlers = new Elysia().use(hooks).post(
-  '',
-  async ({ params, body }) => {
-    const { environmentId, featureId, projectId } = params;
-    const { conditions } = body;
+export const conditionsHandlers = new Elysia()
+  .use(hooks)
+  .post(
+    '',
+    async ({ params, body }) => {
+      const { environmentId, featureId, projectId } = params;
+      const { conditions } = body;
 
-    await projectsController.getProjectById(projectId);
-    await featuresController.getProjectFeatureById(projectId, featureId);
-    await environmentsController.getEnvironmentById(environmentId);
+      await projectsController.getProjectById(projectId);
+      await featuresController.getProjectFeatureById(projectId, featureId);
+      await environmentsController.getEnvironmentById(environmentId);
 
-    await conditionsController.createConditions(
-      conditions,
-      projectId,
-      featureId,
-      environmentId,
-    );
-  },
-  {
-    params: t.Object({
-      projectId: t.String(),
-      featureId: t.Numeric(),
-      environmentId: t.Numeric(),
-    }),
-    body: t.Object({
-      conditions: t.Array(
-        t.Object({
-          contextName: t.String({
-            maxLength: contextFieldNameReqs.maxLength,
-          }),
-          operator: t.Enum(Operators, {
-            error: `operator: Expected one of [${OperatorsValues.join(', ')}]`,
-          }),
-          description: t.Optional(
-            t.String({
-              maxLength: conditionsFieldDescriptionReqs.maxLength,
+      await conditionsController.createConditions(
+        conditions,
+        projectId,
+        featureId,
+        environmentId,
+      );
+    },
+    {
+      params: t.Object({
+        projectId: t.String(),
+        featureId: t.Numeric(),
+        environmentId: t.Numeric(),
+      }),
+      body: t.Object({
+        conditions: t.Array(
+          t.Object({
+            contextName: t.String({
+              maxLength: contextFieldNameReqs.maxLength,
             }),
-          ),
-          values: t.Array(
-            t.String({
-              maxLength: conditionsFieldValuesReqs.maxLength,
+            operator: t.Enum(Operators, {
+              error: `operator: Expected one of [${OperatorsValues.join(', ')}]`,
             }),
-          ),
-        }),
-      ),
-    }),
-    beforeHandle: [
-      ({ isSignedIn }) => isSignedIn(),
-      ({ hasUserPermissions }) =>
-        hasUserPermissions([UserPermission.CREATE_FEATURE_TOGGLE_CONDITION]),
-    ],
-  },
-);
+            description: t.Optional(
+              t.String({
+                maxLength: conditionsFieldDescriptionReqs.maxLength,
+              }),
+            ),
+            values: t.Array(
+              t.String({
+                maxLength: conditionsFieldValuesReqs.maxLength,
+              }),
+            ),
+          }),
+        ),
+      }),
+      beforeHandle: [
+        ({ isSignedIn }) => isSignedIn(),
+        ({ hasUserPermissions }) =>
+          hasUserPermissions([UserPermission.CREATE_FEATURE_TOGGLE_CONDITION]),
+      ],
+    },
+  )
+  .get(
+    '',
+    async ({ params }) => {
+      const { projectId, featureId, environmentId } = params;
+      await projectsController.getProjectById(projectId);
+      await featuresController.getProjectFeatureById(projectId, featureId);
+      await environmentsController.getEnvironmentById(environmentId);
+
+      const conditions =
+        await conditionsController.getProjectFeatureEnvironmentConditions(
+          projectId,
+          featureId,
+          environmentId,
+        );
+      return {
+        conditions,
+      };
+    },
+    {
+      params: t.Object({
+        projectId: t.String(),
+        featureId: t.Numeric(),
+        environmentId: t.Numeric(),
+      }),
+      beforeHandle: [
+        ({ isSignedIn }) => isSignedIn(),
+        ({ hasUserPermissions }) =>
+          hasUserPermissions([UserPermission.VIEW_FEATURE_TOGGLE_CONDITIONS]),
+      ],
+    },
+  );
