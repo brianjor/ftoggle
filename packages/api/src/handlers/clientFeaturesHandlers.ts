@@ -51,6 +51,13 @@ export const clientFeaturesHandler = new Elysia().use(hooks).get(
           t.Object({
             name: t.String(),
             isEnabled: t.Boolean(),
+            conditions: t.Array(
+              t.Object({
+                field: t.String(),
+                operator: t.String(),
+                values: t.Array(t.String()),
+              }),
+            ),
           }),
         ),
       }),
