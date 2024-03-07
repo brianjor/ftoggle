@@ -1,3 +1,8 @@
 <div>Is "feature" enabled? {{ isFeatureEnabled() }}</div>
 <div>Api response: {{ apiResponse() }}</div>
 <button (click)="pingApi()">Ping Api</button>
+<div>
+  Context:
+  <pre>{{ context | json }}</pre>
+</div>
+<div>Set context <input [(ngModel)]="context.asd" /></div>

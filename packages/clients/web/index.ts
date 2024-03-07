@@ -1,5 +1,6 @@
 type Event = 'changed';
 type VoidFunction = () => void;
+type Context = Record<string, string | string[] | number | number[] | Date>;
 
 interface IConfig {
   /** Your frontend API token */
@@ -8,14 +9,25 @@ interface IConfig {
   baseUrl: string;
   /** How often should the client check for feature changes. In seconds. */
   refreshInterval?: number;
+  context?: Context;
 }
 
 interface Config extends IConfig {
   refreshInterval: number;
+  context: Context;
+}
+
+interface Condition {
+  field: string;
+  operator: string;
+  values: string[];
 }
 
 export class FToggle {
-  private features: Map<string, boolean> = new Map();
+  private features: Map<
+    string,
+    { isEnabled: boolean; conditions: Condition[] }
+  > = new Map();
   private events: { [key: string]: { listeners: VoidFunction[] } } = {};
   private _config: Config;
 
@@ -23,13 +35,68 @@ export class FToggle {
     // Supply defaults to optional fields
     this._config = {
       refreshInterval: 30,
+      context: {},
       ...config,
     };
     this.getFeatures();
   }
 
   public isEnabled(featureName: string): boolean {
-    return this.features.get(featureName) ?? false;
+    console.log(`Checking feature: ${featureName}`);
+    const feature = this.features.get(featureName);
+    console.log(`feature: ${feature}`);
+    return (feature?.isEnabled ?? false) && this.checkConditions(feature!);
+  }
+
+  private checkConditions(feature: { conditions: Condition[] }): boolean {
+    console.log('checking conditions');
+    const conditions = feature.conditions;
+    const context = this._config.context;
+    const passes = conditions.some((c) => {
+      if (!(c.field in context)) {
+        console.error(`FToggle: Context does not have the field: "${c.field}"`);
+        return false;
+      }
+      switch (c.operator) {
+        case 'LESS_THAN':
+          return false;
+        case 'GREATER_THAN':
+          return false;
+        case 'LESS_OR_EQUAL_TO':
+          return false;
+        case 'GREATER_OR_EQUAL_TO':
+          return false;
+        case 'EQUAL_TO':
+          return false;
+        case 'NOT_EQUAL_TO':
+          return false;
+        case 'STARTS_WITH':
+          return false;
+        case 'ENDS_WITH':
+          return false;
+        case 'CONTAINS': {
+          const fieldValue = context[c.field];
+          if (typeof fieldValue !== 'string') {
+            console.error(
+              `FToggle: Using "CONTAINS" against a non-string field "${c.field}"`,
+            );
+            return false;
+          }
+          return c.values.some((value) => value.includes(fieldValue));
+        }
+        case 'IN':
+          return false;
+        case 'NOT_IN':
+          return false;
+        case 'DATE_BEFORE':
+          return false;
+        case 'DATE_AFTER':
+          return false;
+        default:
+          return false;
+      }
+    });
+    return passes;
   }
 
   public on(event: Event, listener: VoidFunction) {
@@ -57,7 +124,11 @@ export class FToggle {
       },
     });
     const body = (await res.json()) as {
-      features: { name: string; isEnabled: boolean }[];
+      features: {
+        name: string;
+        isEnabled: boolean;
+        conditions: Condition[];
+      }[];
     };
 
     let hasProblem = false;
@@ -73,7 +144,10 @@ export class FToggle {
     if (!hasProblem) {
       this.features.clear();
       body.features.forEach((f) => {
-        this.features.set(f.name, f.isEnabled);
+        this.features.set(f.name, {
+          isEnabled: f.isEnabled,
+          conditions: f.conditions,
+        });
       });
       this.emit('changed');
     }
