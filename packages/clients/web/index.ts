@@ -47,7 +47,6 @@ export class FToggle {
   }
 
   private checkConditions(feature: { conditions: Condition[] }): boolean {
-    console.log('checking conditions');
     const conditions = feature.conditions;
     const context = this._config.context;
     const passes = conditions.some((c) => {
