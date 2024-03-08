@@ -42,9 +42,7 @@ export class FToggle {
   }
 
   public isEnabled(featureName: string): boolean {
-    console.log(`Checking feature: ${featureName}`);
     const feature = this.features.get(featureName);
-    console.log(`feature: ${feature}`);
     return (feature?.isEnabled ?? false) && this.checkConditions(feature!);
   }
 
