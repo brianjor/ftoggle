@@ -52,4 +52,6 @@ export enum UserPermission {
   VIEW_FEATURE_TOGGLE_CONDITIONS = 'VIEW_FEATURE_TOGGLE_CONDITIONS',
   /** Allows viewing a projects context fields */
   VIEW_PROJECT_CONTEXT_FIELDS = 'VIEW_PROJECT_CONTEXT_FIELDS',
+  /** Allows deleting a projects context field */
+  DELETE_PROJECT_CONTEXT_FIELD = 'DELETE_PROJECT_CONTEXT_FIELD',
 }
