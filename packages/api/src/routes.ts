@@ -9,6 +9,7 @@ import {
 } from './handlers/authHandlers';
 import { clientFeaturesHandler } from './handlers/clientFeaturesHandlers';
 import { conditionsHandlers } from './handlers/conditionsHandlers';
+import { contextFieldHandlers } from './handlers/contextFieldHandlers';
 import { contextFieldsHandlers } from './handlers/contextFieldsHandlers';
 import { environmentHandlers } from './handlers/environementHandlers';
 import { environmentsHandlers } from './handlers/environementsHandlers';
@@ -47,6 +48,8 @@ export const routes = new Elysia()
           ) // /:apiTokenId
         ) // /apiTokens
         .group('/context-fields', _ => _.use(contextFieldsHandlers)
+          .group('/:contextFieldName', _ => _.use(contextFieldHandlers)
+          ) // /:contextFieldName
         ) // /context-fields
         .group('/environments', _ => _.use(environmentsHandlers)
           .group('/:environmentId', _ => _.use(environmentHandlers)

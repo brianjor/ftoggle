@@ -78,6 +78,13 @@
       "when": 1709957756694,
       "tag": "0010_broad_makkari",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "5",
+      "when": 1709959351276,
+      "tag": "0011_green_shaman",
+      "breakpoints": true
     }
   ]
 }
