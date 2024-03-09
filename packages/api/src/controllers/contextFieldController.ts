@@ -30,4 +30,14 @@ export class ContextFieldController {
       .values({ projectId, name, description })
       .returning();
   }
+
+  /**
+   * Gets the context fields for the project.
+   * @param projectId the project id
+   */
+  async getContextFields(projectId: string) {
+    return await dbClient.query.contextFields.findMany({
+      where: eq(contextFields.projectId, projectId),
+    });
+  }
 }
