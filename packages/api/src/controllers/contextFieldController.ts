@@ -40,4 +40,20 @@ export class ContextFieldController {
       where: eq(contextFields.projectId, projectId),
     });
   }
+
+  /**
+   * Deletes a context field from a project.
+   * @param projectId id of the project
+   * @param contextFieldName context fields name
+   */
+  async deleteContextFieldByName(projectId: string, contextFieldName: string) {
+    await dbClient
+      .delete(contextFields)
+      .where(
+        and(
+          eq(contextFields.projectId, projectId),
+          eq(contextFields.name, contextFieldName),
+        ),
+      );
+  }
 }
