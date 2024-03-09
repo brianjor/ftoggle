@@ -71,6 +71,13 @@
       "when": 1709610380209,
       "tag": "0009_quiet_bastion",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1709957756694,
+      "tag": "0010_broad_makkari",
+      "breakpoints": true
     }
   ]
 }
