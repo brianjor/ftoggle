@@ -85,6 +85,13 @@
       "when": 1709959351276,
       "tag": "0011_green_shaman",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "5",
+      "when": 1710046191028,
+      "tag": "0012_magenta_ezekiel",
+      "breakpoints": true
     }
   ]
 }
