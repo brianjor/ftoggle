@@ -1,5 +1,6 @@
 import { dbClient } from '@ftoggle/db/connection';
 import {
+  conditions,
   conditions as conditionsTable,
   contextFields,
 } from '@ftoggle/db/schema';
@@ -68,5 +69,13 @@ export class ConditionsController {
         contextField: true,
       },
     });
+  }
+
+  /**
+   * Deletes a condition by its id.
+   * @param conditionId id of the condition
+   */
+  async deleteConditionById(conditionId: string) {
+    await dbClient.delete(conditions).where(eq(conditions.id, conditionId));
   }
 }

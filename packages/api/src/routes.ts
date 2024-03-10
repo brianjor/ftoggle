@@ -8,6 +8,7 @@ import {
   signupHandler,
 } from './handlers/authHandlers';
 import { clientFeaturesHandler } from './handlers/clientFeaturesHandlers';
+import { conditionHandlers } from './handlers/conditionHandlers';
 import { conditionsHandlers } from './handlers/conditionsHandlers';
 import { contextFieldHandlers } from './handlers/contextFieldHandlers';
 import { contextFieldsHandlers } from './handlers/contextFieldsHandlers';
@@ -60,6 +61,8 @@ export const routes = new Elysia()
             .group('/environments', _ => _
               .group('/:environmentId', _ => _.use(featureEnvironmentHandler)
                 .group('/conditions', _ => _.use(conditionsHandlers)
+                  .group('/:conditionId', _ => _.use(conditionHandlers)
+                  ) // /:conditionId
                 ) // /conditions
               ) // /:environmentId
             ) // /environments
