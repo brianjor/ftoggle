@@ -5,3 +5,4 @@
 - 0007_common_sway
 - 0010_broad_makkari
 - 0010_green_shaman
+- 0012_magenta_ezekiel

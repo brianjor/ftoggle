@@ -54,4 +54,6 @@ export enum UserPermission {
   VIEW_PROJECT_CONTEXT_FIELDS = 'VIEW_PROJECT_CONTEXT_FIELDS',
   /** Allows deleting a projects context field */
   DELETE_PROJECT_CONTEXT_FIELD = 'DELETE_PROJECT_CONTEXT_FIELD',
+  /** Allows delete a condition from a feature toggle */
+  DELETE_FEATURE_TOGGLE_CONDITION = 'DELETE_FEATURE_TOGGLE_CONDITION',
 }
