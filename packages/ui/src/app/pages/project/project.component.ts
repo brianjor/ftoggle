@@ -2,9 +2,11 @@ import { Component } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute } from '@angular/router';
 import { ApiTokenService } from '../../services/api-token.service';
+import { ContextFieldsService } from '../../services/context-fields.service';
 import { EnvironmentsService } from '../../services/environments.service';
 import { FeaturesService } from '../../services/features.service';
 import { ProjectApiTokensComponent } from './components/api-tokens/api-tokens.component';
+import { ProjectContextFieldsComponent } from './components/context-fields/context-fields.component';
 import { ProjectEnvironmentsComponent } from './components/environments/environments.component';
 import { ProjectFeaturesComponent } from './components/features/features.component';
 import { ProjectSettingsComponent } from './components/settings/settings.component';
@@ -14,6 +16,7 @@ import { ProjectSettingsComponent } from './components/settings/settings.compone
   standalone: true,
   imports: [
     ProjectApiTokensComponent,
+    ProjectContextFieldsComponent,
     ProjectEnvironmentsComponent,
     ProjectFeaturesComponent,
     ProjectSettingsComponent,
@@ -27,11 +30,13 @@ export class ProjectComponent {
   features = this.featuresService.features;
   environments = this.environmentsService.environments;
   apiTokens = this.apiTokenService.apiTokens;
+  contextFields = this.contextFieldsService.contextFields;
 
   constructor(
     private featuresService: FeaturesService,
     private environmentsService: EnvironmentsService,
     private apiTokenService: ApiTokenService,
+    private contextFieldsService: ContextFieldsService,
     private route: ActivatedRoute,
   ) {}
 
@@ -56,5 +61,9 @@ export class ProjectComponent {
 
   getApiTokens() {
     this.apiTokenService.getApiTokens(this.projectId);
+  }
+
+  getContextFields() {
+    this.contextFieldsService.getContextFields(this.projectId);
   }
 }

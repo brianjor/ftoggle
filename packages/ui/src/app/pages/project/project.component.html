@@ -8,6 +8,15 @@
     ></app-project-features>
   </mat-tab>
 
+  <mat-tab label="Context Fields">
+    <app-project-context-fields
+      [projectId]="projectId"
+      [contextFields]="contextFields()"
+      (getContextFieldsEvent)="getContextFields()"
+    >
+    </app-project-context-fields>
+  </mat-tab>
+
   <mat-tab label="API Tokens">
     <app-project-api-tokens
       [projectId]="projectId"

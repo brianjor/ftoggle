@@ -7,6 +7,7 @@ import { ContextFieldController } from '../controllers/contextFieldController';
 import { ProjectsController } from '../controllers/projectsController';
 import { UserPermission } from '../enums/permissions';
 import { hooks } from '../hooks';
+import { contextFieldsTableItem } from '../typeboxes/contextFieldsTypes';
 
 const contextFieldController = new ContextFieldController();
 const projectsController = new ProjectsController();
@@ -74,6 +75,11 @@ export const contextFieldsHandlers = new Elysia()
       };
     },
     {
+      response: {
+        200: t.Object({
+          contextFields: t.Array(contextFieldsTableItem),
+        }),
+      },
       params: t.Object({
         projectId: t.String(),
       }),
