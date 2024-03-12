@@ -11,6 +11,21 @@ export class ContextFieldsService {
 
   constructor(private apiService: ApiService) {}
 
+  public async createContextField(
+    projectId: string,
+    name: string,
+    description?: string,
+  ) {
+    try {
+      await this.apiService.api.projects[projectId]['context-fields'].post({
+        name,
+        description,
+      });
+    } catch (error) {
+      console.error('Error creating context field', error);
+    }
+  }
+
   public async getContextFields(projectId: string) {
     try {
       const response =

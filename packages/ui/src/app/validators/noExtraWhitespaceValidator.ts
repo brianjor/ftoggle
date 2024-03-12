@@ -35,7 +35,7 @@ export const createNoExtraWhitespaceValidator = (
       !(settings.noBlank && isBlank) &&
       !(settings.noAny && hasAny);
     return !isValid
-      ? { hasExtraWhitespace: { hasLeading, hasTrailing, isBlank } }
+      ? { hasExtraWhitespace: { hasLeading, hasTrailing, isBlank, hasAny } }
       : null;
   };
 };
