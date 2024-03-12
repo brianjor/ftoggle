@@ -22,6 +22,19 @@
       {{ contextField.description }}
     </td>
   </ng-container>
+  <ng-container matColumnDef="delete">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let contextField">
+      <button
+        [disabled]="deleteContextFieldInFlight"
+        mat-icon-button
+        color="warn"
+        (click)="deleteContextField(contextField)"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+  </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="contextFieldsColumns"></tr>
   <tr mat-footer-row *matRowDef="let row; columns: contextFieldsColumns"></tr>

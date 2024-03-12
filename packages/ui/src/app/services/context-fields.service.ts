@@ -35,4 +35,17 @@ export class ContextFieldsService {
       console.error('Error getting context fields', error);
     }
   }
+
+  public async deleteContextField(
+    projectId: string,
+    contextField: ContextFieldsTableItem,
+  ) {
+    try {
+      await this.apiService.api.projects[projectId]['context-fields'][
+        contextField.name
+      ].delete();
+    } catch (error) {
+      console.error('Error deleting context field', error);
+    }
+  }
 }

@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { ContextFieldsTableItem } from '@ftoggle/api/types/contextFieldsTypes';
 import { CreateContextFieldDialogComponent } from '../../../../components/create-context-field-dialog/create-context-field-dialog.component';
+import { ContextFieldsService } from '../../../../services/context-fields.service';
 
 @Component({
   selector: 'app-project-context-fields',
@@ -17,9 +18,13 @@ export class ProjectContextFieldsComponent {
   @Input({ required: true }) projectId = '';
   @Input({ required: true }) contextFields: ContextFieldsTableItem[] = [];
   @Output() getContextFieldsEvent = new EventEmitter();
-  contextFieldsColumns = ['name', 'description'];
+  contextFieldsColumns = ['name', 'description', 'delete'];
+  deleteContextFieldInFlight = false;
 
-  constructor(public dialog: MatDialog) {}
+  constructor(
+    private contextFieldsService: ContextFieldsService,
+    public dialog: MatDialog,
+  ) {}
 
   ngOnInit() {
     this.getContextFields();
@@ -39,5 +44,14 @@ export class ProjectContextFieldsComponent {
     createContextFieldDialog
       .afterClosed()
       .subscribe(() => this.getContextFields());
+  }
+
+  deleteContextField(contextField: ContextFieldsTableItem) {
+    if (this.deleteContextFieldInFlight) return;
+    this.deleteContextFieldInFlight = true;
+    this.contextFieldsService
+      .deleteContextField(this.projectId, contextField)
+      .then(() => this.getContextFields())
+      .finally(() => (this.deleteContextFieldInFlight = false));
   }
 }
