@@ -5,8 +5,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTableModule } from '@angular/material/table';
+import { RouterLink } from '@angular/router';
 import { EnvironmentsTableItem } from '@ftoggle/api/types/environmentTypes';
 import { FeatureWithEnvironments } from '@ftoggle/api/types/featuresTypes';
+import { paths } from '../../../../app.routes';
 import { CreateFeatureDialogComponent } from '../../../../components/create-feature-dialog/create-feature-dialog.component';
 import { FeaturesService } from '../../../../services/features.service';
 
@@ -20,6 +22,7 @@ import { FeaturesService } from '../../../../services/features.service';
     MatIconModule,
     MatSlideToggleModule,
     MatTableModule,
+    RouterLink,
   ],
   templateUrl: './features.component.html',
   styleUrl: './features.component.scss',
@@ -29,6 +32,7 @@ export class ProjectFeaturesComponent {
   @Input({ required: true }) features: FeatureWithEnvironments[] = [];
   @Input({ required: true }) environments: EnvironmentsTableItem[] = [];
   @Output() getFeaturesEvent = new EventEmitter();
+  paths = paths;
   BASE_COLUMNS = ['name', 'created'];
   featureColumns = [...this.BASE_COLUMNS, 'delete'];
   toggleFeatureInFlight = false;
