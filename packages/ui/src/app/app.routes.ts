@@ -18,9 +18,9 @@ export const paths = {
   projectFeatures: 'projects/:projectId/features',
   toProjectFeatures: (projectId: string | number) =>
     `/${paths.projectFeatures.replace(':projectId', projectId.toString())}`,
-  projectConditions: 'projects/:projectId/features/:featureName/conditions',
-  toProjectConditions: (projectId: string, featureName: string) =>
-    `/${paths.projectConditions.replace(':projectId', projectId).replace(':featureName', featureName)}`,
+  projectConditions: 'projects/:projectId/features/:featureId/conditions',
+  toProjectConditions: (projectId: string, featureId: number) =>
+    `/${paths.projectConditions.replace(':projectId', projectId).replace(':featureId', String(featureId))}`,
   users: 'users',
 };
 
