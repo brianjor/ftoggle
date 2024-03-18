@@ -9,7 +9,11 @@
 >
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef>Name</th>
-    <td mat-cell *matCellDef="let feature">{{ feature.name }}</td>
+    <td mat-cell *matCellDef="let feature">
+      <a routerLink="{{ paths.toProjectConditions(projectId, feature.id) }}">{{
+        feature.name
+      }}</a>
+    </td>
   </ng-container>
   <ng-container matColumnDef="created">
     <th mat-header-cell *matHeaderCellDef>Created</th>

@@ -1,0 +1,81 @@
+<h1 mat-dialog-title>Create Condition</h1>
+<mat-dialog-content>
+  <form
+    class="create-condition-form"
+    [formGroup]="createConditionForm"
+    (ngSubmit)="(createCondition)"
+  >
+    <mat-form-field id="contextFieldFormField">
+      <mat-label>Context field</mat-label>
+      <input
+        matInput
+        id="contextField"
+        placeholder="Context Field"
+        [formControl]="contextName"
+      />
+      @if (contextName.hasError('required')) {
+        <mat-error>Context field is required</mat-error>
+      } @else if (contextName.getError('hasExtraWhitespace')?.hasAny) {
+        <mat-error>Cannot have any white space</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field id="operatorFormField">
+      <mat-label>Operator</mat-label>
+      <mat-select id="operator" [formControl]="operator">
+        @for (operator of operators; track operator) {
+          <mat-option [value]="operator">{{ operator }}</mat-option>
+        }
+      </mat-select>
+      @if (operator.hasError('required')) {
+        <mat-error>Operator is required</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Values</mat-label>
+      <input
+        [matChipInputFor]="valuesGrid"
+        (matChipInputTokenEnd)="addValue($event)"
+      />
+      <mat-chip-grid #valuesGrid [formControl]="values">
+        @for (value of values.value; track value) {
+          <mat-chip-row (removed)="removeValue(value)" id="values">
+            {{ value }}
+            <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+        }
+      </mat-chip-grid>
+      @if (values.hasError('required')) {
+        <mat-error>At least one value is required</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field id="descriptionFormField">
+      <mat-label>Description</mat-label>
+      <input
+        matInput
+        id="description"
+        placeholder="Description"
+        [formControl]="description"
+      />
+      @if (description.hasError('required')) {
+        <mat-error>Description is required</mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="closeDialog()">Cancel</button>
+  <button
+    mat-flat-button
+    color="primary"
+    [disabled]="!createConditionForm.valid"
+    (click)="createCondition()"
+  >
+    @if (!inFlight()) {
+      Create
+    } @else {
+      Creating
+    }
+  </button>
+</mat-dialog-actions>
