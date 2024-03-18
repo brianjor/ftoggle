@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ConditionsTableItem } from '@ftoggle/api/types/conditionsTypes';
 import { ApiService } from './api.service';
 
 @Injectable({
@@ -35,5 +36,11 @@ export class ConditionsService {
         featureId
       ].environments[environmentId].conditions.get();
     return res.data?.conditions ?? [];
+  }
+
+  async deleteCondition(condition: ConditionsTableItem) {
+    await this.apiService.api.projects[condition.projectId].features[
+      condition.featureId
+    ].environments[condition.environmentId].conditions[condition.id].delete();
   }
 }

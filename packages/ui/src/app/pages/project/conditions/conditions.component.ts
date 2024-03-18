@@ -30,8 +30,9 @@ export class ConditionsComponent {
   featureId = '';
   environments = this.environmentsService.environments;
   conditions = signal<ConditionWithContextField[]>([]);
-  conditionColumns = ['field', 'operator', 'values'];
+  conditionColumns = ['field', 'operator', 'values', 'delete'];
   panel = '';
+  deleteConditionInFlight = signal(false);
 
   constructor(
     private conditionsService: ConditionsService,
@@ -90,5 +91,18 @@ export class ConditionsComponent {
     createConditionDialogRef
       .afterClosed()
       .subscribe(() => this.getConditions(env));
+  }
+
+  deleteCondition(condition: ConditionWithContextField) {
+    if (this.deleteConditionInFlight()) return;
+    this.deleteConditionInFlight.set(true);
+    this.conditionsService
+      .deleteCondition(condition)
+      .then(() =>
+        this.getConditions(
+          this.environments().find((e) => e.id === condition.environmentId)!,
+        ),
+      )
+      .finally(() => this.deleteConditionInFlight.set(false));
   }
 }
