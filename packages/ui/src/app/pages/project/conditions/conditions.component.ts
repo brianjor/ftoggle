@@ -1,17 +1,27 @@
 import { CommonModule } from '@angular/common';
 import { Component, signal } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { ConditionWithContextField } from '@ftoggle/api/types/conditionsTypes';
 import { EnvironmentsTableItem } from '@ftoggle/api/types/environmentTypes';
+import { CreateConditionDialogComponent } from '../../../components/create-condition-dialog/create-condition-dialog.component';
 import { ConditionsService } from '../../../services/conditions.service';
 import { EnvironmentsService } from '../../../services/environments.service';
 
 @Component({
   selector: 'app-project-feature-conditions',
   standalone: true,
-  imports: [CommonModule, MatExpansionModule, MatTableModule],
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatExpansionModule,
+    MatIconModule,
+    MatTableModule,
+  ],
   templateUrl: './conditions.component.html',
   styleUrl: './conditions.component.scss',
 })
@@ -27,6 +37,7 @@ export class ConditionsComponent {
     private conditionsService: ConditionsService,
     private environmentsService: EnvironmentsService,
     private route: ActivatedRoute,
+    public dialog: MatDialog,
   ) {}
 
   ngOnInit() {
@@ -55,6 +66,7 @@ export class ConditionsComponent {
   }
 
   async getConditions(env: EnvironmentsTableItem) {
+    this.conditions.set([]);
     this.conditions.set(
       await this.conditionsService.getConditions(
         this.projectId,
@@ -62,5 +74,21 @@ export class ConditionsComponent {
         env.id,
       ),
     );
+  }
+
+  openCreateConditionDialog(env: EnvironmentsTableItem) {
+    const createConditionDialogRef = this.dialog.open(
+      CreateConditionDialogComponent,
+      {
+        data: {
+          projectId: this.projectId,
+          featureId: this.featureId,
+          environmentId: env.id,
+        },
+      },
+    );
+    createConditionDialogRef
+      .afterClosed()
+      .subscribe(() => this.getConditions(env));
   }
 }
