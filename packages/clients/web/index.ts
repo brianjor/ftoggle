@@ -1,6 +1,6 @@
 type Event = 'changed';
 type VoidFunction = () => void;
-type Context = Record<string, string | string[] | number | number[] | Date>;
+type Context = Record<string, string[]>;
 
 interface IConfig {
   /** Your frontend API token */
@@ -49,12 +49,12 @@ export class FToggle {
   private checkConditions(feature: { conditions: Condition[] }): boolean {
     const conditions = feature.conditions;
     const context = this._config.context;
-    const passes = conditions.some((c) => {
-      if (!(c.field in context)) {
-        console.error(`FToggle: Context does not have the field: "${c.field}"`);
+    const passes = conditions.every((condition) => {
+      if (!(condition.field in context)) {
+        console.error(`FToggle: Context missing field: "${condition.field}"`);
         return false;
       }
-      switch (c.operator) {
+      switch (condition.operator) {
         case 'LESS_THAN':
           return false;
         case 'GREATER_THAN':
@@ -72,14 +72,10 @@ export class FToggle {
         case 'ENDS_WITH':
           return false;
         case 'CONTAINS': {
-          const fieldValue = context[c.field];
-          if (typeof fieldValue !== 'string') {
-            console.error(
-              `FToggle: Using "CONTAINS" against a non-string field "${c.field}"`,
-            );
-            return false;
-          }
-          return c.values.some((value) => value.includes(fieldValue));
+          const fieldValues = context[condition.field];
+          return condition.values.every((value) =>
+            fieldValues.some((fieldValue) => fieldValue.includes(value)),
+          );
         }
         case 'IN':
           return false;
