@@ -5,4 +5,6 @@
   Context:
   <pre>{{ context | json }}</pre>
 </div>
-<div>Set context <input [(ngModel)]="context.asd" /></div>
+<div>
+  Set context <input [value]="context.asd" (change)="updateAsd($event)" />
+</div>
