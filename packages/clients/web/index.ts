@@ -77,7 +77,9 @@ export class FToggle {
             fieldValues.some((fieldValue) => +fieldValue === +value),
           );
         case 'NOT_EQUAL_TO':
-          return false;
+          return condition.values.every((value) =>
+            fieldValues.some((fieldValue) => +fieldValue !== +value),
+          );
         case 'STARTS_WITH':
           return false;
         case 'ENDS_WITH':
