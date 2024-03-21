@@ -81,7 +81,9 @@ export class FToggle {
             fieldValues.some((fieldValue) => +fieldValue !== +value),
           );
         case 'STARTS_WITH':
-          return false;
+          return condition.values.every((value) =>
+            fieldValues.some((fieldValue) => fieldValue.startsWith(value)),
+          );
         case 'ENDS_WITH':
           return false;
         case 'CONTAINS': {
