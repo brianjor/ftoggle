@@ -96,7 +96,7 @@ export class FToggle {
         case 'IN':
           return condition.values.some((value) => fieldValues.includes(value));
         case 'NOT_IN':
-          return false;
+          return !condition.values.some((value) => fieldValues.includes(value));
         case 'DATE_BEFORE':
           return false;
         case 'DATE_AFTER':
