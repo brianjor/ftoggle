@@ -94,7 +94,7 @@ export class FToggle {
           );
         }
         case 'IN':
-          return false;
+          return condition.values.some((value) => fieldValues.includes(value));
         case 'NOT_IN':
           return false;
         case 'DATE_BEFORE':
