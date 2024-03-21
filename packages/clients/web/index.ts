@@ -61,7 +61,9 @@ export class FToggle {
             fieldValues.some((fieldValue) => +fieldValue < +value),
           );
         case 'GREATER_THAN':
-          return false;
+          return condition.values.every((value) =>
+            fieldValues.some((fieldValue) => +fieldValue > +value),
+          );
         case 'LESS_OR_EQUAL_TO':
           return false;
         case 'GREATER_OR_EQUAL_TO':
