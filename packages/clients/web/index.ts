@@ -54,9 +54,12 @@ export class FToggle {
         console.error(`FToggle: Context missing field: "${condition.field}"`);
         return false;
       }
+      const fieldValues = context[condition.field];
       switch (condition.operator) {
         case 'LESS_THAN':
-          return false;
+          return condition.values.every((value) =>
+            fieldValues.some((fieldValue) => +fieldValue < +value),
+          );
         case 'GREATER_THAN':
           return false;
         case 'LESS_OR_EQUAL_TO':
@@ -72,7 +75,6 @@ export class FToggle {
         case 'ENDS_WITH':
           return false;
         case 'CONTAINS': {
-          const fieldValues = context[condition.field];
           return condition.values.every((value) =>
             fieldValues.some((fieldValue) => fieldValue.includes(value)),
           );
