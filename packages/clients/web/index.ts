@@ -98,9 +98,17 @@ export class FToggle {
         case 'NOT_IN':
           return !condition.values.some((value) => fieldValues.includes(value));
         case 'DATE_BEFORE':
-          return false;
+          return condition.values.every((value) =>
+            fieldValues.some(
+              (fieldValue) => new Date(fieldValue) < new Date(value),
+            ),
+          );
         case 'DATE_AFTER':
-          return false;
+          return condition.values.every((value) =>
+            fieldValues.some(
+              (fieldValue) => new Date(fieldValue) > new Date(value),
+            ),
+          );
         default:
           return false;
       }
