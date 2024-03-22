@@ -34,7 +34,7 @@ export const githubLoginHandler = new Elysia()
     async ({ cookie, query, set }) => {
       const code = query.code;
       const state = query.state;
-      const storedState = cookie.github_oauth_state.get();
+      const storedState = cookie.github_oauth_state.value;
 
       if (!code || !state || !storedState || state !== storedState) {
         return new Response(null, { status: HttpStatus.BadRequest });
