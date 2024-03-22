@@ -9,7 +9,7 @@ import { AuthenticationError, AuthorizationError } from '../errors/apiErrors';
  * @throws An {@link AuthenticationError} if user cannot be validated
  */
 const validateUserToken = async (context: Context) => {
-  const accessToken = context.cookie['accessToken'].get();
+  const accessToken = context.cookie['accessToken'].value;
 
   if (!accessToken) {
     throw new AuthenticationError('Missing cookie: "accessToken"');
@@ -23,7 +23,7 @@ const validateUserToken = async (context: Context) => {
 
 export const requestUserHooks = new Elysia({
   name: 'hooks:getRequestUser',
-}).derive((context) => ({
+}).derive({ as: 'global' }, (context) => ({
   /**
    * Checks if user is signed in.
    * @throws An {@link AuthenticationError} if user cannot be validated
