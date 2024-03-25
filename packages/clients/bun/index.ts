@@ -1,3 +1,5 @@
+type Context = Record<string, string[]>;
+
 interface Config {
   /** Your frontend API token */
   apiToken: string;
@@ -5,14 +7,25 @@ interface Config {
   baseUrl: string;
   /** How often should the client check for feature changes. In seconds. */
   refreshInterval?: number;
+  context?: Context;
 }
 
 interface _Config extends Config {
   refreshInterval: number;
+  context: Context;
+}
+
+interface Condition {
+  field: string;
+  operator: string;
+  values: string[];
 }
 
 export class FToggle {
-  private features: Map<string, boolean> = new Map();
+  private features: Map<
+    string,
+    { isEnabled: boolean; conditions: Condition[] }
+  > = new Map();
   private _config: _Config;
 
   constructor(
@@ -26,13 +39,85 @@ export class FToggle {
     // but let them be overrided if the user did supply any
     this._config = {
       refreshInterval: 30,
+      context: {},
       ...config,
     };
     this.getFeatures();
   }
 
   public isEnabled(featureName: string): boolean {
-    return this.features.get(featureName) ?? false;
+    const feature = this.features.get(featureName);
+    return (feature?.isEnabled ?? false) && this.checkConditions(feature!);
+  }
+
+  private checkConditions(feature: { conditions: Condition[] }): boolean {
+    const conditions = feature.conditions;
+    const context = this._config.context;
+    const passes = conditions.every((condition) => {
+      if (!(condition.field in context)) {
+        console.error(`FToggle: Context missing field: "${condition.field}"`);
+        return false;
+      }
+      const fieldValues = context[condition.field];
+      switch (condition.operator) {
+        case 'LESS_THAN':
+          return condition.values.every((value) =>
+            fieldValues.some((fieldValue) => +fieldValue < +value),
+          );
+        case 'GREATER_THAN':
+          return condition.values.every((value) =>
+            fieldValues.some((fieldValue) => +fieldValue > +value),
+          );
+        case 'LESS_OR_EQUAL_TO':
+          return condition.values.every((value) =>
+            fieldValues.some((fieldValue) => +fieldValue <= +value),
+          );
+        case 'GREATER_OR_EQUAL_TO':
+          return condition.values.every((value) =>
+            fieldValues.some((fieldValue) => +fieldValue >= +value),
+          );
+        case 'EQUAL_TO':
+          return condition.values.every((value) =>
+            fieldValues.some((fieldValue) => +fieldValue === +value),
+          );
+        case 'NOT_EQUAL_TO':
+          return condition.values.every((value) =>
+            fieldValues.some((fieldValue) => +fieldValue !== +value),
+          );
+        case 'STARTS_WITH':
+          return condition.values.every((value) =>
+            fieldValues.some((fieldValue) => fieldValue.startsWith(value)),
+          );
+        case 'ENDS_WITH':
+          return condition.values.every((value) =>
+            fieldValues.some((fieldValue) => fieldValue.endsWith(value)),
+          );
+        case 'CONTAINS': {
+          return condition.values.every((value) =>
+            fieldValues.some((fieldValue) => fieldValue.includes(value)),
+          );
+        }
+        case 'IN':
+          return condition.values.some((value) => fieldValues.includes(value));
+        case 'NOT_IN':
+          return !condition.values.some((value) => fieldValues.includes(value));
+        case 'DATE_BEFORE':
+          return condition.values.every((value) =>
+            fieldValues.some(
+              (fieldValue) => new Date(fieldValue) < new Date(value),
+            ),
+          );
+        case 'DATE_AFTER':
+          return condition.values.every((value) =>
+            fieldValues.some(
+              (fieldValue) => new Date(fieldValue) > new Date(value),
+            ),
+          );
+        default:
+          return false;
+      }
+    });
+    return passes;
   }
 
   private setTimeout() {
@@ -49,7 +134,7 @@ export class FToggle {
       },
     });
     const body = (await res.json()) as {
-      features: { name: string; isEnabled: boolean }[];
+      features: { name: string; isEnabled: boolean; conditions: Condition[] }[];
     };
     if (res.status !== 200) {
       console.error('FToggleClient: Bad response.', body);
@@ -64,7 +149,10 @@ export class FToggle {
 
     this.features.clear();
     body.features.forEach((f) => {
-      this.features.set(f.name, f.isEnabled);
+      this.features.set(f.name, {
+        isEnabled: f.isEnabled,
+        conditions: f.conditions,
+      });
     });
     this.setTimeout();
   }
