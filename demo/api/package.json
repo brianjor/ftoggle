@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "start": "bun run ./index.ts",
+    "watch": "bun --hot run ./index.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier . --check",
