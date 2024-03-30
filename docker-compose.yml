@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  db:
+    container_name: ftoggle_db
+    extends:
+      file: packages/db/docker-compose.yml
+      service: db
+
+  api:
+    image: oven/bun:latest
+    container_name: ftoggle_api
+    depends_on:
+      - db
+    env_file:
+      - ./packages/api/.env
+    environment:
+      - DB_HOST=db
+      - UI_BASE_URL=http://ui:4200
+    volumes:
+      - ./:/usr/src
+    ports:
+      - '8080:8080'
+    expose:
+      - 8080
+    command: bash -c "cd /usr/src/packages/api && bun --bun run dev"
+
+  ui:
+    container_name: ftoggle_ui
+    build:
+      context: .
+      dockerfile: ./packages/ui/dockerfile
+    depends_on:
+      - api
+    volumes:
+      - ./:/usr/src
+      - ui_node_modules:/usr/src/packages/ui/node_modules
+      - ui_cache:/usr/src/packages/ui/.angular
+    ports:
+      - '4200:4200'
+    command: bun run dev:docker
+
+volumes:
+  ftoggle_db_data:
+    name: ftoggle_db_data
+  ui_node_modules:
+    name: ui_node_modules
+  ui_cache:
+    name: ui_cache
