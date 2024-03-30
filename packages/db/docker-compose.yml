@@ -3,7 +3,7 @@ version: '3.8'
 services:
   db:
     image: postgres:16.1
-    container_name: ftoggle_db
+    container_name: ftoggle_db_stand_alone
     volumes:
       - ftoggle_db_data:/var/lib/postgresql/data
     env_file: .env

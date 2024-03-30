@@ -72,6 +72,10 @@
             },
             "development": {
               "buildTarget": "@ftoggle/ui:build:development"
+            },
+            "docker-dev": {
+              "buildTarget": "@ftoggle/ui:build:development",
+              "proxyConfig": "src/proxy.docker-dev.conf.json"
             }
           },
           "defaultConfiguration": "development"
@@ -98,5 +102,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }
