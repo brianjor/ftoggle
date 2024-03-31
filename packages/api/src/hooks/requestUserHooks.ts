@@ -1,6 +1,6 @@
 import Elysia, { Context } from 'elysia';
 import { lucia } from '../auth/lucia';
-import { AuthenticationError } from '../errors/apiErrors';
+import { AuthenticationError, AuthorizationError } from '../errors/apiErrors';
 
 /**
  * Validates the token for the user of the request.
@@ -27,9 +27,13 @@ export const requestUserHooks = new Elysia({
   /**
    * Checks if user is signed in.
    * @throws An {@link AuthenticationError} if user cannot be validated
+   * @throws An {@link AuthorizationError} if user is not approved
    */
   isSignedIn: async () => {
-    await validateUserToken(context);
+    const { user } = await validateUserToken(context);
+    if (!user.isApproved) {
+      throw new AuthorizationError('User is not approved');
+    }
   },
   /**
    * Gets the user of the request.

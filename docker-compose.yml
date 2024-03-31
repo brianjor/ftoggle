@@ -16,7 +16,6 @@ services:
       - ./packages/api/.env
     environment:
       - DB_HOST=db
-      - UI_BASE_URL=http://ui:4200
     volumes:
       - ./:/usr/src
     ports:
