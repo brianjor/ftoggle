@@ -27,6 +27,7 @@ export const requestUserHooks = new Elysia({
   /**
    * Checks if user is signed in.
    * @throws An {@link AuthenticationError} if user cannot be validated
+   * @throws An {@link AuthorizationError} if user is not approved
    */
   isSignedIn: async () => {
     const { user } = await validateUserToken(context);
