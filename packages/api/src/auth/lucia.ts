@@ -9,8 +9,8 @@ declare module 'lucia' {
     DatabaseSessionAttributes: object;
     DatabaseUserAttributes: {
       username: string;
-      githubId: number;
-      isApproved: boolean;
+      github_id: number;
+      is_approved: boolean;
     };
   }
 }
@@ -24,8 +24,8 @@ export const lucia = new Lucia(adapter, {
   getUserAttributes: (data) => {
     return {
       username: data.username,
-      githubId: data.githubId,
-      isApproved: data.isApproved,
+      githubId: data.github_id,
+      isApproved: data.is_approved,
     };
   },
 });
