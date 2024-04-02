@@ -1,0 +1,6 @@
+{
+  "/demo": {
+    "target": "http://host.docker.internal:8081",
+    "secure": false
+  }
+}
