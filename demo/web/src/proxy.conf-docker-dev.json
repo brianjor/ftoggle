@@ -2,5 +2,9 @@
   "/demo": {
     "target": "http://host.docker.internal:8081",
     "secure": false
+  },
+  "/api": {
+    "target": "http://host.docker.internal:8080",
+    "secure": false
   }
 }
