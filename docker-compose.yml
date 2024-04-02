@@ -46,3 +46,7 @@ volumes:
     name: ui_node_modules
   ui_cache:
     name: ui_cache
+
+networks:
+  ftoggle_network:
+    name: ftoggle_network

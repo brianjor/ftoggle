@@ -69,6 +69,10 @@
             },
             "development": {
               "buildTarget": "demo-web:build:development"
+            },
+            "docker-dev": {
+              "buildTarget": "demo-web:build:development",
+              "proxyConfig": "src/proxy.conf-docker-dev.json"
             }
           },
           "defaultConfiguration": "development"

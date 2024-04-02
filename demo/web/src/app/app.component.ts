@@ -15,7 +15,7 @@ import { FToggle } from '@ftoggle/clients-web';
 export class AppComponent {
   context = { asd: ['asd'] };
   private fToggle = new FToggle({
-    apiToken: 'tp1:dev:13f614c1-be4f-4c9c-95e1-e34f0389279b',
+    apiToken: 'tp1:dev:c33b8bee-fdf3-4a75-9fe1-d3a1a9cffe92',
     baseUrl: 'http://localhost:8080',
     refreshInterval: 5,
     context: this.context,
