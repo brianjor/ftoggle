@@ -58,6 +58,7 @@ export class FToggle {
         console.error(`FToggle: Context missing field: "${condition.field}"`);
         return false;
       }
+      const curTime = new Date();
       const fieldValues = context[condition.field];
       switch (condition.operator) {
         case 'LESS_THAN':
@@ -102,17 +103,9 @@ export class FToggle {
         case 'NOT_IN':
           return !condition.values.some((value) => fieldValues.includes(value));
         case 'DATE_BEFORE':
-          return condition.values.every((value) =>
-            fieldValues.some(
-              (fieldValue) => new Date(fieldValue) < new Date(value),
-            ),
-          );
+          return condition.values.every((value) => curTime < new Date(value));
         case 'DATE_AFTER':
-          return condition.values.every((value) =>
-            fieldValues.some(
-              (fieldValue) => new Date(fieldValue) > new Date(value),
-            ),
-          );
+          return condition.values.every((value) => curTime > new Date(value));
         default:
           return false;
       }
