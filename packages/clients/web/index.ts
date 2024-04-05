@@ -55,6 +55,7 @@ export class FToggle {
         return false;
       }
       const fieldValues = context[condition.field];
+      const curTime = new Date();
       switch (condition.operator) {
         case 'LESS_THAN':
           return condition.values.every((value) =>
@@ -98,17 +99,9 @@ export class FToggle {
         case 'NOT_IN':
           return !condition.values.some((value) => fieldValues.includes(value));
         case 'DATE_BEFORE':
-          return condition.values.every((value) =>
-            fieldValues.some(
-              (fieldValue) => new Date(fieldValue) < new Date(value),
-            ),
-          );
+          return condition.values.every((value) => curTime < new Date(value));
         case 'DATE_AFTER':
-          return condition.values.every((value) =>
-            fieldValues.some(
-              (fieldValue) => new Date(fieldValue) > new Date(value),
-            ),
-          );
+          return condition.values.every((value) => curTime > new Date(value));
         default:
           return false;
       }
