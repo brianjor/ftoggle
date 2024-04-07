@@ -3,8 +3,9 @@ import {
   conditions,
   conditions as conditionsTable,
   contextFields,
+  features,
 } from '@ftoggle/db/schema';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, getTableColumns } from 'drizzle-orm';
 import { RecordDoesNotExistError } from '../errors/dbErrors';
 
 export class ConditionsController {
@@ -16,7 +17,7 @@ export class ConditionsController {
       contextName: string;
     }[],
     projectId: string,
-    featureId: number,
+    featureName: string,
     environmentId: number,
   ) {
     if (conditions.length === 0) return;
@@ -30,14 +31,24 @@ export class ConditionsController {
     });
     if (!contextField) {
       throw new RecordDoesNotExistError(
-        `Context field with name: "${fieldName}" does not exist`,
+        `Context field: "${fieldName}" does not exist`,
       );
     }
-
+    const feature = await dbClient.query.features.findFirst({
+      where: eq(features.name, featureName),
+      columns: {
+        id: true,
+      },
+    });
+    if (feature === undefined) {
+      throw new RecordDoesNotExistError(
+        `Feature: ${featureName} does not exist.`,
+      );
+    }
     await dbClient.insert(conditionsTable).values(
       conditions.map((c) => ({
         projectId,
-        featureId,
+        featureId: feature.id,
         environmentId,
         contextFieldId: contextField?.id,
         values: c.values,
@@ -50,25 +61,30 @@ export class ConditionsController {
   /**
    * Gets all conditions for a project -> feature -> environment.
    * @param projectId id of the project
-   * @param featureId id of the feature
+   * @param featureName name of the feature
    * @param environmentId id of the environment
    * @returns all conditions for the provided project, feature, environment
    */
   getProjectFeatureEnvironmentConditions(
     projectId: string,
-    featureId: number,
+    featureName: string,
     environmentId: number,
   ) {
-    return dbClient.query.conditions.findMany({
-      where: and(
-        eq(conditionsTable.projectId, projectId),
-        eq(conditionsTable.featureId, featureId),
-        eq(conditionsTable.environmentId, environmentId),
-      ),
-      with: {
-        contextField: true,
-      },
-    });
+    return dbClient
+      .select({
+        ...getTableColumns(conditions),
+        contextField: getTableColumns(contextFields),
+      })
+      .from(conditions)
+      .leftJoin(features, eq(features.id, conditions.featureId))
+      .innerJoin(contextFields, eq(contextFields.id, conditions.contextFieldId))
+      .where(
+        and(
+          eq(conditionsTable.projectId, projectId),
+          eq(features.name, featureName),
+          eq(conditionsTable.environmentId, environmentId),
+        ),
+      );
   }
 
   /**

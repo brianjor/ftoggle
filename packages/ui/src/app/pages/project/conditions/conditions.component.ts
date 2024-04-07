@@ -27,7 +27,7 @@ import { EnvironmentsService } from '../../../services/environments.service';
 })
 export class ConditionsComponent {
   projectId = '';
-  featureId = '';
+  featureName = '';
   environments = this.environmentsService.environments;
   conditions = signal<ConditionWithContextField[]>([]);
   conditionColumns = ['field', 'operator', 'values', 'delete'];
@@ -50,13 +50,13 @@ export class ConditionsComponent {
     } else {
       this.projectId = projectId;
     }
-    const featureId = this.route.snapshot.paramMap.get('featureId');
-    if (featureId === null) {
+    const featureName = this.route.snapshot.paramMap.get('featureName');
+    if (featureName === null) {
       console.error(
-        `${this.constructor.name} requires a ":featureId" url parameter`,
+        `${this.constructor.name} requires a ":featureName" url parameter`,
       );
     } else {
-      this.featureId = featureId;
+      this.featureName = featureName;
     }
     this.environmentsService.getEnvironments(this.projectId);
   }
@@ -71,7 +71,7 @@ export class ConditionsComponent {
     this.conditions.set(
       await this.conditionsService.getConditions(
         this.projectId,
-        this.featureId,
+        this.featureName,
         env.id,
       ),
     );
@@ -83,7 +83,7 @@ export class ConditionsComponent {
       {
         data: {
           projectId: this.projectId,
-          featureId: this.featureId,
+          featureName: this.featureName,
           environmentId: env.id,
         },
       },
@@ -97,7 +97,7 @@ export class ConditionsComponent {
     if (this.deleteConditionInFlight()) return;
     this.deleteConditionInFlight.set(true);
     this.conditionsService
-      .deleteCondition(condition)
+      .deleteCondition(condition, this.featureName)
       .then(() =>
         this.getConditions(
           this.environments().find((e) => e.id === condition.environmentId)!,

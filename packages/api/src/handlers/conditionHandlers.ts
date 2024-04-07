@@ -14,9 +14,9 @@ const conditionsController = new ConditionsController();
 export const conditionHandlers = new Elysia().use(hooks).delete(
   '',
   async ({ params }) => {
-    const { projectId, featureId, environmentId, conditionId } = params;
+    const { projectId, featureName, environmentId, conditionId } = params;
     await projectsController.getProjectById(projectId);
-    await featuresController.getProjectFeatureById(projectId, featureId);
+    await featuresController.getProjectFeature(projectId, featureName);
     await environmentsController.getEnvironmentById(environmentId);
 
     await conditionsController.deleteConditionById(conditionId);
@@ -29,7 +29,7 @@ export const conditionHandlers = new Elysia().use(hooks).delete(
     },
     params: t.Object({
       projectId: t.String(),
-      featureId: t.Numeric(),
+      featureName: t.String(),
       environmentId: t.Numeric(),
       conditionId: t.String(),
     }),

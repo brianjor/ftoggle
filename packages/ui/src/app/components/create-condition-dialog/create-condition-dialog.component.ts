@@ -26,7 +26,7 @@ import { createNoExtraWhitespaceValidator } from '../../validators/noExtraWhites
 
 export interface CreateConditionDialogData {
   projectId: string;
-  featureId: number;
+  featureName: string;
   environmentId: number;
 }
 
@@ -120,7 +120,7 @@ export class CreateConditionDialogComponent {
     this.conditionsService
       .createConditions(
         this.data.projectId,
-        this.data.featureId,
+        this.data.featureName,
         this.data.environmentId,
         [
           {

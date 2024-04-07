@@ -35,16 +35,16 @@ export class FeaturesService {
 
   async toggleFeature(
     projectId: string,
-    featureId: number,
+    featureName: string,
     environmentId: number,
   ) {
     try {
       await this.apiService.api.projects[projectId].features[
-        featureId
+        featureName
       ].environments[environmentId].put({
         $query: {
           projectId,
-          featureId: String(featureId),
+          featureName: featureName,
           environmentId: String(environmentId),
         },
       });
@@ -53,10 +53,10 @@ export class FeaturesService {
     }
   }
 
-  async deleteFeature(featureId: number, projectId: string) {
+  async deleteFeature(featureName: string, projectId: string) {
     try {
       await this.apiService.api.projects[projectId].features[
-        featureId
+        featureName
       ].delete();
     } catch (error) {
       console.error('Error deleting feature', error);

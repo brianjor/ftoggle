@@ -18,9 +18,10 @@ export const paths = {
   projectFeatures: 'projects/:projectId/features',
   toProjectFeatures: (projectId: string | number) =>
     `/${paths.projectFeatures.replace(':projectId', projectId.toString())}`,
-  projectConditions: 'projects/:projectId/features/:featureId/conditions',
-  toProjectConditions: (projectId: string, featureId: number) =>
-    `/${paths.projectConditions.replace(':projectId', projectId).replace(':featureId', String(featureId))}`,
+  projectFeatureConditions:
+    'projects/:projectId/features/:featureName/conditions',
+  toProjectFeatureConditions: (projectId: string, featureName: string) =>
+    `/${paths.projectFeatureConditions.replace(':projectId', projectId).replace(':featureName', String(featureName))}`,
   users: 'users',
 };
 
@@ -38,7 +39,7 @@ export const routes: Routes = [
     canActivate: [isSignedIn],
   },
   {
-    path: paths.projectConditions,
+    path: paths.projectFeatureConditions,
     component: ConditionsComponent,
     canActivate: [isSignedIn],
   },

@@ -5,7 +5,7 @@ import { contextFieldsTableItem } from './contextFieldsTypes';
 export const conditionsTableItem = t.Object({
   id: t.String(),
   projectId: t.String(),
-  featureId: t.Number(),
+  featureId: t.String(),
   environmentId: t.Number(),
   contextFieldId: t.String(),
   operator: t.String(),

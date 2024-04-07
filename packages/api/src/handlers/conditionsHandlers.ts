@@ -22,24 +22,24 @@ export const conditionsHandlers = new Elysia()
   .post(
     '',
     async ({ params, body }) => {
-      const { environmentId, featureId, projectId } = params;
+      const { environmentId, featureName, projectId } = params;
       const { conditions } = body;
 
       await projectsController.getProjectById(projectId);
-      await featuresController.getProjectFeatureById(projectId, featureId);
+      await featuresController.getProjectFeature(projectId, featureName);
       await environmentsController.getEnvironmentById(environmentId);
 
       await conditionsController.createConditions(
         conditions,
         projectId,
-        featureId,
+        featureName,
         environmentId,
       );
     },
     {
       params: t.Object({
         projectId: t.String(),
-        featureId: t.Numeric(),
+        featureName: t.String(),
         environmentId: t.Numeric(),
       }),
       body: t.Object({
@@ -74,15 +74,15 @@ export const conditionsHandlers = new Elysia()
   .get(
     '',
     async ({ params }) => {
-      const { projectId, featureId, environmentId } = params;
+      const { projectId, featureName, environmentId } = params;
       await projectsController.getProjectById(projectId);
-      await featuresController.getProjectFeatureById(projectId, featureId);
+      await featuresController.getProjectFeature(projectId, featureName);
       await environmentsController.getEnvironmentById(environmentId);
 
       const conditions =
         await conditionsController.getProjectFeatureEnvironmentConditions(
           projectId,
-          featureId,
+          featureName,
           environmentId,
         );
       return {
@@ -92,7 +92,7 @@ export const conditionsHandlers = new Elysia()
     {
       params: t.Object({
         projectId: t.String(),
-        featureId: t.Numeric(),
+        featureName: t.String(),
         environmentId: t.Numeric(),
       }),
       beforeHandle: [
