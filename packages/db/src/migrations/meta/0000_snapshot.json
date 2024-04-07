@@ -1,5 +1,5 @@
 {
-  "id": "265ced7c-8398-4e36-b572-594bfc6c4808",
+  "id": "7d3eec6f-6eb9-4f81-8f9f-e0e0c55d5ff0",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -23,7 +23,7 @@
         },
         "environment_id": {
           "name": "environment_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -123,7 +123,7 @@
         },
         "environment_id": {
           "name": "environment_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -274,9 +274,10 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "uuid",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "gen_random_uuid()"
         },
         "name": {
           "name": "name",
@@ -505,7 +506,7 @@
         },
         "environment_id": {
           "name": "environment_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },

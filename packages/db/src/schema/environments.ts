@@ -1,4 +1,4 @@
-import { pgTable, serial, text, timestamp, unique } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, unique, uuid } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm/relations';
 import { projects } from './projects';
 import { projectsFeaturesEnvironments } from './projectsFeaturesEnvironments';
@@ -6,7 +6,7 @@ import { projectsFeaturesEnvironments } from './projectsFeaturesEnvironments';
 export const environments = pgTable(
   'environments',
   {
-    id: serial('id').primaryKey(),
+    id: uuid('id').primaryKey().defaultRandom(),
     name: text('name').notNull(),
     createdAt: timestamp('created_at', { withTimezone: true })
       .notNull()

@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm';
-import { integer, pgTable, text, uuid } from 'drizzle-orm/pg-core';
+import { pgTable, text, uuid } from 'drizzle-orm/pg-core';
 import { contextFields, environments, features, projects } from '.';
 
 export const conditions = pgTable('conditions', {
@@ -10,7 +10,7 @@ export const conditions = pgTable('conditions', {
   featureId: uuid('feature_id')
     .notNull()
     .references(() => features.id, { onDelete: 'cascade' }),
-  environmentId: integer('environment_id')
+  environmentId: uuid('environment_id')
     .notNull()
     .references(() => environments.id, { onDelete: 'cascade' }),
   contextFieldId: uuid('context_field_id')

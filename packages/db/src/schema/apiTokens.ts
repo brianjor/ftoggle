@@ -1,4 +1,4 @@
-import { integer, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm/relations';
 import { environments, projects, users } from '.';
 
@@ -7,7 +7,7 @@ export const apiTokens = pgTable('api_tokens', {
   projectId: text('project_id')
     .notNull()
     .references(() => projects.id, { onDelete: 'cascade' }),
-  environmentId: integer('environment_id')
+  environmentId: uuid('environment_id')
     .notNull()
     .references(() => environments.id, { onDelete: 'cascade' }),
   name: text('name').notNull(),

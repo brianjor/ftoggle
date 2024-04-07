@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS "api_tokens" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"project_id" text NOT NULL,
-	"environment_id" integer NOT NULL,
+	"environment_id" uuid NOT NULL,
 	"name" text NOT NULL,
 	"type" text NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS "conditions" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"project_id" text NOT NULL,
 	"feature_id" uuid NOT NULL,
-	"environment_id" integer NOT NULL,
+	"environment_id" uuid NOT NULL,
 	"context_field_id" uuid NOT NULL,
 	"operator" text NOT NULL,
 	"description" text,
@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS "context_fields" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "environments" (
-	"id" serial PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" text NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"modified_at" timestamp with time zone DEFAULT now() NOT NULL,
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS "projects" (
 CREATE TABLE IF NOT EXISTS "projects_features_environments" (
 	"project_id" text NOT NULL,
 	"feature_id" uuid NOT NULL,
-	"environment_id" integer NOT NULL,
+	"environment_id" uuid NOT NULL,
 	"is_enabled" boolean DEFAULT false NOT NULL,
 	CONSTRAINT "projects_features_environments_feature_id_environment_id_project_id_unique" UNIQUE("feature_id","environment_id","project_id")
 );

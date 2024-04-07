@@ -82,6 +82,7 @@ WITH
   createFeatureConditionId      AS (SELECT id FROM "permissions" WHERE "name" = 'CREATE_FEATURE_TOGGLE_CONDITION'),
   viewProjectContextFieldsId    AS (SELECT id FROM "permissions" WHERE "name" = 'VIEW_PROJECT_CONTEXT_FIELDS'),
   deleteProjectContextFieldId   AS (SELECT id FROM "permissions" WHERE "name" = 'DELETE_PROJECT_CONTEXT_FIELD'),
+  deleteFeatureConditionId      AS (SELECT id FROM "permissions" WHERE "name" = 'DELETE_FEATURE_TOGGLE_CONDITION'),
   viewFeatureToggleConditionId  AS (SELECT id FROM "permissions" WHERE "name" = 'VIEW_FEATURE_TOGGLE_CONDITIONS')
 INSERT INTO "roles_permissions"
   ("role_id", "permission_id")
