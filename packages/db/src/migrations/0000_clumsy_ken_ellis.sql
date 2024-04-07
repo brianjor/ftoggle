@@ -8,6 +8,25 @@ CREATE TABLE IF NOT EXISTS "api_tokens" (
 	"user_id" text NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "conditions" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"project_id" text NOT NULL,
+	"feature_id" uuid NOT NULL,
+	"environment_id" integer NOT NULL,
+	"context_field_id" uuid NOT NULL,
+	"operator" text NOT NULL,
+	"description" text,
+	"values" text[] NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "context_fields" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"project_id" text NOT NULL,
+	"name" text NOT NULL,
+	"description" text,
+	CONSTRAINT "context_fields_project_id_name_unique" UNIQUE("project_id","name")
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "environments" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"name" text NOT NULL,
@@ -18,7 +37,7 @@ CREATE TABLE IF NOT EXISTS "environments" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "features" (
-	"id" serial PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" text NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"modified_at" timestamp with time zone DEFAULT now() NOT NULL,
@@ -44,23 +63,10 @@ CREATE TABLE IF NOT EXISTS "projects" (
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "projects_features_environments" (
 	"project_id" text NOT NULL,
-	"feature_id" integer NOT NULL,
+	"feature_id" uuid NOT NULL,
 	"environment_id" integer NOT NULL,
 	"is_enabled" boolean DEFAULT false NOT NULL,
 	CONSTRAINT "projects_features_environments_feature_id_environment_id_project_id_unique" UNIQUE("feature_id","environment_id","project_id")
-);
---> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "projects_users" (
-	"project_id" text NOT NULL,
-	"user_id" text NOT NULL,
-	CONSTRAINT "projects_users_project_id_user_id_pk" PRIMARY KEY("project_id","user_id")
-);
---> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "projects_users_roles" (
-	"role_id" integer NOT NULL,
-	"project_id" text NOT NULL,
-	"user_id" text NOT NULL,
-	CONSTRAINT "projects_users_roles_role_id_project_id_user_id_pk" PRIMARY KEY("role_id","project_id","user_id")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "roles" (
@@ -86,7 +92,9 @@ CREATE TABLE IF NOT EXISTS "users" (
 	"id" text PRIMARY KEY NOT NULL,
 	"username" text NOT NULL,
 	"is_approved" boolean DEFAULT false NOT NULL,
-	CONSTRAINT "users_username_unique" UNIQUE("username")
+	"github_id" integer,
+	CONSTRAINT "users_username_unique" UNIQUE("username"),
+	CONSTRAINT "users_github_id_unique" UNIQUE("github_id")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "users_passwords" (
@@ -121,6 +129,36 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
+ ALTER TABLE "conditions" ADD CONSTRAINT "conditions_project_id_projects_id_fk" FOREIGN KEY ("project_id") REFERENCES "projects"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "conditions" ADD CONSTRAINT "conditions_feature_id_features_id_fk" FOREIGN KEY ("feature_id") REFERENCES "features"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "conditions" ADD CONSTRAINT "conditions_environment_id_environments_id_fk" FOREIGN KEY ("environment_id") REFERENCES "environments"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "conditions" ADD CONSTRAINT "conditions_context_field_id_context_fields_id_fk" FOREIGN KEY ("context_field_id") REFERENCES "context_fields"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "context_fields" ADD CONSTRAINT "context_fields_project_id_projects_id_fk" FOREIGN KEY ("project_id") REFERENCES "projects"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
  ALTER TABLE "environments" ADD CONSTRAINT "environments_project_id_projects_id_fk" FOREIGN KEY ("project_id") REFERENCES "projects"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
@@ -146,36 +184,6 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "projects_features_environments" ADD CONSTRAINT "projects_features_environments_environment_id_environments_id_fk" FOREIGN KEY ("environment_id") REFERENCES "environments"("id") ON DELETE cascade ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "projects_users" ADD CONSTRAINT "projects_users_project_id_projects_id_fk" FOREIGN KEY ("project_id") REFERENCES "projects"("id") ON DELETE cascade ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "projects_users" ADD CONSTRAINT "projects_users_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE no action ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "projects_users_roles" ADD CONSTRAINT "projects_users_roles_role_id_roles_id_fk" FOREIGN KEY ("role_id") REFERENCES "roles"("id") ON DELETE no action ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "projects_users_roles" ADD CONSTRAINT "projects_users_roles_project_id_projects_id_fk" FOREIGN KEY ("project_id") REFERENCES "projects"("id") ON DELETE cascade ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "projects_users_roles" ADD CONSTRAINT "projects_users_roles_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
