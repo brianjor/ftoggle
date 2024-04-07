@@ -1,8 +1,3 @@
 # Migrations with custom SQL
 
-- 0001_lumpy_loki
-- 0005_gorgeous_wendigo
-- 0007_common_sway
-- 0010_broad_makkari
-- 0010_green_shaman
-- 0012_magenta_ezekiel
+- 0001_useful_catseye

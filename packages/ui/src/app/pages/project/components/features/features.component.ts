@@ -81,7 +81,7 @@ export class ProjectFeaturesComponent {
     if (this.toggleFeatureInFlight) return;
     this.toggleFeatureInFlight = true;
     this.featuresService
-      .toggleFeature(this.projectId, feature.id, env.id)
+      .toggleFeature(this.projectId, feature.name, env.id)
       .then(() => {
         const updatedEnv = this.findEnvironment(feature, env);
         if (updatedEnv) {
@@ -96,7 +96,7 @@ export class ProjectFeaturesComponent {
     if (this.deleteFeatureInFlight) return;
     this.deleteFeatureInFlight = true;
     this.featuresService
-      .deleteFeature(feature.id, this.projectId)
+      .deleteFeature(feature.name, this.projectId)
       .then(() => this.getFeatures())
       .finally(() => (this.deleteFeatureInFlight = false));
   }

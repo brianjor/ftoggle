@@ -7,7 +7,7 @@ export const conditions = pgTable('conditions', {
   projectId: text('project_id')
     .notNull()
     .references(() => projects.id, { onDelete: 'cascade' }),
-  featureId: integer('feature_id')
+  featureId: uuid('feature_id')
     .notNull()
     .references(() => features.id, { onDelete: 'cascade' }),
   environmentId: integer('environment_id')

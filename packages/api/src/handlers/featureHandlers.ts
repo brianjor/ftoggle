@@ -12,35 +12,28 @@ export const featureHandlers = new Elysia()
   .use(hooks)
   .get(
     '',
-    async ({ set, params }) => {
-      const { projectId, featureId } = params;
-      const feature = await featuresController.getProjectFeatureById(
+    async ({ params }) => {
+      const { projectId, featureName } = params;
+      const feature = await featuresController.getProjectFeature(
         projectId,
-        featureId,
+        featureName,
       );
       const response = {
         data: {
           feature,
         },
       };
-      set.status = 200;
       return response;
     },
     {
       params: t.Object({
         projectId: t.String(),
-        featureId: t.Numeric(),
+        featureName: t.String(),
       }),
       response: {
         200: t.Object({
           data: t.Object({
-            feature: t.Object({
-              id: t.Number(),
-              name: t.String(),
-              isEnabled: t.Boolean(),
-              createdAt: t.Date(),
-              modifiedAt: t.Date(),
-            }),
+            feature: featuresTableItem,
           }),
         }),
         404: t.String(),
@@ -55,12 +48,12 @@ export const featureHandlers = new Elysia()
   .put(
     '',
     async ({ body, params }) => {
-      const { projectId, featureId } = params;
+      const { projectId, featureName } = params;
       await projectsController.getProjectById(projectId);
-      await featuresController.getProjectFeatureById(projectId, featureId);
+      await featuresController.getProjectFeature(projectId, featureName);
 
       const updatedFeature = await featuresController.updateFeature(
-        featureId,
+        featureName,
         projectId,
         {
           name: body.name,
@@ -72,7 +65,7 @@ export const featureHandlers = new Elysia()
     {
       params: t.Object({
         projectId: t.String(),
-        featureId: t.Numeric(),
+        featureName: t.String(),
       }),
       body: t.Object(
         {
@@ -95,8 +88,8 @@ export const featureHandlers = new Elysia()
   .delete(
     '',
     async ({ params }) => {
-      const { projectId, featureId } = params;
-      await featuresController.deleteProjectFeature(featureId, projectId);
+      const { projectId, featureName } = params;
+      await featuresController.deleteProjectFeature(featureName, projectId);
 
       return {
         message: 'Feature deleted',
@@ -105,7 +98,7 @@ export const featureHandlers = new Elysia()
     {
       params: t.Object({
         projectId: t.String(),
-        featureId: t.Numeric(),
+        featureName: t.String(),
       }),
       beforeHandle: [
         ({ isSignedIn }) => isSignedIn(),

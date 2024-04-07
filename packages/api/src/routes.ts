@@ -57,7 +57,7 @@ export const routes = new Elysia()
           ) // /:environmentId
         ) // /environments
         .group('/features', _ => _.use(featuresHandlers)
-          .group('/:featureId', _ => _.use(featureHandlers)
+          .group('/:featureName', _ => _.use(featureHandlers)
             .group('/environments', _ => _
               .group('/:environmentId', _ => _.use(featureEnvironmentHandler)
                 .group('/conditions', _ => _.use(conditionsHandlers)
@@ -66,7 +66,7 @@ export const routes = new Elysia()
                 ) // /conditions
               ) // /:environmentId
             ) // /environments
-          ) // /:featureId
+          ) // /:featureName
         ) // /features
       ) // /:projectId
     ) // /projects

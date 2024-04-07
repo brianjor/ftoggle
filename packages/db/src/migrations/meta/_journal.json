@@ -5,92 +5,15 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1707715912184,
-      "tag": "0000_salty_la_nuit",
+      "when": 1712433610927,
+      "tag": "0000_clumsy_ken_ellis",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "5",
-      "when": 1707715917446,
-      "tag": "0001_lumpy_loki",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1708239088287,
-      "tag": "0002_flashy_roulette",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1708834302406,
-      "tag": "0003_uneven_starbolt",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1709006699456,
-      "tag": "0004_lively_guardian",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "5",
-      "when": 1709423971726,
-      "tag": "0005_gorgeous_wendigo",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "5",
-      "when": 1709424772414,
-      "tag": "0006_overjoyed_living_mummy",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "5",
-      "when": 1709527376348,
-      "tag": "0007_common_sway",
-      "breakpoints": true
-    },
-    {
-      "idx": 8,
-      "version": "5",
-      "when": 1709527882171,
-      "tag": "0008_clammy_edwin_jarvis",
-      "breakpoints": true
-    },
-    {
-      "idx": 9,
-      "version": "5",
-      "when": 1709610380209,
-      "tag": "0009_quiet_bastion",
-      "breakpoints": true
-    },
-    {
-      "idx": 10,
-      "version": "5",
-      "when": 1709957756694,
-      "tag": "0010_broad_makkari",
-      "breakpoints": true
-    },
-    {
-      "idx": 11,
-      "version": "5",
-      "when": 1709959351276,
-      "tag": "0011_green_shaman",
-      "breakpoints": true
-    },
-    {
-      "idx": 12,
-      "version": "5",
-      "when": 1710046191028,
-      "tag": "0012_magenta_ezekiel",
+      "when": 1712433614247,
+      "tag": "0001_useful_catseye",
       "breakpoints": true
     }
   ]

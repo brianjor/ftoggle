@@ -16,6 +16,8 @@ export class FeaturesController {
    */
   public async addFeature(name: string, projectId: string) {
     const envs = await projectsController.getEnvironments(projectId);
+
+    // TODO: Wrap in transaction, https://github.com/brianjor/ftoggle/issues/329
     const feature = (
       await dbClient.insert(features).values({ name, projectId }).returning()
     )[0];
@@ -52,20 +54,23 @@ export class FeaturesController {
   /**
    * Gets a feature by project and feature id.
    * @param projectId id of the project
-   * @param featureId id of the feature
+   * @param featureName name of the feature
    * @returns the feature
    * @throws A {@link RecordDoesNotExistError} if the feature does not exist
    */
-  public async getProjectFeatureById(
+  public async getProjectFeature(
     projectId: string,
-    featureId: number,
+    featureName: string,
   ): Promise<FeaturesTableItem> {
     const feature = await dbClient.query.features.findFirst({
-      where: and(eq(features.id, featureId), eq(features.projectId, projectId)),
+      where: and(
+        eq(features.name, featureName),
+        eq(features.projectId, projectId),
+      ),
     });
     if (feature === undefined) {
       throw new RecordDoesNotExistError(
-        `Feature with id: "${featureId}" does not exist on project with id: "${projectId}".`,
+        `Feature: "${featureName}" does not exist on project with id: "${projectId}".`,
       );
     }
     return feature;
@@ -73,12 +78,12 @@ export class FeaturesController {
 
   /**
    * Update a feature.
-   * @param featureId id of feature
-   * @param projectId id of project
+   * @param featureName name of the feature
+   * @param projectId id of the project
    * @param updateFields fields of the feature to update
    */
   public async updateFeature(
-    featureId: number,
+    featureName: string,
     projectId: string,
     updateFields: { name?: string },
   ): Promise<FeaturesTableItem> {
@@ -87,7 +92,10 @@ export class FeaturesController {
         .update(features)
         .set({ ...updateFields, modifiedAt: new Date() })
         .where(
-          and(eq(features.id, featureId), eq(features.projectId, projectId)),
+          and(
+            eq(features.name, featureName),
+            eq(features.projectId, projectId),
+          ),
         )
         .returning()
     )[0];
@@ -95,25 +103,14 @@ export class FeaturesController {
 
   /**
    * Deletes the feature.
-   * @param featureId id of the feature
+   * @param featureName name of the feature
    * @param projectId id of the project
    */
-  async deleteProjectFeature(featureId: number, projectId: string) {
+  async deleteProjectFeature(featureName: string, projectId: string) {
     await dbClient
       .delete(features)
       .where(
-        and(eq(features.id, featureId), eq(features.projectId, projectId)),
+        and(eq(features.name, featureName), eq(features.projectId, projectId)),
       );
-    // await dbClient.transaction(async (tx) => {
-    //   await tx
-    //     .delete(projectsFeaturesEnvironments)
-    //     .where(
-    //       and(
-    //         eq(projectsFeaturesEnvironments.projectId, projectId),
-    //         eq(projectsFeaturesEnvironments.featureId, featureId),
-    //       ),
-    //     );
-    //   await tx.delete(features).where(eq(features.id, featureId));
-    // });
   }
 }

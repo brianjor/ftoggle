@@ -10,9 +10,12 @@
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef>Name</th>
     <td mat-cell *matCellDef="let feature">
-      <a routerLink="{{ paths.toProjectConditions(projectId, feature.id) }}">{{
-        feature.name
-      }}</a>
+      <a
+        routerLink="{{
+          paths.toProjectFeatureConditions(projectId, feature.name)
+        }}"
+        >{{ feature.name }}</a
+      >
     </td>
   </ng-container>
   <ng-container matColumnDef="created">
@@ -26,7 +29,7 @@
       <th mat-header-cell *matHeaderCellDef>{{ env.name }}</th>
       <td mat-cell *matCellDef="let feature">
         <mat-slide-toggle
-          id="{{ feature.id }}-{{ env.id }}-toggle"
+          id="{{ feature.name }}-{{ env.id }}-toggle"
           hideIcon="true"
           (change)="toggleFeature(feature, env)"
           [checked]="findEnvironment(feature, env)?.isEnabled ?? false"
