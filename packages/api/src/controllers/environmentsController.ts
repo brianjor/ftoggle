@@ -12,7 +12,7 @@ export class EnvironmentsController {
    * @throws A {@link RecordDoesNotExistError} if there is no environment with that id
    */
   public async getEnvironmentById(
-    environmentId: number,
+    environmentId: string,
   ): Promise<EnvironmentsTableItem> {
     const env = await dbClient.query.environments.findFirst({
       where: eq(environments.id, environmentId),

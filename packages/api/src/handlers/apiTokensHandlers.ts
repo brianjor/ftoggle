@@ -39,7 +39,7 @@ export const apiTokensHandlers = new Elysia()
       },
       params: t.Object({ projectId: t.String() }),
       body: t.Object({
-        environmentId: t.Number(),
+        environmentId: t.String(),
         type: t.Enum(ApiTokenType),
         name: t.String(),
       }),

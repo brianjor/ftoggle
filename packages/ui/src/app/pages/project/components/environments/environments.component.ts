@@ -49,7 +49,7 @@ export class ProjectEnvironmentsComponent {
     if (this.deleteEnvironmentInFlight) return;
     this.deleteEnvironmentInFlight = true;
     this.environmentsService
-      .deleteEnvironment(this.projectId, environment.id)
+      .deleteEnvironment(this.projectId, environment.name)
       .then(() => this.getEnvironments())
       .finally(() => (this.deleteEnvironmentInFlight = false));
   }

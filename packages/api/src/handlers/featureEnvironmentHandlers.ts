@@ -15,18 +15,18 @@ export const toggleFeatureDataContract = t.Object({
 export const featureEnvironmentHandler = new Elysia().use(hooks).put(
   '',
   async ({ params }) => {
-    const { projectId, featureName, environmentId } = params;
+    const { projectId, featureName, environmentName } = params;
     await projectsController.getProjectById(projectId);
     await featuresEnvironmentsController.getProjectFeatureEnvironmentRelation(
-      featureName,
-      environmentId,
       projectId,
+      featureName,
+      environmentName,
     );
 
     const relation = await featuresEnvironmentsController.toggleFeature(
       projectId,
       featureName,
-      environmentId,
+      environmentName,
     );
 
     return {
@@ -37,7 +37,7 @@ export const featureEnvironmentHandler = new Elysia().use(hooks).put(
     params: t.Object({
       projectId: t.String(),
       featureName: t.String(),
-      environmentId: t.Numeric(),
+      environmentName: t.String(),
     }),
     response: toggleFeatureDataContract,
     beforeHandle: [

@@ -72,7 +72,7 @@ export class ConditionsComponent {
       await this.conditionsService.getConditions(
         this.projectId,
         this.featureName,
-        env.id,
+        env.name,
       ),
     );
   }
@@ -84,7 +84,7 @@ export class ConditionsComponent {
         data: {
           projectId: this.projectId,
           featureName: this.featureName,
-          environmentId: env.id,
+          environmentName: env.name,
         },
       },
     );
@@ -93,16 +93,15 @@ export class ConditionsComponent {
       .subscribe(() => this.getConditions(env));
   }
 
-  deleteCondition(condition: ConditionWithContextField) {
+  deleteCondition(
+    condition: ConditionWithContextField,
+    env: EnvironmentsTableItem,
+  ) {
     if (this.deleteConditionInFlight()) return;
     this.deleteConditionInFlight.set(true);
     this.conditionsService
-      .deleteCondition(condition, this.featureName)
-      .then(() =>
-        this.getConditions(
-          this.environments().find((e) => e.id === condition.environmentId)!,
-        ),
-      )
+      .deleteCondition(condition, this.featureName, env.name)
+      .then(() => this.getConditions(env))
       .finally(() => this.deleteConditionInFlight.set(false));
   }
 }

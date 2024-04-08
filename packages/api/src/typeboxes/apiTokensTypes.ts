@@ -6,7 +6,7 @@ import { projectTableItem } from './projectsTypes';
 export const apiTokensTableItem = t.Object({
   id: t.String(),
   projectId: t.String(),
-  environmentId: t.Number(),
+  environmentId: t.String(),
   name: t.String(),
   type: t.String(),
   createdAt: t.Date(),

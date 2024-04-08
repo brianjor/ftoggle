@@ -81,7 +81,7 @@ export class CreateApiTokenDialogComponent {
   createApiToken() {
     if (!this.createApiTokenForm.valid || this.inFlight()) return;
     const name = this.name.value as string;
-    const environmentId = Number(this.environment.value as string);
+    const environmentId = this.environment.value as string;
     const type = this.type.value as ApiTokenType;
     this.inFlight.set(true);
     this.apiTokenService
