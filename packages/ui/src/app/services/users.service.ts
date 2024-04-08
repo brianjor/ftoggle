@@ -23,28 +23,28 @@ export class UsersService {
   }
 
   async setApproval(user: UsersTableItem, approval: boolean) {
-    const { response, data } = await this.apiService.api.users[user.id].patch({
-      isApproved: approval,
-    });
+    const { response, data } = await this.apiService.api
+      .users({ userId: user.id })
+      .patch({ isApproved: approval });
     if (!response.ok) {
       console.error('Error setting user approval', data);
     }
   }
 
   async addRole(user: UsersTableItem, role: UserRole) {
-    const { response, error } = await this.apiService.api.users[
-      user.id
-    ].roles.post({
-      role,
-    });
+    const { response, error } = await this.apiService.api
+      .users({ userId: user.id })
+      .roles.post({ role });
     if (!response.ok) {
       console.error('Error adding role', error?.message);
     }
   }
 
   async removeRole(user: UsersTableItem, role: RolesTableItem) {
-    const { response, data } =
-      await this.apiService.api.users[user.id].roles[role.id].delete();
+    const { response, data } = await this.apiService.api
+      .users({ userId: user.id })
+      .roles({ roleId: role.id })
+      .delete();
     if (!response.ok) {
       console.error('Error removing role:', data);
     }

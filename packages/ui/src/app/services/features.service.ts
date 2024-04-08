@@ -13,7 +13,7 @@ export class FeaturesService {
 
   async createFeature(projectId: string, feature: { name: string }) {
     try {
-      await this.apiService.api.projects[projectId].features.post({
+      await this.apiService.api.projects({ projectId }).features.post({
         $query: { projectId },
         name: feature.name,
       });
@@ -24,8 +24,9 @@ export class FeaturesService {
 
   async getFeatures(projectId: string) {
     try {
-      const response =
-        await this.apiService.api.projects[projectId].features.get();
+      const response = await this.apiService.api
+        .projects({ projectId })
+        .features.get();
       this._features.set(response.data?.features ?? []);
       return;
     } catch (error) {
@@ -39,9 +40,11 @@ export class FeaturesService {
     environmentName: string,
   ) {
     try {
-      await this.apiService.api.projects[projectId].features[
-        featureName
-      ].environments[environmentName].put();
+      await this.apiService.api
+        .projects({ projectId })
+        .features({ featureName })
+        .environments({ environmentName })
+        .put();
     } catch (err) {
       console.error('Error toggling feature', err);
     }
@@ -49,9 +52,10 @@ export class FeaturesService {
 
   async deleteFeature(featureName: string, projectId: string) {
     try {
-      await this.apiService.api.projects[projectId].features[
-        featureName
-      ].delete();
+      await this.apiService.api
+        .projects({ projectId })
+        .features({ featureName })
+        .delete();
     } catch (error) {
       console.error('Error deleting feature', error);
     }
