@@ -53,18 +53,18 @@ export const routes = new Elysia()
           ) // /:contextFieldName
         ) // /context-fields
         .group('/environments', _ => _.use(environmentsHandlers)
-          .group('/:environmentId', _ => _.use(environmentHandlers)
-          ) // /:environmentId
+          .group('/:environmentName', _ => _.use(environmentHandlers)
+          ) // /:environmentName
         ) // /environments
         .group('/features', _ => _.use(featuresHandlers)
           .group('/:featureName', _ => _.use(featureHandlers)
             .group('/environments', _ => _
-              .group('/:environmentId', _ => _.use(featureEnvironmentHandler)
+              .group('/:environmentName', _ => _.use(featureEnvironmentHandler)
                 .group('/conditions', _ => _.use(conditionsHandlers)
                   .group('/:conditionId', _ => _.use(conditionHandlers)
                   ) // /:conditionId
                 ) // /conditions
-              ) // /:environmentId
+              ) // /:environmentName
             ) // /environments
           ) // /:featureName
         ) // /features

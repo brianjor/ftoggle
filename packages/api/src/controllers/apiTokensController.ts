@@ -16,7 +16,7 @@ export class ApiTokensController {
    */
   public async createApiToken(fields: {
     projectId: string;
-    environmentId: number;
+    environmentId: string;
     name: string;
     type: ApiTokenType;
     userId: string;

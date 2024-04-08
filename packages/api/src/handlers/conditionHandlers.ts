@@ -1,6 +1,5 @@
 import { Elysia, t } from 'elysia';
 import { ConditionsController } from '../controllers/conditionsController';
-import { EnvironmentsController } from '../controllers/environmentsController';
 import { FeaturesController } from '../controllers/featuresController';
 import { ProjectsController } from '../controllers/projectsController';
 import { UserPermission } from '../enums/permissions';
@@ -8,16 +7,15 @@ import { hooks } from '../hooks';
 
 const projectsController = new ProjectsController();
 const featuresController = new FeaturesController();
-const environmentsController = new EnvironmentsController();
 const conditionsController = new ConditionsController();
 
 export const conditionHandlers = new Elysia().use(hooks).delete(
   '',
   async ({ params }) => {
-    const { projectId, featureName, environmentId, conditionId } = params;
+    const { projectId, featureName, environmentName, conditionId } = params;
     await projectsController.getProjectById(projectId);
     await featuresController.getProjectFeature(projectId, featureName);
-    await environmentsController.getEnvironmentById(environmentId);
+    await projectsController.getProjectEnvironment(projectId, environmentName);
 
     await conditionsController.deleteConditionById(conditionId);
 
@@ -30,7 +28,7 @@ export const conditionHandlers = new Elysia().use(hooks).delete(
     params: t.Object({
       projectId: t.String(),
       featureName: t.String(),
-      environmentId: t.Numeric(),
+      environmentName: t.String(),
       conditionId: t.String(),
     }),
     beforeHandle: [

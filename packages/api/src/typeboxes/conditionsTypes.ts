@@ -6,7 +6,7 @@ export const conditionsTableItem = t.Object({
   id: t.String(),
   projectId: t.String(),
   featureId: t.String(),
-  environmentId: t.Number(),
+  environmentId: t.String(),
   contextFieldId: t.String(),
   operator: t.String(),
   description: t.Nullable(t.String()),

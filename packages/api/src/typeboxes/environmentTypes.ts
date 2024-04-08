@@ -2,7 +2,7 @@ import { Static, t } from 'elysia';
 
 /** DTO of an environment from the `environments` table. */
 export const environmentsTableItem = t.Object({
-  id: t.Number(),
+  id: t.String(),
   name: t.String(),
   createdAt: t.Date(),
   modifiedAt: t.Date(),

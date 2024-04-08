@@ -1,11 +1,4 @@
-import {
-  boolean,
-  integer,
-  pgTable,
-  text,
-  unique,
-  uuid,
-} from 'drizzle-orm/pg-core';
+import { boolean, pgTable, text, unique, uuid } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm/relations';
 import { environments } from './environments';
 import { features } from './features';
@@ -20,7 +13,7 @@ export const projectsFeaturesEnvironments = pgTable(
     featureId: uuid('feature_id')
       .notNull()
       .references(() => features.id, { onDelete: 'cascade' }),
-    environmentId: integer('environment_id')
+    environmentId: uuid('environment_id')
       .notNull()
       .references(() => environments.id, { onDelete: 'cascade' }),
     isEnabled: boolean('is_enabled').notNull().default(false),

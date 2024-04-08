@@ -18,7 +18,7 @@ export class ConditionsController {
     }[],
     projectId: string,
     featureName: string,
-    environmentId: number,
+    environmentId: string,
   ) {
     if (conditions.length === 0) return;
 
@@ -49,8 +49,8 @@ export class ConditionsController {
       conditions.map((c) => ({
         projectId,
         featureId: feature.id,
-        environmentId,
-        contextFieldId: contextField?.id,
+        environmentId: environmentId,
+        contextFieldId: contextField.id,
         values: c.values,
         description: c.description,
         operator: c.operator,
@@ -68,7 +68,7 @@ export class ConditionsController {
   getProjectFeatureEnvironmentConditions(
     projectId: string,
     featureName: string,
-    environmentId: number,
+    environmentId: string,
   ) {
     return dbClient
       .select({

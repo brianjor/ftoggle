@@ -33,10 +33,10 @@ export class EnvironmentsService {
     }
   }
 
-  async deleteEnvironment(projectId: string, environmentId: number) {
+  async deleteEnvironment(projectId: string, environmentName: string) {
     try {
       await this.apiService.api.projects[projectId].environments[
-        environmentId
+        environmentName
       ].delete();
     } catch (err) {
       console.error('Error deleting environment', err);

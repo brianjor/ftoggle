@@ -15,7 +15,7 @@ export class ApiTokenService {
   public async createApiToken(fields: {
     projectId: string;
     name: string;
-    environmentId: number;
+    environmentId: string;
     type: ApiTokenType;
   }) {
     const { projectId, name, environmentId, type } = fields;

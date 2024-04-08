@@ -1,21 +1,25 @@
 import { dbClient } from '@ftoggle/db/connection';
-import { features, projectsFeaturesEnvironments } from '@ftoggle/db/schema';
+import {
+  environments,
+  features,
+  projectsFeaturesEnvironments,
+} from '@ftoggle/db/schema';
 import { and, eq, getTableColumns } from 'drizzle-orm';
 import { RecordDoesNotExistError } from '../errors/dbErrors';
 
 export class FeaturesEnvironmentsController {
   /**
    * Gets a feature environment relation.
-   * @param featureName name of feature
-   * @param userId id of environment
-   * @param projectId id of project
+   * @param featureName name of the feature
+   * @param environmentName name of the environment
+   * @param projectId id of the project
    * @returns The feature environment relation
    * @throws A {@link RecordDoesNotExistError} if no relation exists
    */
   public async getProjectFeatureEnvironmentRelation(
-    featureName: string,
-    environmentId: number,
     projectId: string,
+    featureName: string,
+    environmentName: string,
   ) {
     const projectFeatureEnvironmentRelation = (
       await dbClient
@@ -25,16 +29,21 @@ export class FeaturesEnvironmentsController {
           features,
           eq(features.id, projectsFeaturesEnvironments.featureId),
         )
+        .leftJoin(
+          environments,
+          eq(environments.id, projectsFeaturesEnvironments.environmentId),
+        )
         .where(
           and(
-            eq(projectsFeaturesEnvironments.environmentId, environmentId),
             eq(projectsFeaturesEnvironments.projectId, projectId),
+            eq(features.name, featureName),
+            eq(environments.name, environmentName),
           ),
         )
     )[0];
     if (projectFeatureEnvironmentRelation === undefined) {
       throw new RecordDoesNotExistError(
-        `No relation exists between feature: "${featureName}" and environment with id: "${environmentId}".`,
+        `No relation exists between feature: "${featureName}" and environment with id: "${environmentName}".`,
       );
     }
     return projectFeatureEnvironmentRelation;
@@ -44,20 +53,20 @@ export class FeaturesEnvironmentsController {
    * Toggles the 'isEnabled' column of a feature environment relation.
    * If 'isEnabled' is true, sets to false. If 'isEnabled' is false, sets to true.
    * @param featureName name of the feature
-   * @param environmentId id of environment
-   * @param projectId id of project
+   * @param environmentName name of the environment
+   * @param projectId id of the project
    * @returns The feature environment relation after toggling
    * @throws A {@link RecordDoesNotExistError} if no relation exists
    */
   public async toggleFeature(
     projectId: string,
     featureName: string,
-    environmentId: number,
+    environmentName: string,
   ) {
     const currentRelation = await this.getProjectFeatureEnvironmentRelation(
-      featureName,
-      environmentId,
       projectId,
+      featureName,
+      environmentName,
     );
     return (
       await dbClient
@@ -69,7 +78,10 @@ export class FeaturesEnvironmentsController {
               projectsFeaturesEnvironments.featureId,
               currentRelation.featureId,
             ),
-            eq(projectsFeaturesEnvironments.environmentId, environmentId),
+            eq(
+              projectsFeaturesEnvironments.environmentId,
+              currentRelation.environmentId,
+            ),
             eq(projectsFeaturesEnvironments.projectId, projectId),
           ),
         )

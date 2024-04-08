@@ -11,7 +11,7 @@ export class ConditionsService {
   async createConditions(
     projectId: string,
     featureName: string,
-    environmentId: number,
+    environmentName: string,
     conditions: {
       contextName: string;
       operator: string;
@@ -21,7 +21,7 @@ export class ConditionsService {
   ) {
     return await this.apiService.api.projects[projectId].features[
       featureName
-    ].environments[environmentId].conditions.post({
+    ].environments[environmentName].conditions.post({
       conditions,
     });
   }
@@ -29,18 +29,22 @@ export class ConditionsService {
   async getConditions(
     projectId: string,
     featureName: string,
-    environmentId: number,
+    environmentName: string,
   ) {
     const res =
       await this.apiService.api.projects[projectId].features[
         featureName
-      ].environments[environmentId].conditions.get();
+      ].environments[environmentName].conditions.get();
     return res.data?.conditions ?? [];
   }
 
-  async deleteCondition(condition: ConditionsTableItem, featureName: string) {
+  async deleteCondition(
+    condition: ConditionsTableItem,
+    featureName: string,
+    environmentName: string,
+  ) {
     await this.apiService.api.projects[condition.projectId].features[
       featureName
-    ].environments[condition.environmentId].conditions[condition.id].delete();
+    ].environments[environmentName].conditions[condition.id].delete();
   }
 }

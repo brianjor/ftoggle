@@ -3,7 +3,7 @@ import { conditions, projectsFeaturesEnvironments } from '@ftoggle/db/schema';
 import { and, eq, inArray } from 'drizzle-orm';
 
 export class ClientController {
-  async getFeatures(projectId: string, environmentId: number) {
+  async getFeatures(projectId: string, environmentId: string) {
     // Get features
     const features = await dbClient.query.projectsFeaturesEnvironments.findMany(
       {

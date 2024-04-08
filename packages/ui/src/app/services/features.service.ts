@@ -36,18 +36,12 @@ export class FeaturesService {
   async toggleFeature(
     projectId: string,
     featureName: string,
-    environmentId: number,
+    environmentName: string,
   ) {
     try {
       await this.apiService.api.projects[projectId].features[
         featureName
-      ].environments[environmentId].put({
-        $query: {
-          projectId,
-          featureName: featureName,
-          environmentId: String(environmentId),
-        },
-      });
+      ].environments[environmentName].put();
     } catch (err) {
       console.error('Error toggling feature', err);
     }

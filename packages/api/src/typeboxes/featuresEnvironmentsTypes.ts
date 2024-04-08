@@ -4,7 +4,7 @@ import { Static, t } from 'elysia';
 export const featuresEnvironmentsTableItem = t.Object({
   projectId: t.String(),
   featureId: t.String(),
-  environmentId: t.Number(),
+  environmentId: t.String(),
   isEnabled: t.Boolean(),
 });
 

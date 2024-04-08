@@ -2,6 +2,7 @@ import Elysia, { t } from 'elysia';
 import { ProjectsController } from '../controllers/projectsController';
 import { UserPermission } from '../enums/permissions';
 import { hooks } from '../hooks';
+import { environmentsTableItem } from '../typeboxes/environmentTypes';
 
 const projectsController = new ProjectsController();
 
@@ -10,10 +11,10 @@ export const environmentHandlers = new Elysia()
   .get(
     '',
     async ({ params }) => {
-      const { projectId, environmentId } = params;
-      const env = await projectsController.getEnvironmentById(
+      const { projectId, environmentName } = params;
+      const env = await projectsController.getProjectEnvironment(
         projectId,
-        environmentId,
+        environmentName,
       );
       return {
         data: {
@@ -24,18 +25,12 @@ export const environmentHandlers = new Elysia()
     {
       params: t.Object({
         projectId: t.String(),
-        environmentId: t.Numeric(),
+        environmentName: t.String(),
       }),
       response: {
         200: t.Object({
           data: t.Object({
-            environment: t.Object({
-              id: t.Number(),
-              name: t.String(),
-              createdAt: t.Date(),
-              modifiedAt: t.Date(),
-              projectId: t.String(),
-            }),
+            environment: environmentsTableItem,
           }),
         }),
       },
@@ -49,20 +44,20 @@ export const environmentHandlers = new Elysia()
   .delete(
     '',
     async ({ params }) => {
-      const { projectId, environmentId } = params;
+      const { projectId, environmentName } = params;
       const { project, ...environment } =
         await projectsController.getProjectsEnvironmentsRelation(
           projectId,
-          environmentId,
+          environmentName,
         );
-      await projectsController.deleteEnvironment(projectId, environmentId);
+      await projectsController.deleteEnvironment(projectId, environmentName);
 
       return `Deleted environment: "${environment.name}" from project: "${project.name}"`;
     },
     {
       params: t.Object({
         projectId: t.String(),
-        environmentId: t.Numeric(),
+        environmentName: t.String(),
       }),
       beforeHandle: [
         ({ isSignedIn }) => isSignedIn(),
