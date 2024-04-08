@@ -17,7 +17,7 @@ export class ContextFieldsService {
     description?: string,
   ) {
     try {
-      await this.apiService.api.projects[projectId].contextFields.post({
+      await this.apiService.api.projects({ projectId }).contextFields.post({
         name,
         description,
       });
@@ -36,8 +36,9 @@ export class ContextFieldsService {
   ): Promise<ContextFieldsTableItem[]> {
     let cFields: ContextFieldsTableItem[] = [];
     try {
-      const { data, error, response } =
-        await this.apiService.api.projects[projectId].contextFields.get();
+      const { data, error, response } = await this.apiService.api
+        .projects({ projectId })
+        .contextFields.get();
       if (!response.ok) {
         throw error;
       }
@@ -54,9 +55,12 @@ export class ContextFieldsService {
     contextField: ContextFieldsTableItem,
   ) {
     try {
-      await this.apiService.api.projects[projectId].contextFields[
-        contextField.name
-      ].delete();
+      await this.apiService.api
+        .projects({ projectId })
+        .contextFields({
+          contextFieldName: contextField.name,
+        })
+        .delete();
     } catch (error) {
       console.error('Error deleting context field', error);
     }
