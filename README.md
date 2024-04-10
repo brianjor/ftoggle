@@ -1,15 +1,27 @@
 # ftoggle
 
-To install dependencies:
+ftoggle is a feature toggle management tool.
 
-```bash
-bun install
-```
+## Development Setup
 
-To run:
+- Install [bun](https://bun.sh/)
+- Run `bun run setup`
 
-```bash
-bun run index.ts
-```
+Optional Dependencies:
 
-This project was created using `bun init` in bun v1.0.14. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+- [Docker](https://www.docker.com/)
+
+### With Docker
+
+- Go into the UI and DB packages folders and create an `.env` file copied from the `example.env`
+- From project root run: `docker compose up`
+- Access the Postgres database and create a database named: `ftoggle`
+- From a separate terminal: `cd ./packages/db` & `bun run migrations:run`
+- Access UI at `localhost:4200`, Default User:Pass - `Admin`:`FToggle`
+- Access API at `localhost:8080`, `/swagger` for docs
+
+### Without Docker
+
+- [Database setup](./packages/db/README.md)
+- [API Setup](./packages/api/README.md)
+- [UI Setup](./packages/ui/README.md)
