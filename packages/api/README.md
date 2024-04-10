@@ -1,15 +1,9 @@
-# ftoggle-api
+# API
 
-To install dependencies:
+API for ftoggle.
 
-```bash
-bun install
-```
+## Setup
 
-To run:
-
-```bash
-bun run index.ts
-```
-
-This project was created using `bun init` in bun v1.0.14. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+- Create an `.env` file and copy the contents from `example.env`
+- Run `bun run dev`
+- If using defaults you should be able to see swagger docs at `localhost:8080/swagger`
