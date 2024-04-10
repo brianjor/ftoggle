@@ -6,6 +6,7 @@
     "packages/clients/*"
   ],
   "scripts": {
+    "setup": "bun run setup.ts",
     "lint": "nx run-many --target=lint",
     "lint:fix": "nx run-many --target=lint:fix",
     "format": "nx run-many --target=format",
@@ -26,5 +27,8 @@
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "ora": "^8.0.1"
   }
 }
