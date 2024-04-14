@@ -1,5 +1,5 @@
 import { dbClient } from '@ftoggle/db/connection';
-import { contextFields } from '@ftoggle/db/schema';
+import { tContextFields } from '@ftoggle/db/schema';
 import { and, eq } from 'drizzle-orm';
 import { DuplicateRecordError } from '../errors/dbErrors';
 
@@ -14,10 +14,10 @@ export class ContextFieldController {
     name: string,
     description?: string,
   ) {
-    const exists = await dbClient.query.contextFields.findFirst({
+    const exists = await dbClient.query.tContextFields.findFirst({
       where: and(
-        eq(contextFields.projectId, projectId),
-        eq(contextFields.name, name),
+        eq(tContextFields.projectId, projectId),
+        eq(tContextFields.name, name),
       ),
     });
     if (exists) {
@@ -26,7 +26,7 @@ export class ContextFieldController {
       );
     }
     return await dbClient
-      .insert(contextFields)
+      .insert(tContextFields)
       .values({ projectId, name, description })
       .returning();
   }
@@ -36,8 +36,8 @@ export class ContextFieldController {
    * @param projectId the project id
    */
   async getContextFields(projectId: string) {
-    return await dbClient.query.contextFields.findMany({
-      where: eq(contextFields.projectId, projectId),
+    return await dbClient.query.tContextFields.findMany({
+      where: eq(tContextFields.projectId, projectId),
     });
   }
 
@@ -48,11 +48,11 @@ export class ContextFieldController {
    */
   async deleteContextFieldByName(projectId: string, contextFieldName: string) {
     await dbClient
-      .delete(contextFields)
+      .delete(tContextFields)
       .where(
         and(
-          eq(contextFields.projectId, projectId),
-          eq(contextFields.name, contextFieldName),
+          eq(tContextFields.projectId, projectId),
+          eq(tContextFields.name, contextFieldName),
         ),
       );
   }

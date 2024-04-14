@@ -1,10 +1,5 @@
 import { dbClient } from '@ftoggle/db/connection';
-import {
-  conditions,
-  conditions as conditionsTable,
-  contextFields,
-  features,
-} from '@ftoggle/db/schema';
+import { tConditions, tContextFields, tFeatures } from '@ftoggle/db/schema';
 import { and, eq, getTableColumns } from 'drizzle-orm';
 import { RecordDoesNotExistError } from '../errors/dbErrors';
 
@@ -23,10 +18,10 @@ export class ConditionsController {
     if (conditions.length === 0) return;
 
     const fieldName = conditions[0].contextName;
-    const contextField = await dbClient.query.contextFields.findFirst({
+    const contextField = await dbClient.query.tContextFields.findFirst({
       where: and(
-        eq(contextFields.name, fieldName),
-        eq(contextFields.projectId, projectId),
+        eq(tContextFields.name, fieldName),
+        eq(tContextFields.projectId, projectId),
       ),
     });
     if (!contextField) {
@@ -34,8 +29,8 @@ export class ConditionsController {
         `Context field: "${fieldName}" does not exist`,
       );
     }
-    const feature = await dbClient.query.features.findFirst({
-      where: eq(features.name, featureName),
+    const feature = await dbClient.query.tFeatures.findFirst({
+      where: eq(tFeatures.name, featureName),
       columns: {
         id: true,
       },
@@ -45,7 +40,7 @@ export class ConditionsController {
         `Feature: ${featureName} does not exist.`,
       );
     }
-    await dbClient.insert(conditionsTable).values(
+    await dbClient.insert(tConditions).values(
       conditions.map((c) => ({
         projectId,
         featureId: feature.id,
@@ -72,17 +67,20 @@ export class ConditionsController {
   ) {
     return dbClient
       .select({
-        ...getTableColumns(conditions),
-        contextField: getTableColumns(contextFields),
+        ...getTableColumns(tConditions),
+        contextField: getTableColumns(tContextFields),
       })
-      .from(conditions)
-      .leftJoin(features, eq(features.id, conditions.featureId))
-      .innerJoin(contextFields, eq(contextFields.id, conditions.contextFieldId))
+      .from(tConditions)
+      .leftJoin(tFeatures, eq(tFeatures.id, tConditions.featureId))
+      .innerJoin(
+        tContextFields,
+        eq(tContextFields.id, tConditions.contextFieldId),
+      )
       .where(
         and(
-          eq(conditionsTable.projectId, projectId),
-          eq(features.name, featureName),
-          eq(conditionsTable.environmentId, environmentId),
+          eq(tConditions.projectId, projectId),
+          eq(tFeatures.name, featureName),
+          eq(tConditions.environmentId, environmentId),
         ),
       );
   }
@@ -92,6 +90,6 @@ export class ConditionsController {
    * @param conditionId id of the condition
    */
   async deleteConditionById(conditionId: string) {
-    await dbClient.delete(conditions).where(eq(conditions.id, conditionId));
+    await dbClient.delete(tConditions).where(eq(tConditions.id, conditionId));
   }
 }

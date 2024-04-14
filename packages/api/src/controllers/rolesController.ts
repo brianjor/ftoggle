@@ -1,6 +1,6 @@
 import { UserRole } from '@ftoggle/common/enums/roles';
 import { dbClient } from '@ftoggle/db/connection';
-import { roles } from '@ftoggle/db/schema';
+import { tRoles } from '@ftoggle/db/schema';
 import { eq } from 'drizzle-orm';
 import { RecordDoesNotExistError } from '../errors/dbErrors';
 
@@ -12,8 +12,8 @@ export class RolesController {
    * @throws A {@link RecordDoesNotExistError} if there is no role exists with the provided name
    */
   public async getRoleByName(roleName: UserRole) {
-    const role = await dbClient.query.roles.findFirst({
-      where: eq(roles.name, roleName),
+    const role = await dbClient.query.tRoles.findFirst({
+      where: eq(tRoles.name, roleName),
     });
     if (role === undefined) {
       throw new RecordDoesNotExistError(
@@ -30,8 +30,8 @@ export class RolesController {
    * @throws A {@link RecordDoesNotExistError} if there is no role exists with the provided id
    */
   public async getRoleById(roleId: number) {
-    const role = await dbClient.query.roles.findFirst({
-      where: eq(roles.id, roleId),
+    const role = await dbClient.query.tRoles.findFirst({
+      where: eq(tRoles.id, roleId),
     });
     if (role === undefined) {
       throw new RecordDoesNotExistError(

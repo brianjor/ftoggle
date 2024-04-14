@@ -1,9 +1,9 @@
 import { pgTable, text, timestamp, unique, uuid } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm/relations';
-import { projects } from './projects';
-import { projectsFeaturesEnvironments } from './projectsFeaturesEnvironments';
+import { tProjects } from './projects';
+import { tProjectsFeaturesEnvironments } from './projectsFeaturesEnvironments';
 
-export const environments = pgTable(
+export const tEnvironments = pgTable(
   'environments',
   {
     id: uuid('id').primaryKey().defaultRandom(),
@@ -16,20 +16,20 @@ export const environments = pgTable(
       .defaultNow(),
     projectId: text('project_id')
       .notNull()
-      .references(() => projects.id, { onDelete: 'cascade' }),
+      .references(() => tProjects.id, { onDelete: 'cascade' }),
   },
   (t) => ({
     unq: unique().on(t.name, t.projectId),
   }),
 );
 
-export const environmentRelations = relations(
-  environments,
+export const tEnvironmentsRelations = relations(
+  tEnvironments,
   ({ one, many }) => ({
-    features: many(projectsFeaturesEnvironments),
-    project: one(projects, {
-      fields: [environments.projectId],
-      references: [projects.id],
+    features: many(tProjectsFeaturesEnvironments),
+    project: one(tProjects, {
+      fields: [tEnvironments.projectId],
+      references: [tProjects.id],
     }),
   }),
 );

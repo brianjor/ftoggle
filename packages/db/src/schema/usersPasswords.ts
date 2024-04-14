@@ -1,19 +1,19 @@
 import { relations } from 'drizzle-orm';
 import { pgTable, serial, text } from 'drizzle-orm/pg-core';
-import { users } from './users';
+import { tUsers } from './users';
 
-export const usersPasswords = pgTable('users_passwords', {
+export const tUsersPasswords = pgTable('users_passwords', {
   id: serial('id').primaryKey(),
   hashedPassword: text('hashed_password').notNull(),
   userId: text('user_id')
     .unique()
     .notNull()
-    .references(() => users.id),
+    .references(() => tUsers.id),
 });
 
-export const passwordTableRelations = relations(usersPasswords, ({ one }) => ({
-  user: one(users, {
-    fields: [usersPasswords.userId],
-    references: [users.id],
+export const passwordTableRelations = relations(tUsersPasswords, ({ one }) => ({
+  user: one(tUsers, {
+    fields: [tUsersPasswords.userId],
+    references: [tUsers.id],
   }),
 }));

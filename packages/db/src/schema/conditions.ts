@@ -1,41 +1,41 @@
 import { relations } from 'drizzle-orm';
 import { pgTable, text, uuid } from 'drizzle-orm/pg-core';
-import { contextFields, environments, features, projects } from '.';
+import { tContextFields, tEnvironments, tFeatures, tProjects } from '.';
 
-export const conditions = pgTable('conditions', {
+export const tConditions = pgTable('conditions', {
   id: uuid('id').primaryKey().defaultRandom(),
   projectId: text('project_id')
     .notNull()
-    .references(() => projects.id, { onDelete: 'cascade' }),
+    .references(() => tProjects.id, { onDelete: 'cascade' }),
   featureId: uuid('feature_id')
     .notNull()
-    .references(() => features.id, { onDelete: 'cascade' }),
+    .references(() => tFeatures.id, { onDelete: 'cascade' }),
   environmentId: uuid('environment_id')
     .notNull()
-    .references(() => environments.id, { onDelete: 'cascade' }),
+    .references(() => tEnvironments.id, { onDelete: 'cascade' }),
   contextFieldId: uuid('context_field_id')
     .notNull()
-    .references(() => contextFields.id, { onDelete: 'cascade' }),
+    .references(() => tContextFields.id, { onDelete: 'cascade' }),
   operator: text('operator').notNull(),
   description: text('description'),
   values: text('values').array().notNull(),
 });
 
-export const conditionsRealations = relations(conditions, ({ one }) => ({
-  contextField: one(contextFields, {
-    fields: [conditions.contextFieldId],
-    references: [contextFields.id],
+export const tConditionsRelations = relations(tConditions, ({ one }) => ({
+  contextField: one(tContextFields, {
+    fields: [tConditions.contextFieldId],
+    references: [tContextFields.id],
   }),
-  environment: one(environments, {
-    fields: [conditions.environmentId],
-    references: [environments.id],
+  environment: one(tEnvironments, {
+    fields: [tConditions.environmentId],
+    references: [tEnvironments.id],
   }),
-  feature: one(features, {
-    fields: [conditions.featureId],
-    references: [features.id],
+  feature: one(tFeatures, {
+    fields: [tConditions.featureId],
+    references: [tFeatures.id],
   }),
-  project: one(projects, {
-    fields: [conditions.projectId],
-    references: [projects.id],
+  project: one(tProjects, {
+    fields: [tConditions.projectId],
+    references: [tProjects.id],
   }),
 }));

@@ -1,15 +1,15 @@
 import { dbClient } from '@ftoggle/db/connection';
-import { conditions, projectsFeaturesEnvironments } from '@ftoggle/db/schema';
+import { tConditions, tProjectsFeaturesEnvironments } from '@ftoggle/db/schema';
 import { and, eq, inArray } from 'drizzle-orm';
 
 export class ClientController {
   async getFeatures(projectId: string, environmentId: string) {
     // Get features
-    const features = await dbClient.query.projectsFeaturesEnvironments.findMany(
-      {
+    const features =
+      await dbClient.query.tProjectsFeaturesEnvironments.findMany({
         where: and(
-          eq(projectsFeaturesEnvironments.projectId, projectId),
-          eq(projectsFeaturesEnvironments.environmentId, environmentId),
+          eq(tProjectsFeaturesEnvironments.projectId, projectId),
+          eq(tProjectsFeaturesEnvironments.environmentId, environmentId),
         ),
         with: {
           feature: {
@@ -19,15 +19,14 @@ export class ClientController {
             },
           },
         },
-      },
-    );
+      });
     const featureIds = features.map((f) => f.featureId);
     // Get conditions for the features
-    const featureConditions = await dbClient.query.conditions.findMany({
+    const conditions = await dbClient.query.tConditions.findMany({
       where: and(
-        eq(conditions.projectId, projectId),
-        eq(conditions.environmentId, environmentId),
-        inArray(conditions.featureId, featureIds),
+        eq(tConditions.projectId, projectId),
+        eq(tConditions.environmentId, environmentId),
+        inArray(tConditions.featureId, featureIds),
       ),
       columns: {
         featureId: true,
@@ -46,7 +45,7 @@ export class ClientController {
     const featuresWConditions = features.map((f) => ({
       name: f.feature.name,
       isEnabled: f.isEnabled,
-      conditions: featureConditions
+      conditions: conditions
         .filter((c) => c.featureId === f.featureId)
         .map((c) => ({
           field: c.contextField.name,

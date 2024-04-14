@@ -1,6 +1,6 @@
 import { ApiTokenType } from '@ftoggle/common/enums/apiTokens';
 import { dbClient } from '@ftoggle/db/connection';
-import { apiTokens, projects } from '@ftoggle/db/schema';
+import { tApiTokens, tProjects } from '@ftoggle/db/schema';
 import { eq, getTableColumns } from 'drizzle-orm';
 import { RecordDoesNotExistError } from '../errors/dbErrors';
 import {
@@ -21,7 +21,7 @@ export class ApiTokensController {
     type: ApiTokenType;
     userId: string;
   }): Promise<ApiTokensTableItem> {
-    return (await dbClient.insert(apiTokens).values(fields).returning())[0];
+    return (await dbClient.insert(tApiTokens).values(fields).returning())[0];
   }
 
   /**
@@ -33,8 +33,8 @@ export class ApiTokensController {
   public async getApiTokenById(
     apiTokenId: string,
   ): Promise<ApiTokenWithProjectAndEnvironment> {
-    const apiToken = await dbClient.query.apiTokens.findFirst({
-      where: eq(apiTokens.id, apiTokenId),
+    const apiToken = await dbClient.query.tApiTokens.findFirst({
+      where: eq(tApiTokens.id, apiTokenId),
       with: {
         project: true,
         environment: true,
@@ -57,10 +57,10 @@ export class ApiTokensController {
     projectId: string,
   ): Promise<ApiTokensTableItem[]> {
     return await dbClient
-      .select(getTableColumns(apiTokens))
-      .from(apiTokens)
-      .leftJoin(projects, eq(apiTokens.projectId, projects.id))
-      .where(eq(apiTokens.projectId, projectId));
+      .select(getTableColumns(tApiTokens))
+      .from(tApiTokens)
+      .leftJoin(tProjects, eq(tApiTokens.projectId, tProjects.id))
+      .where(eq(tApiTokens.projectId, projectId));
   }
 
   /**
@@ -68,6 +68,6 @@ export class ApiTokensController {
    * @param apiTokenId id of the API token
    */
   public async deleteApiTokenById(apiTokenId: string): Promise<void> {
-    await dbClient.delete(apiTokens).where(eq(apiTokens.id, apiTokenId));
+    await dbClient.delete(tApiTokens).where(eq(tApiTokens.id, apiTokenId));
   }
 }

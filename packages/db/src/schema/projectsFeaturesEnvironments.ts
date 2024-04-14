@@ -1,21 +1,21 @@
 import { boolean, pgTable, text, unique, uuid } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm/relations';
-import { environments } from './environments';
-import { features } from './features';
-import { projects } from './projects';
+import { tEnvironments } from './environments';
+import { tFeatures } from './features';
+import { tProjects } from './projects';
 
-export const projectsFeaturesEnvironments = pgTable(
+export const tProjectsFeaturesEnvironments = pgTable(
   'projects_features_environments',
   {
     projectId: text('project_id')
       .notNull()
-      .references(() => projects.id, { onDelete: 'cascade' }),
+      .references(() => tProjects.id, { onDelete: 'cascade' }),
     featureId: uuid('feature_id')
       .notNull()
-      .references(() => features.id, { onDelete: 'cascade' }),
+      .references(() => tFeatures.id, { onDelete: 'cascade' }),
     environmentId: uuid('environment_id')
       .notNull()
-      .references(() => environments.id, { onDelete: 'cascade' }),
+      .references(() => tEnvironments.id, { onDelete: 'cascade' }),
     isEnabled: boolean('is_enabled').notNull().default(false),
   },
   (t) => ({
@@ -23,20 +23,20 @@ export const projectsFeaturesEnvironments = pgTable(
   }),
 );
 
-export const projectFeaturesEnvironmentsRelations = relations(
-  projectsFeaturesEnvironments,
+export const tProjectFeaturesEnvironmentsRelations = relations(
+  tProjectsFeaturesEnvironments,
   ({ one }) => ({
-    feature: one(features, {
-      fields: [projectsFeaturesEnvironments.featureId],
-      references: [features.id],
+    feature: one(tFeatures, {
+      fields: [tProjectsFeaturesEnvironments.featureId],
+      references: [tFeatures.id],
     }),
-    environment: one(environments, {
-      fields: [projectsFeaturesEnvironments.environmentId],
-      references: [environments.id],
+    environment: one(tEnvironments, {
+      fields: [tProjectsFeaturesEnvironments.environmentId],
+      references: [tEnvironments.id],
     }),
-    project: one(projects, {
-      fields: [projectsFeaturesEnvironments.projectId],
-      references: [projects.id],
+    project: one(tProjects, {
+      fields: [tProjectsFeaturesEnvironments.projectId],
+      references: [tProjects.id],
     }),
   }),
 );

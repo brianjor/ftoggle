@@ -1,15 +1,15 @@
 import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm/relations';
-import { environments, projects, users } from '.';
+import { tEnvironments, tProjects, tUsers } from '.';
 
-export const apiTokens = pgTable('api_tokens', {
+export const tApiTokens = pgTable('api_tokens', {
   id: uuid('id').primaryKey().defaultRandom(),
   projectId: text('project_id')
     .notNull()
-    .references(() => projects.id, { onDelete: 'cascade' }),
+    .references(() => tProjects.id, { onDelete: 'cascade' }),
   environmentId: uuid('environment_id')
     .notNull()
-    .references(() => environments.id, { onDelete: 'cascade' }),
+    .references(() => tEnvironments.id, { onDelete: 'cascade' }),
   name: text('name').notNull(),
   type: text('type').notNull(),
   createdAt: timestamp('created_at', { withTimezone: true })
@@ -17,20 +17,20 @@ export const apiTokens = pgTable('api_tokens', {
     .defaultNow(),
   userId: text('user_id')
     .notNull()
-    .references(() => users.id),
+    .references(() => tUsers.id),
 });
 
-export const apiTokensRelations = relations(apiTokens, ({ one }) => ({
-  project: one(projects, {
-    fields: [apiTokens.projectId],
-    references: [projects.id],
+export const tApiTokensRelations = relations(tApiTokens, ({ one }) => ({
+  project: one(tProjects, {
+    fields: [tApiTokens.projectId],
+    references: [tProjects.id],
   }),
-  environment: one(environments, {
-    fields: [apiTokens.environmentId],
-    references: [environments.id],
+  environment: one(tEnvironments, {
+    fields: [tApiTokens.environmentId],
+    references: [tEnvironments.id],
   }),
-  user: one(users, {
-    fields: [apiTokens.userId],
-    references: [users.id],
+  user: one(tUsers, {
+    fields: [tApiTokens.userId],
+    references: [tUsers.id],
   }),
 }));
