@@ -36,11 +36,10 @@ export const featuresHandlers = new Elysia()
   )
   .post(
     '',
-    async ({ set, body, params }) => {
+    async ({ body, params }) => {
       const { name } = body;
       const { projectId } = params;
       await featuresController.addFeature(name, projectId);
-      set.status = 200;
       return 'Successfully added feature!';
     },
     {
