@@ -15,7 +15,6 @@ ftoggle is a feature toggle management tool.
 - From project root:
   - `bun run setup`
   - `docker compose up`
-- Access the Postgres service and create a database named: `ftoggle`
 - From a separate terminal: `cd ./packages/db` & `bun run migrations:run`
 
 ### Access
