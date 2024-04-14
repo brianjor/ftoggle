@@ -17,19 +17,21 @@ export class FeaturesController {
   public async addFeature(name: string, projectId: string) {
     const envs = await projectsController.getEnvironments(projectId);
 
-    // TODO: Wrap in transaction, https://github.com/brianjor/ftoggle/issues/329
-    const feature = (
-      await dbClient.insert(features).values({ name, projectId }).returning()
-    )[0];
-    if (envs.length > 0) {
-      await dbClient.insert(projectsFeaturesEnvironments).values(
-        envs.map((env) => ({
-          featureId: feature.id,
-          environmentId: env.id,
-          projectId: projectId,
-        })),
-      );
-    }
+    const feature = await dbClient.transaction(async (tx) => {
+      const feature = (
+        await tx.insert(features).values({ name, projectId }).returning()
+      )[0];
+      if (envs.length > 0) {
+        await tx.insert(projectsFeaturesEnvironments).values(
+          envs.map((env) => ({
+            featureId: feature.id,
+            environmentId: env.id,
+            projectId: projectId,
+          })),
+        );
+      }
+      return feature;
+    });
     return feature;
   }
 
