@@ -1,7 +1,10 @@
 import { dbClient } from '@ftoggle/db/connection';
 import { features, projectsFeaturesEnvironments } from '@ftoggle/db/schema';
 import { and, eq } from 'drizzle-orm';
-import { RecordDoesNotExistError } from '../errors/dbErrors';
+import {
+  DuplicateRecordError,
+  RecordDoesNotExistError,
+} from '../errors/dbErrors';
 import { FeaturesTableItem } from '../typeboxes/featuresTypes';
 import { ProjectsController } from './projectsController';
 
@@ -15,6 +18,13 @@ export class FeaturesController {
    * @returns the created feature
    */
   public async addFeature(name: string, projectId: string) {
+    const exists = await this.featureExists(projectId, name);
+    if (exists) {
+      throw new DuplicateRecordError(
+        `Project: "${projectId}" already has a feature named: "${name}"`,
+      );
+    }
+
     const envs = await projectsController.getEnvironments(projectId);
 
     const feature = await dbClient.transaction(async (tx) => {
@@ -76,6 +86,23 @@ export class FeaturesController {
       );
     }
     return feature;
+  }
+
+  /**
+   * Checks if a feature exists on a project.
+   * @param projectId id of the project
+   * @param featureName name of the feature
+   * @returns true if the feature exists on the project, otherwise false.
+   */
+  public async featureExists(projectId: string, featureName: string) {
+    const feature = await dbClient
+      .select({})
+      .from(features)
+      .where(
+        and(eq(features.name, featureName), eq(features.projectId, projectId)),
+      )
+      .limit(1);
+    return !!feature.length;
   }
 
   /**
