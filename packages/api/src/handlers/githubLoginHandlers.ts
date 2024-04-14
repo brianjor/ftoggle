@@ -1,5 +1,5 @@
 import { dbClient } from '@ftoggle/db/connection';
-import { users } from '@ftoggle/db/schema';
+import { tUsers } from '@ftoggle/db/schema';
 import { OAuth2RequestError, generateState } from 'arctic';
 import { eq } from 'drizzle-orm';
 import { Elysia, t } from 'elysia';
@@ -50,8 +50,8 @@ export const githubLoginHandler = new Elysia()
         const githubUser: GitHubUser =
           (await githubUserResponse.json()) as GitHubUser;
 
-        const existingUser = await dbClient.query.users.findFirst({
-          where: eq(users.githubId, githubUser.id),
+        const existingUser = await dbClient.query.tUsers.findFirst({
+          where: eq(tUsers.githubId, githubUser.id),
         });
 
         let user: UsersTableItem;
@@ -63,7 +63,7 @@ export const githubLoginHandler = new Elysia()
 
           user = (
             await dbClient
-              .insert(users)
+              .insert(tUsers)
               .values({
                 id: userId,
                 githubId: githubUser.id,

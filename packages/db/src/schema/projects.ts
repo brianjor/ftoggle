@@ -1,12 +1,12 @@
 import { boolean, pgTable, text, timestamp, unique } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm/relations';
-import { apiTokens } from '.';
-import { conditions } from './conditions';
-import { contextFields } from './contextFields';
-import { environments } from './environments';
-import { features } from './features';
+import { tApiTokens } from '.';
+import { tConditions } from './conditions';
+import { tContextFields } from './contextFields';
+import { tEnvironments } from './environments';
+import { tFeatures } from './features';
 
-export const projects = pgTable(
+export const tProjects = pgTable(
   'projects',
   {
     id: text('id').primaryKey(),
@@ -24,10 +24,10 @@ export const projects = pgTable(
   }),
 );
 
-export const projectsRelations = relations(projects, ({ many }) => ({
-  environments: many(environments),
-  features: many(features),
-  apiTokens: many(apiTokens),
-  contextFields: many(contextFields),
-  conditions: many(conditions),
+export const tProjectsRelations = relations(tProjects, ({ many }) => ({
+  environments: many(tEnvironments),
+  features: many(tFeatures),
+  apiTokens: many(tApiTokens),
+  contextFields: many(tContextFields),
+  conditions: many(tConditions),
 }));

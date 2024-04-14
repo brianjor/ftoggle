@@ -1,9 +1,9 @@
 import { dbClient } from '@ftoggle/db/connection';
 import {
-  environments,
-  features,
-  projects,
-  projectsFeaturesEnvironments,
+  tEnvironments,
+  tFeatures,
+  tProjects,
+  tProjectsFeaturesEnvironments,
 } from '@ftoggle/db/schema';
 import { and, eq } from 'drizzle-orm';
 import { RecordDoesNotExistError } from '../errors/dbErrors';
@@ -12,12 +12,12 @@ export class ProjectsController {
   public async getProjects() {
     return await dbClient
       .select({
-        id: projects.id,
-        name: projects.name,
-        createdAt: projects.createdAt,
-        modifiedAt: projects.modifiedAt,
+        id: tProjects.id,
+        name: tProjects.name,
+        createdAt: tProjects.createdAt,
+        modifiedAt: tProjects.modifiedAt,
       })
-      .from(projects);
+      .from(tProjects);
   }
 
   /**
@@ -27,8 +27,8 @@ export class ProjectsController {
    * @throws A {@link RecordDoesNotExistError} if the project does not exist
    */
   public async getProjectById(projectId: string) {
-    const project = await dbClient.query.projects.findFirst({
-      where: eq(projects.id, projectId),
+    const project = await dbClient.query.tProjects.findFirst({
+      where: eq(tProjects.id, projectId),
       with: {
         features: {
           with: {
@@ -53,7 +53,7 @@ export class ProjectsController {
   public async createProject(projectId: string, projectName: string) {
     return (
       await dbClient
-        .insert(projects)
+        .insert(tProjects)
         .values({ id: projectId, name: projectName })
         .returning()
     )[0];
@@ -64,14 +64,14 @@ export class ProjectsController {
     updateFields: { name?: string },
   ) {
     await dbClient
-      .update(projects)
+      .update(tProjects)
       .set({ name: updateFields.name, modifiedAt: new Date() })
-      .where(eq(projects.id, projectId));
+      .where(eq(tProjects.id, projectId));
   }
 
   public async getEnvironments(projectId: string) {
-    return await dbClient.query.environments.findMany({
-      where: eq(environments.projectId, projectId),
+    return await dbClient.query.tEnvironments.findMany({
+      where: eq(tEnvironments.projectId, projectId),
     });
   }
 
@@ -86,10 +86,10 @@ export class ProjectsController {
     projectId: string,
     enviromentName: string,
   ) {
-    const env = await dbClient.query.environments.findFirst({
+    const env = await dbClient.query.tEnvironments.findFirst({
       where: and(
-        eq(environments.name, enviromentName),
-        eq(environments.projectId, projectId),
+        eq(tEnvironments.name, enviromentName),
+        eq(tEnvironments.projectId, projectId),
       ),
     });
     if (env === undefined) {
@@ -112,20 +112,20 @@ export class ProjectsController {
       // Create the environment
       const env = (
         await tx
-          .insert(environments)
+          .insert(tEnvironments)
           .values({ name: envName, projectId })
           .returning()
       )[0];
       // Get all the projects features
       const featIds = (
         await tx
-          .select({ id: features.id })
-          .from(features)
-          .where(eq(features.projectId, projectId))
+          .select({ id: tFeatures.id })
+          .from(tFeatures)
+          .where(eq(tFeatures.projectId, projectId))
       ).map((f) => f.id);
       // Attach all features to the environment
       if (featIds.length > 0) {
-        await tx.insert(projectsFeaturesEnvironments).values(
+        await tx.insert(tProjectsFeaturesEnvironments).values(
           featIds.map((fId) => ({
             featureId: fId,
             environmentId: env.id,
@@ -154,9 +154,9 @@ export class ProjectsController {
     }
     await dbClient.transaction(async (tx) => {
       await tx
-        .delete(projectsFeaturesEnvironments)
-        .where(eq(projectsFeaturesEnvironments.environmentId, env.id));
-      await tx.delete(environments).where(eq(environments.id, env.id));
+        .delete(tProjectsFeaturesEnvironments)
+        .where(eq(tProjectsFeaturesEnvironments.environmentId, env.id));
+      await tx.delete(tEnvironments).where(eq(tEnvironments.id, env.id));
     });
     return env;
   }
@@ -173,10 +173,10 @@ export class ProjectsController {
     environmentName: string,
   ) {
     const projectEnvironmentRelation =
-      await dbClient.query.environments.findFirst({
+      await dbClient.query.tEnvironments.findFirst({
         where: and(
-          eq(environments.name, environmentName),
-          eq(environments.projectId, projectId),
+          eq(tEnvironments.name, environmentName),
+          eq(tEnvironments.projectId, projectId),
         ),
         with: {
           project: true,
@@ -195,7 +195,7 @@ export class ProjectsController {
    * @param projectId id of the project to delete
    */
   public async deleteProject(projectId: string) {
-    await dbClient.delete(projects).where(eq(projects.id, projectId));
+    await dbClient.delete(tProjects).where(eq(tProjects.id, projectId));
   }
 
   /**
@@ -204,8 +204,8 @@ export class ProjectsController {
    */
   public async archiveProject(projectId: string) {
     await dbClient
-      .update(projects)
+      .update(tProjects)
       .set({ isArchived: true, modifiedAt: new Date() })
-      .where(eq(projects.id, projectId));
+      .where(eq(tProjects.id, projectId));
   }
 }

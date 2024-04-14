@@ -1,15 +1,15 @@
 import { relations } from 'drizzle-orm';
 import { pgTable, serial, text } from 'drizzle-orm/pg-core';
-import { rolesPermissions } from './rolesPermissions';
-import { usersRoles } from './usersRoles';
+import { tRolesPermissions } from './rolesPermissions';
+import { tUsersRoles } from './usersRoles';
 
-export const roles = pgTable('roles', {
+export const tRoles = pgTable('roles', {
   id: serial('id').primaryKey(),
   name: text('name').notNull().unique(),
   description: text('description'),
 });
 
-export const rolesRelations = relations(roles, ({ many }) => ({
-  rolesPermissions: many(rolesPermissions),
-  usersRoles: many(usersRoles),
+export const tRolesRelations = relations(tRoles, ({ many }) => ({
+  rolesPermissions: many(tRolesPermissions),
+  usersRoles: many(tUsersRoles),
 }));

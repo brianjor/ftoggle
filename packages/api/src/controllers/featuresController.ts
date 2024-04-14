@@ -1,5 +1,5 @@
 import { dbClient } from '@ftoggle/db/connection';
-import { features, projectsFeaturesEnvironments } from '@ftoggle/db/schema';
+import { tFeatures, tProjectsFeaturesEnvironments } from '@ftoggle/db/schema';
 import { and, eq } from 'drizzle-orm';
 import {
   DuplicateRecordError,
@@ -29,10 +29,10 @@ export class FeaturesController {
 
     const feature = await dbClient.transaction(async (tx) => {
       const feature = (
-        await tx.insert(features).values({ name, projectId }).returning()
+        await tx.insert(tFeatures).values({ name, projectId }).returning()
       )[0];
       if (envs.length > 0) {
-        await tx.insert(projectsFeaturesEnvironments).values(
+        await tx.insert(tProjectsFeaturesEnvironments).values(
           envs.map((env) => ({
             featureId: feature.id,
             environmentId: env.id,
@@ -51,8 +51,8 @@ export class FeaturesController {
    * @returns list of features
    */
   public async getFeatures(projectId: string) {
-    return await dbClient.query.features.findMany({
-      where: eq(features.projectId, projectId),
+    return await dbClient.query.tFeatures.findMany({
+      where: eq(tFeatures.projectId, projectId),
       with: {
         environments: {
           with: {
@@ -74,10 +74,10 @@ export class FeaturesController {
     projectId: string,
     featureName: string,
   ): Promise<FeaturesTableItem> {
-    const feature = await dbClient.query.features.findFirst({
+    const feature = await dbClient.query.tFeatures.findFirst({
       where: and(
-        eq(features.name, featureName),
-        eq(features.projectId, projectId),
+        eq(tFeatures.name, featureName),
+        eq(tFeatures.projectId, projectId),
       ),
     });
     if (feature === undefined) {
@@ -97,9 +97,12 @@ export class FeaturesController {
   public async featureExists(projectId: string, featureName: string) {
     const feature = await dbClient
       .select({})
-      .from(features)
+      .from(tFeatures)
       .where(
-        and(eq(features.name, featureName), eq(features.projectId, projectId)),
+        and(
+          eq(tFeatures.name, featureName),
+          eq(tFeatures.projectId, projectId),
+        ),
       )
       .limit(1);
     return !!feature.length;
@@ -118,12 +121,12 @@ export class FeaturesController {
   ): Promise<FeaturesTableItem> {
     return (
       await dbClient
-        .update(features)
+        .update(tFeatures)
         .set({ ...updateFields, modifiedAt: new Date() })
         .where(
           and(
-            eq(features.name, featureName),
-            eq(features.projectId, projectId),
+            eq(tFeatures.name, featureName),
+            eq(tFeatures.projectId, projectId),
           ),
         )
         .returning()
@@ -137,9 +140,12 @@ export class FeaturesController {
    */
   async deleteProjectFeature(featureName: string, projectId: string) {
     await dbClient
-      .delete(features)
+      .delete(tFeatures)
       .where(
-        and(eq(features.name, featureName), eq(features.projectId, projectId)),
+        and(
+          eq(tFeatures.name, featureName),
+          eq(tFeatures.projectId, projectId),
+        ),
       );
   }
 }

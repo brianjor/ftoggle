@@ -1,30 +1,30 @@
 import { relations } from 'drizzle-orm';
 import { integer, pgTable, primaryKey, text } from 'drizzle-orm/pg-core';
-import { roles } from './roles';
-import { users } from './users';
+import { tRoles } from './roles';
+import { tUsers } from './users';
 
-export const usersRoles = pgTable(
+export const tUsersRoles = pgTable(
   'users_roles',
   {
     roleId: integer('role_id')
       .notNull()
-      .references(() => roles.id),
+      .references(() => tRoles.id),
     userId: text('user_id')
       .notNull()
-      .references(() => users.id),
+      .references(() => tUsers.id),
   },
   (t) => ({
     pk: primaryKey({ columns: [t.roleId, t.userId] }),
   }),
 );
 
-export const usersRolesRelations = relations(usersRoles, ({ one }) => ({
-  role: one(roles, {
-    fields: [usersRoles.roleId],
-    references: [roles.id],
+export const tUsersRolesRelations = relations(tUsersRoles, ({ one }) => ({
+  role: one(tRoles, {
+    fields: [tUsersRoles.roleId],
+    references: [tRoles.id],
   }),
-  user: one(users, {
-    fields: [usersRoles.userId],
-    references: [users.id],
+  user: one(tUsers, {
+    fields: [tUsersRoles.userId],
+    references: [tUsers.id],
   }),
 }));

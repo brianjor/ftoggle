@@ -1,14 +1,14 @@
 import { relations } from 'drizzle-orm';
 import { pgTable, text, unique, uuid } from 'drizzle-orm/pg-core';
-import { projects } from './projects';
+import { tProjects } from './projects';
 
-export const contextFields = pgTable(
+export const tContextFields = pgTable(
   'context_fields',
   {
     id: uuid('id').primaryKey().defaultRandom(),
     projectId: text('project_id')
       .notNull()
-      .references(() => projects.id, { onDelete: 'cascade' }),
+      .references(() => tProjects.id, { onDelete: 'cascade' }),
     name: text('name').notNull(),
     description: text('description'),
   },
@@ -17,9 +17,9 @@ export const contextFields = pgTable(
   }),
 );
 
-export const contextFieldsRelations = relations(contextFields, ({ one }) => ({
-  project: one(projects, {
-    fields: [contextFields.projectId],
-    references: [projects.id],
+export const tContextFieldsRelations = relations(tContextFields, ({ one }) => ({
+  project: one(tProjects, {
+    fields: [tContextFields.projectId],
+    references: [tProjects.id],
   }),
 }));

@@ -1,12 +1,12 @@
 import { UserRole } from '@ftoggle/common/enums/roles';
 import { dbClient } from '@ftoggle/db/connection';
 import {
-  permissions,
-  roles,
-  rolesPermissions,
-  users,
-  usersPasswords,
-  usersRoles,
+  tPermissions,
+  tRoles,
+  tRolesPermissions,
+  tUsers,
+  tUsersPasswords,
+  tUsersRoles,
 } from '@ftoggle/db/schema';
 import { and, eq } from 'drizzle-orm';
 import { User, generateId } from 'lucia';
@@ -29,8 +29,8 @@ export class UsersController {
    * @throws An error if user is not a password user
    */
   async updatePassword(user: User, oldPassword: string, newPassword: string) {
-    const usersPassword = await dbClient.query.usersPasswords.findFirst({
-      where: eq(usersPasswords.userId, user.id),
+    const usersPassword = await dbClient.query.tUsersPasswords.findFirst({
+      where: eq(tUsersPasswords.userId, user.id),
     });
     if (usersPassword === undefined) {
       throw new BadRequestError('User is not a password user.');
@@ -44,9 +44,9 @@ export class UsersController {
     }
     const newHashedPassword = await Bun.password.hash(newPassword);
     await dbClient
-      .update(usersPasswords)
+      .update(tUsersPasswords)
       .set({ hashedPassword: newHashedPassword })
-      .where(eq(usersPasswords.userId, user.id));
+      .where(eq(tUsersPasswords.userId, user.id));
   }
 
   /**
@@ -67,7 +67,7 @@ export class UsersController {
       // Only has undefined values. Nothing to change, return early.
       return;
     }
-    await dbClient.update(users).set(patchValues).where(eq(users.id, userId));
+    await dbClient.update(tUsers).set(patchValues).where(eq(tUsers.id, userId));
   }
 
   /**
@@ -83,8 +83,8 @@ export class UsersController {
   ) {
     try {
       const user = await this.getUserByUsername(username);
-      const usersPassword = await dbClient.query.usersPasswords.findFirst({
-        where: eq(usersPasswords.userId, user.id),
+      const usersPassword = await dbClient.query.tUsersPasswords.findFirst({
+        where: eq(tUsersPasswords.userId, user.id),
       });
       if (usersPassword === undefined) {
         throw new BadRequestError(
@@ -130,14 +130,14 @@ export class UsersController {
     const user = await dbClient.transaction(async (tx) => {
       const user = (
         await tx
-          .insert(users)
+          .insert(tUsers)
           .values({
             id: userId,
             username,
           })
           .returning()
       )[0];
-      await tx.insert(usersPasswords).values({
+      await tx.insert(tUsersPasswords).values({
         hashedPassword,
         userId,
       });
@@ -152,15 +152,15 @@ export class UsersController {
    * @returns true if username exists, false otherwise
    */
   public async usernameExists(username: string) {
-    const user = await dbClient.query.users.findFirst({
-      where: eq(users.username, username),
+    const user = await dbClient.query.tUsers.findFirst({
+      where: eq(tUsers.username, username),
     });
     return user !== undefined;
   }
 
   /** Gets users. */
   public async getUsers() {
-    return await dbClient.query.users.findMany({
+    return await dbClient.query.tUsers.findMany({
       columns: {
         id: true,
         username: true,
@@ -170,7 +170,7 @@ export class UsersController {
 
   /** Gets users and their roles */
   public async getUsersAndRoles() {
-    return await dbClient.query.users.findMany({
+    return await dbClient.query.tUsers.findMany({
       with: {
         usersRoles: {
           with: {
@@ -184,24 +184,24 @@ export class UsersController {
   public async getUserPermissions(user: User) {
     return (
       await dbClient
-        .select({ permission: permissions.name })
-        .from(users)
-        .leftJoin(usersRoles, eq(users.id, usersRoles.userId))
-        .leftJoin(roles, eq(usersRoles.roleId, roles.id))
-        .leftJoin(rolesPermissions, eq(roles.id, rolesPermissions.roleId))
+        .select({ permission: tPermissions.name })
+        .from(tUsers)
+        .leftJoin(tUsersRoles, eq(tUsers.id, tUsersRoles.userId))
+        .leftJoin(tRoles, eq(tUsersRoles.roleId, tRoles.id))
+        .leftJoin(tRolesPermissions, eq(tRoles.id, tRolesPermissions.roleId))
         .leftJoin(
-          permissions,
-          eq(rolesPermissions.permissionId, permissions.id),
+          tPermissions,
+          eq(tRolesPermissions.permissionId, tPermissions.id),
         )
-        .where(eq(users.id, user.id))
+        .where(eq(tUsers.id, user.id))
     )
       .map((r) => r.permission)
       .filter(notNull);
   }
 
   public async getUserByUsername(username: string) {
-    const user = await dbClient.query.users.findFirst({
-      where: eq(users.username, username),
+    const user = await dbClient.query.tUsers.findFirst({
+      where: eq(tUsers.username, username),
     });
     if (user === undefined) {
       throw new RecordDoesNotExistError(
@@ -218,8 +218,8 @@ export class UsersController {
    * @throws A {@link RecordDoesNotExistError} if a user does not exist by the provided id
    */
   public async getUserById(userId: string) {
-    const user = await dbClient.query.users.findFirst({
-      where: eq(users.id, userId),
+    const user = await dbClient.query.tUsers.findFirst({
+      where: eq(tUsers.id, userId),
     });
     if (user === undefined) {
       throw new RecordDoesNotExistError(
@@ -237,14 +237,14 @@ export class UsersController {
   public async getUsersRoles(userId: string) {
     return await dbClient
       .select({
-        id: roles.id,
-        name: roles.name,
-        description: roles.description,
+        id: tRoles.id,
+        name: tRoles.name,
+        description: tRoles.description,
       })
-      .from(roles)
-      .leftJoin(usersRoles, eq(usersRoles.roleId, roles.id))
-      .leftJoin(users, eq(users.id, usersRoles.userId))
-      .where(eq(users.id, userId));
+      .from(tRoles)
+      .leftJoin(tUsersRoles, eq(tUsersRoles.roleId, tRoles.id))
+      .leftJoin(tUsers, eq(tUsers.id, tUsersRoles.userId))
+      .where(eq(tUsers.id, userId));
   }
 
   /**
@@ -265,7 +265,7 @@ export class UsersController {
     }
 
     const role = await rolesController.getRoleByName(roleName);
-    await dbClient.insert(usersRoles).values({ roleId: role.id, userId });
+    await dbClient.insert(tUsersRoles).values({ roleId: role.id, userId });
   }
 
   /**
@@ -276,8 +276,10 @@ export class UsersController {
    */
   public async removeRoleFromUser(userId: string, roleId: number) {
     await dbClient
-      .delete(usersRoles)
-      .where(and(eq(usersRoles.userId, userId), eq(usersRoles.roleId, roleId)));
+      .delete(tUsersRoles)
+      .where(
+        and(eq(tUsersRoles.userId, userId), eq(tUsersRoles.roleId, roleId)),
+      );
   }
 
   /**
@@ -288,8 +290,11 @@ export class UsersController {
    * @throws A {@link RecordDoesNotExistError} if no relation exists
    */
   public async getUsersRolesRelation(userId: string, roleId: number) {
-    const relation = await dbClient.query.usersRoles.findFirst({
-      where: and(eq(usersRoles.userId, userId), eq(usersRoles.roleId, roleId)),
+    const relation = await dbClient.query.tUsersRoles.findFirst({
+      where: and(
+        eq(tUsersRoles.userId, userId),
+        eq(tUsersRoles.roleId, roleId),
+      ),
       with: {
         user: true,
         role: true,

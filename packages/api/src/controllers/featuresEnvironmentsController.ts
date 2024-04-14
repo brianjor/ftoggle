@@ -1,8 +1,8 @@
 import { dbClient } from '@ftoggle/db/connection';
 import {
-  environments,
-  features,
-  projectsFeaturesEnvironments,
+  tEnvironments,
+  tFeatures,
+  tProjectsFeaturesEnvironments,
 } from '@ftoggle/db/schema';
 import { and, eq, getTableColumns } from 'drizzle-orm';
 import { RecordDoesNotExistError } from '../errors/dbErrors';
@@ -23,21 +23,21 @@ export class FeaturesEnvironmentsController {
   ) {
     const projectFeatureEnvironmentRelation = (
       await dbClient
-        .select(getTableColumns(projectsFeaturesEnvironments))
-        .from(projectsFeaturesEnvironments)
+        .select(getTableColumns(tProjectsFeaturesEnvironments))
+        .from(tProjectsFeaturesEnvironments)
         .leftJoin(
-          features,
-          eq(features.id, projectsFeaturesEnvironments.featureId),
+          tFeatures,
+          eq(tFeatures.id, tProjectsFeaturesEnvironments.featureId),
         )
         .leftJoin(
-          environments,
-          eq(environments.id, projectsFeaturesEnvironments.environmentId),
+          tEnvironments,
+          eq(tEnvironments.id, tProjectsFeaturesEnvironments.environmentId),
         )
         .where(
           and(
-            eq(projectsFeaturesEnvironments.projectId, projectId),
-            eq(features.name, featureName),
-            eq(environments.name, environmentName),
+            eq(tProjectsFeaturesEnvironments.projectId, projectId),
+            eq(tFeatures.name, featureName),
+            eq(tEnvironments.name, environmentName),
           ),
         )
     )[0];
@@ -70,19 +70,19 @@ export class FeaturesEnvironmentsController {
     );
     return (
       await dbClient
-        .update(projectsFeaturesEnvironments)
+        .update(tProjectsFeaturesEnvironments)
         .set({ isEnabled: !currentRelation.isEnabled })
         .where(
           and(
             eq(
-              projectsFeaturesEnvironments.featureId,
+              tProjectsFeaturesEnvironments.featureId,
               currentRelation.featureId,
             ),
             eq(
-              projectsFeaturesEnvironments.environmentId,
+              tProjectsFeaturesEnvironments.environmentId,
               currentRelation.environmentId,
             ),
-            eq(projectsFeaturesEnvironments.projectId, projectId),
+            eq(tProjectsFeaturesEnvironments.projectId, projectId),
           ),
         )
         .returning()
