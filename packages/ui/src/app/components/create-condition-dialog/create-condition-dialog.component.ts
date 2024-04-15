@@ -21,10 +21,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
+import { ContextFieldsTableItem } from '@ftoggle/api/types/contextFieldsTypes';
 import { ConditionsService } from '../../services/conditions.service';
-import { createNoExtraWhitespaceValidator } from '../../validators/noExtraWhitespaceValidator';
 
 export interface CreateConditionDialogData {
+  contextFields: ContextFieldsTableItem[];
   projectId: string;
   featureName: string;
   environmentName: string;
@@ -52,12 +53,7 @@ export interface CreateConditionDialogData {
   styleUrl: './create-condition-dialog.component.scss',
 })
 export class CreateConditionDialogComponent {
-  contextName = new FormControl<string>('', [
-    Validators.required,
-    createNoExtraWhitespaceValidator({
-      noAny: true,
-    }),
-  ]);
+  contextName = new FormControl<string>('', [Validators.required]);
   operator = new FormControl<string>('', [Validators.required]);
   values = new FormControl<string[]>([], [Validators.required]);
   description = new FormControl<string>('');
@@ -93,11 +89,10 @@ export class CreateConditionDialogComponent {
 
   addValue(event: MatChipInputEvent) {
     const newValue = event.value;
-    console.log(`adding value ${newValue} to values ${this.values.value}`);
     if (newValue) {
       this.values.setValue([...(this.values.value as string[]), newValue]);
     }
-    event.chipInput!.clear();
+    event.chipInput.clear();
   }
 
   removeValue(value: string) {
