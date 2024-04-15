@@ -7,9 +7,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { ConditionWithContextField } from '@ftoggle/api/types/conditionsTypes';
+import { ContextFieldsTableItem } from '@ftoggle/api/types/contextFieldsTypes';
 import { EnvironmentsTableItem } from '@ftoggle/api/types/environmentTypes';
 import { CreateConditionDialogComponent } from '../../../components/create-condition-dialog/create-condition-dialog.component';
 import { ConditionsService } from '../../../services/conditions.service';
+import { ContextFieldsService } from '../../../services/context-fields.service';
 import { EnvironmentsService } from '../../../services/environments.service';
 
 @Component({
@@ -29,6 +31,7 @@ export class ConditionsComponent {
   projectId = '';
   featureName = '';
   environments = this.environmentsService.environments;
+  contextFields = signal<ContextFieldsTableItem[]>([]);
   conditions = signal<ConditionWithContextField[]>([]);
   conditionColumns = ['field', 'operator', 'values', 'delete'];
   panel = '';
@@ -36,6 +39,7 @@ export class ConditionsComponent {
 
   constructor(
     private conditionsService: ConditionsService,
+    private contextFieldsService: ContextFieldsService,
     private environmentsService: EnvironmentsService,
     private route: ActivatedRoute,
     public dialog: MatDialog,
@@ -59,6 +63,9 @@ export class ConditionsComponent {
       this.featureName = featureName;
     }
     this.environmentsService.getEnvironments(this.projectId);
+    this.contextFieldsService
+      .getContextFields(this.projectId)
+      .then((cFields) => this.contextFields.set(cFields));
   }
 
   setPanel(env: EnvironmentsTableItem) {
@@ -82,6 +89,7 @@ export class ConditionsComponent {
       CreateConditionDialogComponent,
       {
         data: {
+          contextFields: this.contextFields(),
           projectId: this.projectId,
           featureName: this.featureName,
           environmentName: env.name,

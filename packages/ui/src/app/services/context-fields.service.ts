@@ -26,14 +26,27 @@ export class ContextFieldsService {
     }
   }
 
-  public async getContextFields(projectId: string) {
+  /**
+   * Gets a projects context fields.
+   * @param projectId id of the project
+   * @returns list of context fields
+   */
+  public async getContextFields(
+    projectId: string,
+  ): Promise<ContextFieldsTableItem[]> {
+    let cFields: ContextFieldsTableItem[] = [];
     try {
-      const response =
+      const { data, error, response } =
         await this.apiService.api.projects[projectId]['context-fields'].get();
-      this._contextFields.set(response.data?.contextFields ?? []);
-    } catch (error) {
-      console.error('Error getting context fields', error);
+      if (!response.ok) {
+        throw error;
+      }
+      cFields = data?.contextFields ?? [];
+      this._contextFields.set(cFields);
+    } catch (err) {
+      console.error('Error getting context fields', err);
     }
+    return cFields;
   }
 
   public async deleteContextField(

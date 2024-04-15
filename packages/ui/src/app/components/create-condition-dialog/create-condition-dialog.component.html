@@ -7,16 +7,13 @@
   >
     <mat-form-field id="contextFieldFormField">
       <mat-label>Context field</mat-label>
-      <input
-        matInput
-        id="contextField"
-        placeholder="Context Field"
-        [formControl]="contextName"
-      />
+      <mat-select id="contextFieldName" [formControl]="contextName">
+        @for (cField of data.contextFields; track cField.id) {
+          <mat-option [value]="cField.name">{{ cField.name }}</mat-option>
+        }
+      </mat-select>
       @if (contextName.hasError('required')) {
         <mat-error>Context field is required</mat-error>
-      } @else if (contextName.getError('hasExtraWhitespace')?.hasAny) {
-        <mat-error>Cannot have any white space</mat-error>
       }
     </mat-form-field>
     <mat-form-field id="operatorFormField">
