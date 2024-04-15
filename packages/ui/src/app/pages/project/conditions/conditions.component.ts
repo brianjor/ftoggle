@@ -45,7 +45,7 @@ export class ConditionsComponent {
     public dialog: MatDialog,
   ) {}
 
-  async ngOnInit() {
+  ngOnInit() {
     const projectId = this.route.snapshot.paramMap.get('projectId');
     if (projectId === null) {
       console.error(
