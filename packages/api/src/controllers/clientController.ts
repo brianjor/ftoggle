@@ -32,6 +32,7 @@ export class ClientController {
         featureId: true,
         operator: true,
         values: true,
+        value: true,
       },
       with: {
         contextField: {

@@ -19,6 +19,7 @@ export const tConditions = pgTable('conditions', {
   operator: text('operator').notNull(),
   description: text('description'),
   values: text('values').array().notNull(),
+  value: text('value'),
 });
 
 export const tConditionsRelations = relations(tConditions, ({ one }) => ({
