@@ -27,26 +27,36 @@
         <mat-error>Operator is required</mat-error>
       }
     </mat-form-field>
-    <mat-form-field>
-      <mat-label>Values</mat-label>
-      <input
-        [matChipInputFor]="valuesGrid"
-        (matChipInputTokenEnd)="addValue($event)"
-      />
-      <mat-chip-grid #valuesGrid [formControl]="values">
-        @for (value of values.value; track value) {
-          <mat-chip-row (removed)="removeValue(value)" id="values">
-            {{ value }}
-            <button matChipRemove>
-              <mat-icon>cancel</mat-icon>
-            </button>
-          </mat-chip-row>
+    @if (singleValueOperators.includes(operator.value ?? Operators.LESS_THAN)) {
+      <mat-form-field>
+        <mat-label>Value</mat-label>
+        <input matInput id="value" placeholder="value" [formControl]="value" />
+        @if (value.hasError('required')) {
+          <mat-error>Value is required</mat-error>
         }
-      </mat-chip-grid>
-      @if (values.hasError('required')) {
-        <mat-error>At least one value is required</mat-error>
-      }
-    </mat-form-field>
+      </mat-form-field>
+    } @else {
+      <mat-form-field>
+        <mat-label>Values</mat-label>
+        <input
+          [matChipInputFor]="valuesGrid"
+          (matChipInputTokenEnd)="addValue($event)"
+        />
+        <mat-chip-grid #valuesGrid [formControl]="values">
+          @for (value of values.value; track value) {
+            <mat-chip-row (removed)="removeValue(value)" id="values">
+              {{ value }}
+              <button matChipRemove>
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip-row>
+          }
+        </mat-chip-grid>
+        @if (values.hasError('required')) {
+          <mat-error>At least one value is required</mat-error>
+        }
+      </mat-form-field>
+    }
     <mat-form-field id="descriptionFormField">
       <mat-label>Description</mat-label>
       <input
@@ -66,7 +76,7 @@
   <button
     mat-flat-button
     color="primary"
-    [disabled]="!createConditionForm.valid"
+    [disabled]="!isFormValid()"
     (click)="createCondition()"
   >
     @if (!inFlight()) {

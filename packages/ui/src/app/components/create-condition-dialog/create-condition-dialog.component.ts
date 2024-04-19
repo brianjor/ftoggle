@@ -22,6 +22,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { ContextFieldsTableItem } from '@ftoggle/api/types/contextFieldsTypes';
+import {
+  MultiValueOperatorsValues,
+  Operators,
+  OperatorsValues,
+  SingleValueOperators,
+  SingleValueOperatorsValues,
+} from '@ftoggle/common/enums/operators';
 import { ConditionsService } from '../../services/conditions.service';
 
 export interface CreateConditionDialogData {
@@ -54,31 +61,24 @@ export interface CreateConditionDialogData {
 })
 export class CreateConditionDialogComponent {
   contextName = new FormControl<string>('', [Validators.required]);
-  operator = new FormControl<string>('', [Validators.required]);
+  operator = new FormControl<Operators>(Operators.LESS_THAN, [
+    Validators.required,
+  ]);
   values = new FormControl<string[]>([], [Validators.required]);
+  value = new FormControl<string>('', [Validators.required]);
   description = new FormControl<string>('');
   createConditionForm = this.formBuilder.group({
     contextField: this.contextName,
     operator: this.operator,
     values: this.values,
+    value: this.value,
     description: this.description,
   });
   inFlight = signal(false);
-  operators = [
-    'LESS_THAN',
-    'GREATER_THAN',
-    'LESS_OR_EQUAL_TO',
-    'GREATER_OR_EQUAL_TO',
-    'EQUAL_TO',
-    'NOT_EQUAL_TO',
-    'STARTS_WITH',
-    'ENDS_WITH',
-    'CONTAINS',
-    'IN',
-    'NOT_IN',
-    'DATE_BEFORE',
-    'DATE_AFTER',
-  ];
+  Operators = Operators;
+  operators = OperatorsValues;
+  multiValueOperators = MultiValueOperatorsValues;
+  singleValueOperators: SingleValueOperators[] = SingleValueOperatorsValues;
 
   constructor(
     private conditionsService: ConditionsService,
@@ -105,11 +105,32 @@ export class CreateConditionDialogComponent {
     this.dialogRef.close();
   }
 
+  isFormValid() {
+    let valid = true;
+    if (!this.contextName.valid) valid = false;
+    if (!this.operator.valid) valid = false;
+    if (
+      !(
+        this.values.valid &&
+        this.multiValueOperators.includes(this.operator.value ?? '')
+      ) &&
+      !(
+        this.value.valid &&
+        this.singleValueOperators.includes(this.operator.value ?? '')
+      )
+    ) {
+      valid = false;
+    }
+    if (!this.description.valid) valid = false;
+    return valid;
+  }
+
   createCondition() {
-    if (!this.createConditionForm.valid || this.inFlight()) return;
+    if (!this.isFormValid() || this.inFlight()) return;
     const contextName = this.contextName.value as string;
     const operator = this.operator.value as string;
     const values = this.values.value as string[];
+    const value = this.value.value as string;
     const description = this.description.value as string;
     this.inFlight.set(true);
     this.conditionsService
@@ -122,6 +143,7 @@ export class CreateConditionDialogComponent {
             contextName,
             operator,
             values,
+            value,
             description,
           },
         ],
