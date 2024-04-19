@@ -31,3 +31,30 @@ export const Operators = {
 /** Operators that can be applied in a conditional to check a context field. */
 export type Operators = (typeof Operators)[keyof typeof Operators];
 export const OperatorsValues = Object.values(Operators);
+
+export const MultiValueOperators = {
+  CONTAINS: Operators.CONTAINS,
+  IN: Operators.IN,
+  NOT_IN: Operators.NOT_IN,
+};
+
+export type MultiValueOperators =
+  (typeof MultiValueOperators)[keyof typeof MultiValueOperators];
+export const MultiValueOperatorsValues = Object.values(MultiValueOperators);
+
+export const SingleValueOperators = {
+  LESS_THAN: Operators.LESS_THAN,
+  GREATER_THAN: Operators.GREATER_THAN,
+  LESS_OR_EQUAL_TO: Operators.LESS_OR_EQUAL_TO,
+  GREATER_OR_EQUAL_TO: Operators.GREATER_OR_EQUAL_TO,
+  EQUAL_TO: Operators.EQUAL_TO,
+  NOT_EQUAL_TO: Operators.NOT_EQUAL_TO,
+  STARTS_WITH: Operators.STARTS_WITH,
+  ENDS_WITH: Operators.ENDS_WITH,
+  DATE_BEFORE: Operators.DATE_BEFORE,
+  DATE_AFTER: Operators.DATE_AFTER,
+};
+
+export type SingleValueOperators =
+  (typeof SingleValueOperators)[keyof typeof SingleValueOperators];
+export const SingleValueOperatorsValues = Object.values(SingleValueOperators);

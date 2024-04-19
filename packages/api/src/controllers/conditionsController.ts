@@ -7,7 +7,8 @@ export class ConditionsController {
   async createConditions(
     conditions: {
       description?: string;
-      values: string[];
+      values?: string[];
+      value?: string;
       operator: string;
       contextName: string;
     }[],
@@ -46,7 +47,8 @@ export class ConditionsController {
         featureId: feature.id,
         environmentId: environmentId,
         contextFieldId: contextField.id,
-        values: c.values,
+        values: c.values ?? [],
+        value: c.value,
         description: c.description,
         operator: c.operator,
       })),
