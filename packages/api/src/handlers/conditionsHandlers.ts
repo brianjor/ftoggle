@@ -20,22 +20,27 @@ const conditionsController = new ConditionsController();
 const projectsController = new ProjectsController();
 const featuresController = new FeaturesController();
 
-const postConditionBodyType = t.Object({
+const sharedPostBodySchema = {
+  contextName: t.String({
+    maxLength: contextFieldNameReqs.maxLength,
+  }),
+  description: t.Optional(
+    t.String({
+      maxLength: conditionsFieldDescriptionReqs.maxLength,
+    }),
+  ),
+};
+
+const postBodySchema = t.Object({
   conditions: t.Array(
     // Conditions can support either a single value or multiple values
     t.Union([
       // Conditions that support a single value
       t.Object({
-        contextName: t.String({
-          maxLength: contextFieldNameReqs.maxLength,
-        }),
-        description: t.Optional(
-          t.String({
-            maxLength: conditionsFieldDescriptionReqs.maxLength,
-          }),
-        ),
+        ...sharedPostBodySchema,
         operator: t.Enum(SingleValueOperators, {
           error: `operator: Expected one of [${SingleValueOperatorsValues.join(', ')}]`,
+          examples: SingleValueOperatorsValues,
         }),
         value: t.String({
           maxLength: conditionsFieldValuesReqs.maxLength,
@@ -43,16 +48,10 @@ const postConditionBodyType = t.Object({
       }),
       // Conditions that support multiple values
       t.Object({
-        contextName: t.String({
-          maxLength: contextFieldNameReqs.maxLength,
-        }),
-        description: t.Optional(
-          t.String({
-            maxLength: conditionsFieldDescriptionReqs.maxLength,
-          }),
-        ),
+        ...sharedPostBodySchema,
         operator: t.Enum(MultiValueOperators, {
           error: `operator: Expected one of [${MultiValueOperatorsValues.join(', ')}]`,
+          examples: MultiValueOperatorsValues,
         }),
         values: t.Array(
           t.String({
@@ -92,7 +91,7 @@ export const conditionsHandlers = new Elysia()
         featureName: t.String(),
         environmentName: t.String(),
       }),
-      body: postConditionBodyType,
+      body: postBodySchema,
       beforeHandle: [
         ({ isSignedIn }) => isSignedIn(),
         ({ hasUserPermissions }) =>
