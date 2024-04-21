@@ -3,6 +3,7 @@ import {
   projectNameReqs,
 } from '@ftoggle/common/validations/projectsValidations';
 import Elysia, { t } from 'elysia';
+import { ContextFieldController } from '../controllers/contextFieldController';
 import { FeaturesController } from '../controllers/featuresController';
 import { ProjectsController } from '../controllers/projectsController';
 import { UserPermission } from '../enums/permissions';
@@ -10,6 +11,7 @@ import { hooks } from '../hooks';
 
 const projectsController = new ProjectsController();
 const featuresController = new FeaturesController();
+const contextFieldController = new ContextFieldController();
 
 export const projectsHandlers = new Elysia()
   .use(hooks)
@@ -48,6 +50,11 @@ export const projectsHandlers = new Elysia()
       const project = await projectsController.createProject(
         projectId,
         projectName,
+      );
+      await contextFieldController.createContextField(
+        project.id,
+        'currentTime',
+        'Enables conditional restrictions on date values.',
       );
       await projectsController.addEnvironment('dev', project.id);
       await projectsController.addEnvironment('prod', project.id);
