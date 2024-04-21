@@ -40,7 +40,11 @@
           <ng-container matColumnDef="values">
             <th mat-header-cell *matHeaderCellDef>values</th>
             <td mat-cell *matCellDef="let condition">
-              {{ condition.values }}
+              {{
+                singleValueOperators.includes(condition.operator)
+                  ? condition.value
+                  : condition.values
+              }}
             </td>
           </ng-container>
           <ng-container matColumnDef="delete">
