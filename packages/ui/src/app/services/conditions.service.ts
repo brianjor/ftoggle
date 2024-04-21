@@ -17,6 +17,7 @@ export class ConditionsService {
       operator: string;
       description?: string;
       values: string[];
+      value: string;
     }[],
   ) {
     return await this.apiService.api.projects[projectId].features[

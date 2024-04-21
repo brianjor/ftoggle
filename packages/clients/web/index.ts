@@ -21,6 +21,7 @@ interface Condition {
   field: string;
   operator: string;
   values: string[];
+  value: string;
 }
 
 export class FToggle {
@@ -58,36 +59,36 @@ export class FToggle {
       const curTime = new Date();
       switch (condition.operator) {
         case 'LESS_THAN':
-          return condition.values.every((value) =>
-            fieldValues.some((fieldValue) => +fieldValue < +value),
+          return fieldValues.some(
+            (fieldValue) => +fieldValue < +condition.value,
           );
         case 'GREATER_THAN':
-          return condition.values.every((value) =>
-            fieldValues.some((fieldValue) => +fieldValue > +value),
+          return fieldValues.some(
+            (fieldValue) => +fieldValue > +condition.value,
           );
         case 'LESS_OR_EQUAL_TO':
-          return condition.values.every((value) =>
-            fieldValues.some((fieldValue) => +fieldValue <= +value),
+          return fieldValues.some(
+            (fieldValue) => +fieldValue <= +condition.value,
           );
         case 'GREATER_OR_EQUAL_TO':
-          return condition.values.every((value) =>
-            fieldValues.some((fieldValue) => +fieldValue >= +value),
+          return fieldValues.some(
+            (fieldValue) => +fieldValue >= +condition.value,
           );
         case 'EQUAL_TO':
-          return condition.values.every((value) =>
-            fieldValues.some((fieldValue) => +fieldValue === +value),
+          return fieldValues.some(
+            (fieldValue) => +fieldValue === +condition.value,
           );
         case 'NOT_EQUAL_TO':
-          return condition.values.every((value) =>
-            fieldValues.some((fieldValue) => +fieldValue !== +value),
+          return fieldValues.some(
+            (fieldValue) => +fieldValue !== +condition.value,
           );
         case 'STARTS_WITH':
-          return condition.values.every((value) =>
-            fieldValues.some((fieldValue) => fieldValue.startsWith(value)),
+          return fieldValues.some((fieldValue) =>
+            fieldValue.startsWith(condition.value),
           );
         case 'ENDS_WITH':
-          return condition.values.every((value) =>
-            fieldValues.some((fieldValue) => fieldValue.endsWith(value)),
+          return fieldValues.some((fieldValue) =>
+            fieldValue.endsWith(condition.value),
           );
         case 'CONTAINS': {
           return condition.values.every((value) =>
@@ -99,9 +100,9 @@ export class FToggle {
         case 'NOT_IN':
           return !condition.values.some((value) => fieldValues.includes(value));
         case 'DATE_BEFORE':
-          return condition.values.every((value) => curTime < new Date(value));
+          return curTime < new Date(condition.value);
         case 'DATE_AFTER':
-          return condition.values.every((value) => curTime > new Date(value));
+          return curTime > new Date(condition.value);
         default:
           return false;
       }

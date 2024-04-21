@@ -9,6 +9,10 @@ import { ActivatedRoute } from '@angular/router';
 import { ConditionWithContextField } from '@ftoggle/api/types/conditionsTypes';
 import { ContextFieldsTableItem } from '@ftoggle/api/types/contextFieldsTypes';
 import { EnvironmentsTableItem } from '@ftoggle/api/types/environmentTypes';
+import {
+  MultiValueOperatorsValues,
+  SingleValueOperatorsValues,
+} from '@ftoggle/common/enums/operators';
 import { CreateConditionDialogComponent } from '../../../components/create-condition-dialog/create-condition-dialog.component';
 import { ConditionsService } from '../../../services/conditions.service';
 import { ContextFieldsService } from '../../../services/context-fields.service';
@@ -36,6 +40,8 @@ export class ConditionsComponent {
   conditionColumns = ['field', 'operator', 'values', 'delete'];
   panel = '';
   deleteConditionInFlight = signal(false);
+  singleValueOperators = SingleValueOperatorsValues;
+  multiValueOperators = MultiValueOperatorsValues;
 
   constructor(
     private conditionsService: ConditionsService,

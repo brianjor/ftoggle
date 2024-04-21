@@ -52,6 +52,7 @@ export class ClientController {
           field: c.contextField.name,
           operator: c.operator,
           values: c.values,
+          value: c.value,
         })),
     }));
     return featuresWConditions;

@@ -1,4 +1,9 @@
-import { Operators, OperatorsValues } from '@ftoggle/common/enums/operators';
+import {
+  MultiValueOperators,
+  MultiValueOperatorsValues,
+  SingleValueOperators,
+  SingleValueOperatorsValues,
+} from '@ftoggle/common/enums/operators';
 import {
   conditionsFieldDescriptionReqs,
   conditionsFieldValuesReqs,
@@ -14,6 +19,49 @@ import { hooks } from '../hooks';
 const conditionsController = new ConditionsController();
 const projectsController = new ProjectsController();
 const featuresController = new FeaturesController();
+
+const sharedPostBodySchema = {
+  contextName: t.String({
+    maxLength: contextFieldNameReqs.maxLength,
+  }),
+  description: t.Optional(
+    t.String({
+      maxLength: conditionsFieldDescriptionReqs.maxLength,
+    }),
+  ),
+};
+
+const postBodySchema = t.Object({
+  conditions: t.Array(
+    // Conditions can support either a single value or multiple values
+    t.Union([
+      // Conditions that support a single value
+      t.Object({
+        ...sharedPostBodySchema,
+        operator: t.Enum(SingleValueOperators, {
+          error: `operator: Expected one of [${SingleValueOperatorsValues.join(', ')}]`,
+          examples: SingleValueOperatorsValues,
+        }),
+        value: t.String({
+          maxLength: conditionsFieldValuesReqs.maxLength,
+        }),
+      }),
+      // Conditions that support multiple values
+      t.Object({
+        ...sharedPostBodySchema,
+        operator: t.Enum(MultiValueOperators, {
+          error: `operator: Expected one of [${MultiValueOperatorsValues.join(', ')}]`,
+          examples: MultiValueOperatorsValues,
+        }),
+        values: t.Array(
+          t.String({
+            maxLength: conditionsFieldValuesReqs.maxLength,
+          }),
+        ),
+      }),
+    ]),
+  ),
+});
 
 export const conditionsHandlers = new Elysia()
   .use(hooks)
@@ -43,28 +91,7 @@ export const conditionsHandlers = new Elysia()
         featureName: t.String(),
         environmentName: t.String(),
       }),
-      body: t.Object({
-        conditions: t.Array(
-          t.Object({
-            contextName: t.String({
-              maxLength: contextFieldNameReqs.maxLength,
-            }),
-            operator: t.Enum(Operators, {
-              error: `operator: Expected one of [${OperatorsValues.join(', ')}]`,
-            }),
-            description: t.Optional(
-              t.String({
-                maxLength: conditionsFieldDescriptionReqs.maxLength,
-              }),
-            ),
-            values: t.Array(
-              t.String({
-                maxLength: conditionsFieldValuesReqs.maxLength,
-              }),
-            ),
-          }),
-        ),
-      }),
+      body: postBodySchema,
       beforeHandle: [
         ({ isSignedIn }) => isSignedIn(),
         ({ hasUserPermissions }) =>

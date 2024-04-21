@@ -1,3 +1,7 @@
+import {
+  MultiValueOperatorsValues,
+  SingleValueOperatorsValues,
+} from '@ftoggle/common/enums/operators';
 import { dbClient } from '@ftoggle/db/connection';
 import { tConditions, tContextFields, tFeatures } from '@ftoggle/db/schema';
 import { and, eq, getTableColumns } from 'drizzle-orm';
@@ -7,7 +11,8 @@ export class ConditionsController {
   async createConditions(
     conditions: {
       description?: string;
-      values: string[];
+      values?: string[];
+      value?: string;
       operator: string;
       contextName: string;
     }[],
@@ -46,7 +51,10 @@ export class ConditionsController {
         featureId: feature.id,
         environmentId: environmentId,
         contextFieldId: contextField.id,
-        values: c.values,
+        values: MultiValueOperatorsValues.includes(c.operator)
+          ? c.values ?? []
+          : [],
+        value: SingleValueOperatorsValues.includes(c.operator) ? c.value : null,
         description: c.description,
         operator: c.operator,
       })),
