@@ -17,7 +17,7 @@ import {
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { ContextFieldsService } from '../../services/context-fields.service';
+import { ContextFieldsService } from '../../services/contextFields.service';
 import { createNoExtraWhitespaceValidator } from '../../validators/noExtraWhitespaceValidator';
 
 interface CreateContextFieldDialogData {

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute } from '@angular/router';
 import { ApiTokenService } from '../../services/api-token.service';
-import { ContextFieldsService } from '../../services/context-fields.service';
+import { ContextFieldsService } from '../../services/contextFields.service';
 import { EnvironmentsService } from '../../services/environments.service';
 import { FeaturesService } from '../../services/features.service';
 import { ProjectApiTokensComponent } from './components/api-tokens/api-tokens.component';

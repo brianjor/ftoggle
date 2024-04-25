@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ContextFieldsService } from './context-fields.service';
+import { ContextFieldsService } from './contextFields.service';
 
 describe('ContextFieldsService', () => {
   let service: ContextFieldsService;

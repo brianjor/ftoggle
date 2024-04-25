@@ -17,7 +17,7 @@ export class ContextFieldsService {
     description?: string,
   ) {
     try {
-      await this.apiService.api.projects[projectId]['context-fields'].post({
+      await this.apiService.api.projects[projectId].contextFields.post({
         name,
         description,
       });
@@ -37,7 +37,7 @@ export class ContextFieldsService {
     let cFields: ContextFieldsTableItem[] = [];
     try {
       const { data, error, response } =
-        await this.apiService.api.projects[projectId]['context-fields'].get();
+        await this.apiService.api.projects[projectId].contextFields.get();
       if (!response.ok) {
         throw error;
       }
@@ -54,7 +54,7 @@ export class ContextFieldsService {
     contextField: ContextFieldsTableItem,
   ) {
     try {
-      await this.apiService.api.projects[projectId]['context-fields'][
+      await this.apiService.api.projects[projectId].contextFields[
         contextField.name
       ].delete();
     } catch (error) {

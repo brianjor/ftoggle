@@ -48,10 +48,10 @@ export const routes = new Elysia()
           .group('/:apiTokenId', _ => _.use(apiTokenHandlers)
           ) // /:apiTokenId
         ) // /apiTokens
-        .group('/context-fields', _ => _.use(contextFieldsHandlers)
+        .group('/contextFields', _ => _.use(contextFieldsHandlers)
           .group('/:contextFieldName', _ => _.use(contextFieldHandlers)
           ) // /:contextFieldName
-        ) // /context-fields
+        ) // /contextFields
         .group('/environments', _ => _.use(environmentsHandlers)
           .group('/:environmentName', _ => _.use(environmentHandlers)
           ) // /:environmentName
