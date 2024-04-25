@@ -6,7 +6,10 @@ import {
   tProjectsFeaturesEnvironments,
 } from '@ftoggle/db/schema';
 import { and, eq } from 'drizzle-orm';
-import { RecordDoesNotExistError } from '../errors/dbErrors';
+import {
+  DuplicateRecordError,
+  RecordDoesNotExistError,
+} from '../errors/dbErrors';
 
 export class ProjectsController {
   public async getProjects() {
@@ -51,6 +54,14 @@ export class ProjectsController {
   }
 
   public async createProject(projectId: string, projectName: string) {
+    const exists = await dbClient.query.tProjects.findFirst({
+      where: eq(tProjects.id, projectId),
+    });
+    if (exists) {
+      throw new DuplicateRecordError(
+        `A project already exists with the id: "${projectId}"`,
+      );
+    }
     return (
       await dbClient
         .insert(tProjects)
