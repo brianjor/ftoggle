@@ -15,7 +15,7 @@ import {
 } from '@ftoggle/common/enums/operators';
 import { CreateConditionDialogComponent } from '../../../components/create-condition-dialog/create-condition-dialog.component';
 import { ConditionsService } from '../../../services/conditions.service';
-import { ContextFieldsService } from '../../../services/context-fields.service';
+import { ContextFieldsService } from '../../../services/contextFields.service';
 import { EnvironmentsService } from '../../../services/environments.service';
 
 @Component({

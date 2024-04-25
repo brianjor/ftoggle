@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { ContextFieldsTableItem } from '@ftoggle/api/types/contextFieldsTypes';
 import { CreateContextFieldDialogComponent } from '../../../../components/create-context-field-dialog/create-context-field-dialog.component';
-import { ContextFieldsService } from '../../../../services/context-fields.service';
+import { ContextFieldsService } from '../../../../services/contextFields.service';
 
 @Component({
   selector: 'app-project-context-fields',
