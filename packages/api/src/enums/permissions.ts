@@ -56,4 +56,6 @@ export enum UserPermission {
   DELETE_PROJECT_CONTEXT_FIELD = 'DELETE_PROJECT_CONTEXT_FIELD',
   /** Allows delete a condition from a feature toggle */
   DELETE_FEATURE_TOGGLE_CONDITION = 'DELETE_FEATURE_TOGGLE_CONDITION',
+  /** Allows editting a feature toggle condition */
+  EDIT_FEATURE_TOGGLE_CONDITION = 'EDIT_FEATURE_TOGGLE_CONDITION',
 }

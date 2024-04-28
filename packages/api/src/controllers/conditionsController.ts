@@ -1,11 +1,13 @@
 import {
   MultiValueOperatorsValues,
+  Operators,
   SingleValueOperatorsValues,
 } from '@ftoggle/common/enums/operators';
 import { dbClient } from '@ftoggle/db/connection';
 import { tConditions, tContextFields, tFeatures } from '@ftoggle/db/schema';
 import { and, eq, getTableColumns } from 'drizzle-orm';
 import { RecordDoesNotExistError } from '../errors/dbErrors';
+import { ConditionsTableItem } from '../typeboxes/conditionsTypes';
 
 export class ConditionsController {
   async createConditions(
@@ -62,6 +64,25 @@ export class ConditionsController {
   }
 
   /**
+   * Gets the condition by its id.
+   * @param conditionId id of the condition
+   * @returns the condition
+   * @throws A {@link RecordDoesNotExistError} if the condition does not exist
+   */
+  async getConditionById(conditionId: string) {
+    const condition = await dbClient.query.tConditions.findFirst({
+      where: eq(tConditions.id, conditionId),
+    });
+
+    if (!condition) {
+      throw new RecordDoesNotExistError(
+        `Condition with id: "${conditionId}" does not exist.`,
+      );
+    }
+    return condition;
+  }
+
+  /**
    * Gets all conditions for a project -> feature -> environment.
    * @param projectId id of the project
    * @param featureName name of the feature
@@ -91,6 +112,24 @@ export class ConditionsController {
           eq(tConditions.environmentId, environmentId),
         ),
       );
+  }
+
+  /**
+   * Patches a condition.
+   * @param condition the condition to patch
+   * @param value a single condition value
+   * @param values multiple condition values
+   */
+  async patchCondition(
+    condition: ConditionsTableItem,
+    operator: Operators,
+    value: string | undefined,
+    values: string[] | undefined,
+  ) {
+    await dbClient
+      .update(tConditions)
+      .set({ operator, value, values })
+      .where(eq(tConditions.id, condition.id));
   }
 
   /**
