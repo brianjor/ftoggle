@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   web:
     container_name: demo_web
@@ -29,5 +27,4 @@ services:
 
 networks:
   ftoggle_network:
-    external:
-      name: ftoggle_network
+    external: true
