@@ -27,5 +27,4 @@ services:
 
 networks:
   ftoggle_network:
-    external:
-      name: ftoggle_network
+    external: true
