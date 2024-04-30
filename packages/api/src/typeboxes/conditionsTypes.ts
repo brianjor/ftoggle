@@ -11,6 +11,7 @@ export const conditionsTableItem = t.Object({
   operator: t.String(),
   description: t.Nullable(t.String()),
   values: t.Array(t.String()),
+  value: t.Nullable(t.String()),
 });
 
 /** DTO of a condition from the `conditions` table. */

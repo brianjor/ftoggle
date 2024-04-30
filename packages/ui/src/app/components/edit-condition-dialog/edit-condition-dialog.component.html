@@ -1,0 +1,65 @@
+<h1 mat-dialog-title>Edit Condition</h1>
+<mat-dialog-content>
+  <form
+    class="edit-condition-form"
+    [formGroup]="editConditionForm"
+    (ngSubmit)="(editCondition)"
+  >
+    <mat-form-field id="operatorFormField">
+      <mat-label>Operator</mat-label>
+      <mat-select id="operator" [formControl]="operator">
+        @for (operator of operators; track operator) {
+          <mat-option [value]="operator">{{ operator }}</mat-option>
+        }
+      </mat-select>
+      @if (operator.hasError('required')) {
+        <mat-error>Operator is required</mat-error>
+      }
+    </mat-form-field>
+    @if (singleValueOperators.includes(operator.value ?? Operators.LESS_THAN)) {
+      <mat-form-field>
+        <mat-label>Value</mat-label>
+        <input matInput id="value" placeholder="value" [formControl]="value" />
+        @if (value.hasError('required')) {
+          <mat-error>Value is required</mat-error>
+        }
+      </mat-form-field>
+    } @else {
+      <mat-form-field>
+        <mat-label>Values</mat-label>
+        <input
+          [matChipInputFor]="valuesGrid"
+          (matChipInputTokenEnd)="addValue($event)"
+        />
+        <mat-chip-grid #valuesGrid [formControl]="values">
+          @for (value of values.value; track value) {
+            <mat-chip-row (removed)="removeValue(value)" id="values">
+              {{ value }}
+              <button matChipRemove>
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip-row>
+          }
+        </mat-chip-grid>
+        @if (values.hasError('required')) {
+          <mat-error>At least one value is required</mat-error>
+        }
+      </mat-form-field>
+    }
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="closeDialog()">Cancel</button>
+  <button
+    mat-flat-button
+    color="primary"
+    [disabled]="!isFormValid()"
+    (click)="editCondition()"
+  >
+    @if (!inFlight) {
+      Save
+    } @else {
+      Saving
+    }
+  </button>
+</mat-dialog-actions>
