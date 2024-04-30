@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ConditionsTableItem } from '@ftoggle/api/types/conditionsTypes';
+import { SingleValueOperatorsValues } from '@ftoggle/common/enums/operators';
 import { ApiService } from './api.service';
 
 @Injectable({
@@ -37,6 +38,23 @@ export class ConditionsService {
         featureName
       ].environments[environmentName].conditions.get();
     return res.data?.conditions ?? [];
+  }
+
+  async editCondition(
+    conditionToEdit: ConditionsTableItem,
+    projectId: string,
+    featureName: string,
+    environmentName: string,
+    changes: { operator: string; value: string; values: string[] },
+  ) {
+    await this.apiService.api.projects[projectId].features[
+      featureName
+    ].environments[environmentName].conditions[conditionToEdit.id].patch({
+      operator: changes.operator,
+      ...(SingleValueOperatorsValues.includes(changes.operator)
+        ? { value: changes.value }
+        : { values: changes.values }),
+    });
   }
 
   async deleteCondition(

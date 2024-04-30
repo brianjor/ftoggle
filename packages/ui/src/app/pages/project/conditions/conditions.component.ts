@@ -6,7 +6,10 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
-import { ConditionWithContextField } from '@ftoggle/api/types/conditionsTypes';
+import {
+  ConditionWithContextField,
+  ConditionsTableItem,
+} from '@ftoggle/api/types/conditionsTypes';
 import { ContextFieldsTableItem } from '@ftoggle/api/types/contextFieldsTypes';
 import { EnvironmentsTableItem } from '@ftoggle/api/types/environmentTypes';
 import {
@@ -14,6 +17,7 @@ import {
   SingleValueOperatorsValues,
 } from '@ftoggle/common/enums/operators';
 import { CreateConditionDialogComponent } from '../../../components/create-condition-dialog/create-condition-dialog.component';
+import { EditConditionDialogComponent } from '../../../components/edit-condition-dialog/edit-condition-dialog.component';
 import { ConditionsService } from '../../../services/conditions.service';
 import { ContextFieldsService } from '../../../services/contextFields.service';
 import { EnvironmentsService } from '../../../services/environments.service';
@@ -37,7 +41,7 @@ export class ConditionsComponent {
   environments = this.environmentsService.environments;
   contextFields = signal<ContextFieldsTableItem[]>([]);
   conditions = signal<ConditionWithContextField[]>([]);
-  conditionColumns = ['field', 'operator', 'values', 'delete'];
+  conditionColumns = ['field', 'operator', 'values', 'edit', 'delete'];
   panel = '';
   deleteConditionInFlight = signal(false);
   singleValueOperators = SingleValueOperatorsValues;
@@ -103,6 +107,27 @@ export class ConditionsComponent {
       },
     );
     createConditionDialogRef
+      .afterClosed()
+      .subscribe(() => this.getConditions(env));
+  }
+
+  openEditConditionDialog(
+    condition: ConditionsTableItem,
+    env: EnvironmentsTableItem,
+  ) {
+    console.log('sending condition to edit', condition);
+    const editConditionDialogRef = this.dialog.open(
+      EditConditionDialogComponent,
+      {
+        data: {
+          condition,
+          projectId: this.projectId,
+          featureName: this.featureName,
+          environmentName: env.name,
+        },
+      },
+    );
+    editConditionDialogRef
       .afterClosed()
       .subscribe(() => this.getConditions(env));
   }
