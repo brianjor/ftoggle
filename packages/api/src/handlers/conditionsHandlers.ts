@@ -1,8 +1,12 @@
 import {
+  DateOperators,
+  DateOperatorsValues,
   MultiValueOperators,
   MultiValueOperatorsValues,
-  SingleValueOperators,
-  SingleValueOperatorsValues,
+  NumericOperators,
+  NumericOperatorsValues,
+  SingleValueStringOperators,
+  SingleValueStringOperatorsValues,
 } from '@ftoggle/common/enums/operators';
 import {
   conditionsFieldDescriptionReqs,
@@ -36,16 +40,41 @@ const postBodySchema = t.Object({
     // Conditions can support either a single value or multiple values
     t.Union([
       // Conditions that support a single value
-      t.Object({
-        ...sharedPostBodySchema,
-        operator: t.Enum(SingleValueOperators, {
-          error: `operator: Expected one of [${SingleValueOperatorsValues.join(', ')}]`,
-          examples: SingleValueOperatorsValues,
+      t.Union([
+        t.Object({
+          ...sharedPostBodySchema,
+          operator: t.Enum(NumericOperators, {
+            error: `operator: Expected one of [${NumericOperatorsValues.join(', ')}]`,
+            examples: NumericOperatorsValues,
+          }),
+          value: t.String({
+            maxLength: conditionsFieldValuesReqs.maxLength,
+            pattern: '^\\d+$',
+            default: '0',
+          }),
         }),
-        value: t.String({
-          maxLength: conditionsFieldValuesReqs.maxLength,
+        t.Object({
+          ...sharedPostBodySchema,
+          operator: t.Enum(DateOperators, {
+            error: `operator: Expected one of [${DateOperatorsValues.join(', ')}]`,
+            examples: DateOperatorsValues,
+          }),
+          value: t.String({
+            maxLength: conditionsFieldValuesReqs.maxLength,
+            format: 'date-time',
+          }),
         }),
-      }),
+        t.Object({
+          ...sharedPostBodySchema,
+          operator: t.Enum(SingleValueStringOperators, {
+            error: `operator: Expected one of [${SingleValueStringOperatorsValues.join(', ')}]`,
+            examples: SingleValueStringOperatorsValues,
+          }),
+          value: t.String({
+            maxLength: conditionsFieldValuesReqs.maxLength,
+          }),
+        }),
+      ]),
       // Conditions that support multiple values
       t.Object({
         ...sharedPostBodySchema,
@@ -60,6 +89,9 @@ const postBodySchema = t.Object({
         ),
       }),
     ]),
+    {
+      minItems: 1,
+    },
   ),
 });
 
