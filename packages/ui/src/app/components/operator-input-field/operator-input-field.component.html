@@ -6,6 +6,8 @@
       <mat-error>Value is required</mat-error>
     } @else if (value.hasError('pattern')) {
       <mat-error>Value must be numeric</mat-error>
+    } @else if (value.hasError('invalidDate')) {
+      <mat-error>Value must be a date</mat-error>
     }
   </mat-form-field>
 } @else {
