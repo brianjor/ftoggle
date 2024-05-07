@@ -1,0 +1,34 @@
+@if (singleValueOperators.includes(operator)) {
+  <mat-form-field id="valueField">
+    <mat-label>Value</mat-label>
+    <input matInput id="value" placeholder="value" [formControl]="value" />
+    @if (value.hasError('required')) {
+      <mat-error>Value is required</mat-error>
+    } @else if (value.hasError('pattern')) {
+      <mat-error>Value must be numeric</mat-error>
+    } @else if (value.hasError('invalidDate')) {
+      <mat-error>Value must be a date</mat-error>
+    }
+  </mat-form-field>
+} @else {
+  <mat-form-field id="valuesField">
+    <mat-label>Values</mat-label>
+    <input
+      [matChipInputFor]="valuesGrid"
+      (matChipInputTokenEnd)="addValue($event)"
+    />
+    <mat-chip-grid #valuesGrid [formControl]="values">
+      @for (value of values.value; track value) {
+        <mat-chip-row (removed)="removeValue(value)" id="values">
+          {{ value }}
+          <button matChipRemove>
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip-row>
+      }
+    </mat-chip-grid>
+    @if (values.hasError('required')) {
+      <mat-error>At least one value is required</mat-error>
+    }
+  </mat-form-field>
+}

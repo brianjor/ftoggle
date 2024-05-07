@@ -1,6 +1,12 @@
 import {
+  DateOperators,
+  DateOperatorsValues,
   MultiValueOperators,
-  SingleValueOperators,
+  MultiValueOperatorsValues,
+  NumericOperators,
+  NumericOperatorsValues,
+  SingleValueStringOperators,
+  SingleValueStringOperatorsValues,
 } from '@ftoggle/common/enums/operators';
 import { conditionsFieldValuesReqs } from '@ftoggle/common/validations/conditionsValidations';
 import { Elysia, t } from 'elysia';
@@ -53,17 +59,52 @@ export const conditionHandlers = new Elysia()
         conditionId: t.String(),
       }),
       body: t.Union([
+        t.Union([
+          t.Object({
+            operator: t.Enum(NumericOperators, {
+              error: `operator: Expected one of [${NumericOperatorsValues.join(', ')}]`,
+              examples: NumericOperatorsValues,
+            }),
+            value: t.String({
+              maxLength: conditionsFieldValuesReqs.maxLength,
+              pattern: '^\\d+$',
+              default: '0', // TODO: Remove once https://github.com/elysiajs/elysia/issues/514 is resolved
+            }),
+          }),
+          t.Object({
+            operator: t.Enum(DateOperators, {
+              error: `operator: Expected one of [${DateOperatorsValues.join(', ')}]`,
+              examples: DateOperatorsValues,
+            }),
+            value: t.String({
+              maxLength: conditionsFieldValuesReqs.maxLength,
+              format: 'date-time',
+            }),
+          }),
+          t.Object({
+            operator: t.Enum(SingleValueStringOperators, {
+              error: `operator: Expected one of [${SingleValueStringOperatorsValues.join(', ')}]`,
+              examples: SingleValueStringOperatorsValues,
+            }),
+            value: t.String({
+              maxLength: conditionsFieldValuesReqs.maxLength,
+            }),
+          }),
+        ]),
+        // Conditions that support multiple values
         t.Object({
-          operator: t.Enum(SingleValueOperators),
-          value: t.String({ maxLength: conditionsFieldValuesReqs.maxLength }),
-        }),
-        t.Object({
-          operator: t.Enum(MultiValueOperators),
+          operator: t.Enum(MultiValueOperators, {
+            error: `operator: Expected one of [${MultiValueOperatorsValues.join(', ')}]`,
+            examples: MultiValueOperatorsValues,
+          }),
           values: t.Array(
-            t.String({ maxLength: conditionsFieldValuesReqs.maxLength }),
+            t.String({
+              maxLength: conditionsFieldValuesReqs.maxLength,
+            }),
           ),
         }),
       ]),
+
       beforeHandle: [
         ({ isSignedIn }) => isSignedIn(),
         ({ hasUserPermissions }) =>

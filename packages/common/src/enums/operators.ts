@@ -58,3 +58,60 @@ export const SingleValueOperators = {
 export type SingleValueOperators =
   (typeof SingleValueOperators)[keyof typeof SingleValueOperators];
 export const SingleValueOperatorsValues = Object.values(SingleValueOperators);
+
+export const NumericOperators = {
+  LESS_THAN: Operators.LESS_THAN,
+  GREATER_THAN: Operators.GREATER_THAN,
+  LESS_OR_EQUAL_TO: Operators.LESS_OR_EQUAL_TO,
+  GREATER_OR_EQUAL_TO: Operators.GREATER_OR_EQUAL_TO,
+  EQUAL_TO: Operators.EQUAL_TO,
+  NOT_EQUAL_TO: Operators.NOT_EQUAL_TO,
+};
+
+export type NumericOperators =
+  (typeof NumericOperators)[keyof typeof NumericOperators];
+export const NumericOperatorsValues = Object.values(NumericOperators);
+
+export const StringOperators = {
+  CONTAINS: Operators.CONTAINS,
+  IN: Operators.IN,
+  NOT_IN: Operators.NOT_IN,
+  STARTS_WITH: Operators.STARTS_WITH,
+  ENDS_WITH: Operators.ENDS_WITH,
+};
+
+export type StringOperators =
+  (typeof StringOperators)[keyof typeof StringOperators];
+export const StringOperatorsValues = Object.values(StringOperators);
+
+export const DateOperators = {
+  DATE_BEFORE: Operators.DATE_BEFORE,
+  DATE_AFTER: Operators.DATE_AFTER,
+};
+
+export type DateOperators = (typeof DateOperators)[keyof typeof DateOperators];
+export const DateOperatorsValues = Object.values(DateOperators);
+
+export const SingleValueStringOperators = {
+  STARTS_WITH: Operators.STARTS_WITH,
+  ENDS_WITH: Operators.ENDS_WITH,
+};
+
+export type SingleValueStringOperators =
+  (typeof SingleValueStringOperators)[keyof typeof SingleValueStringOperators];
+export const SingleValueStringOperatorsValues = Object.values(
+  SingleValueStringOperators,
+);
+
+export const MultiValueStringOperators = {
+  DATE_BEFORE: Operators.DATE_BEFORE,
+  DATE_AFTER: Operators.DATE_AFTER,
+  STARTS_WITH: Operators.STARTS_WITH,
+  ENDS_WITH: Operators.ENDS_WITH,
+};
+
+export type MultiValueStringOperators =
+  (typeof MultiValueStringOperators)[keyof typeof MultiValueStringOperators];
+export const MultiValueStringOperatorsValues = Object.values(
+  MultiValueStringOperators,
+);

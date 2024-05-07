@@ -7,7 +7,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -30,6 +29,7 @@ import {
   SingleValueOperatorsValues,
 } from '@ftoggle/common/enums/operators';
 import { ConditionsService } from '../../services/conditions.service';
+import { OperatorInputFieldComponent } from '../operator-input-field/operator-input-field.component';
 
 export interface CreateConditionDialogData {
   contextFields: ContextFieldsTableItem[];
@@ -44,7 +44,6 @@ export interface CreateConditionDialogData {
   imports: [
     FormsModule,
     MatButtonModule,
-    MatChipsModule,
     MatDialogActions,
     MatDialogClose,
     MatDialogContent,
@@ -55,18 +54,29 @@ export interface CreateConditionDialogData {
     MatProgressSpinnerModule,
     MatSelectModule,
     ReactiveFormsModule,
+    OperatorInputFieldComponent,
   ],
   templateUrl: './create-condition-dialog.component.html',
   styleUrl: './create-condition-dialog.component.scss',
 })
 export class CreateConditionDialogComponent {
-  contextName = new FormControl<string>('', [Validators.required]);
-  operator = new FormControl<Operators>(Operators.LESS_THAN, [
-    Validators.required,
-  ]);
-  values = new FormControl<string[]>([], [Validators.required]);
-  value = new FormControl<string>('', [Validators.required]);
-  description = new FormControl<string>('');
+  contextName = new FormControl<string>('', {
+    nonNullable: true,
+    validators: [Validators.required],
+  });
+  operator = new FormControl<Operators>(Operators.LESS_THAN, {
+    nonNullable: true,
+    validators: [Validators.required],
+  });
+  values = new FormControl<string[]>([], {
+    nonNullable: true,
+    validators: [Validators.required],
+  });
+  value = new FormControl<string>('', {
+    nonNullable: true,
+    validators: [Validators.required],
+  });
+  description = new FormControl<string>('', { nonNullable: true });
   createConditionForm = this.formBuilder.group({
     contextField: this.contextName,
     operator: this.operator,
@@ -86,20 +96,6 @@ export class CreateConditionDialogComponent {
     public dialogRef: MatDialogRef<CreateConditionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: CreateConditionDialogData,
   ) {}
-
-  addValue(event: MatChipInputEvent) {
-    const newValue = event.value;
-    if (newValue) {
-      this.values.setValue([...(this.values.value as string[]), newValue]);
-    }
-    event.chipInput.clear();
-  }
-
-  removeValue(value: string) {
-    this.values.setValue(
-      (this.values.value as string[]).filter((v) => v !== value),
-    );
-  }
 
   closeDialog() {
     this.dialogRef.close();
@@ -127,11 +123,11 @@ export class CreateConditionDialogComponent {
 
   createCondition() {
     if (!this.isFormValid() || this.inFlight()) return;
-    const contextName = this.contextName.value as string;
-    const operator = this.operator.value as string;
-    const values = this.values.value as string[];
-    const value = this.value.value as string;
-    const description = this.description.value as string;
+    const contextName = this.contextName.value;
+    const operator = this.operator.value;
+    const values = this.values.value;
+    const value = this.value.value;
+    const description = this.description.value;
     this.inFlight.set(true);
     this.conditionsService
       .createConditions(

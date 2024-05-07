@@ -29,7 +29,7 @@ export class FeaturesService {
       this._features.set(response.data?.features ?? []);
       return;
     } catch (error) {
-      console.log('Error getting features');
+      console.error('Error getting features');
     }
   }
 
