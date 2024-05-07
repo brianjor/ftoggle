@@ -115,7 +115,6 @@ export class ConditionsComponent {
     condition: ConditionsTableItem,
     env: EnvironmentsTableItem,
   ) {
-    console.log('sending condition to edit', condition);
     const editConditionDialogRef = this.dialog.open(
       EditConditionDialogComponent,
       {

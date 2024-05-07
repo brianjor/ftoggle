@@ -15,7 +15,7 @@ export class ProjectsService {
       const response = await this.apiService.api.projects.get();
       this._projects.set(response.data?.data.projects ?? []);
     } catch (err) {
-      console.log('Error getting projects', err);
+      console.error('Error getting projects', err);
     }
   }
 

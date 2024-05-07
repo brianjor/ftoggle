@@ -63,9 +63,7 @@ export class OperatorInputFieldComponent {
   private dateOperators = [Operators.DATE_AFTER, Operators.DATE_BEFORE];
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log('Changes:', changes);
     if ('operator' in changes) {
-      console.log(changes.operator);
       this.handleOperatorChanges(changes.operator);
     }
   }

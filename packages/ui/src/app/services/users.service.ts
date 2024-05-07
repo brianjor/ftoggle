@@ -17,7 +17,7 @@ export class UsersService {
     const { data, response, error } =
       await this.apiService.api.users.roles.get();
     if (!response.ok) {
-      console.log('Error getting users', error?.message);
+      console.error('Error getting users', error?.message);
     }
     this._users.set(data?.users ?? []);
   }
@@ -38,7 +38,7 @@ export class UsersService {
       role,
     });
     if (!response.ok) {
-      console.log('Error adding role', error?.message);
+      console.error('Error adding role', error?.message);
     }
   }
 
@@ -46,7 +46,7 @@ export class UsersService {
     const { response, data } =
       await this.apiService.api.users[user.id].roles[role.id].delete();
     if (!response.ok) {
-      console.log('Error removing role:', data);
+      console.error('Error removing role:', data);
     }
   }
 }
