@@ -30,6 +30,7 @@
     "@elysiajs/eden": "^0.7.7",
     "@ftoggle/api": "workspace:*",
     "@ftoggle/common": "workspace:*",
+    "luxon": "^3.4.4",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.2"
@@ -39,6 +40,7 @@
     "@angular/cli": "^17.0.7",
     "@angular/compiler-cli": "^17.0.0",
     "@types/jasmine": "~5.1.0",
+    "@types/luxon": "^3.4.2",
     "eslint-plugin-html": "^7.1.0",
     "jasmine-core": "~5.1.0",
     "karma": "~6.4.0",
