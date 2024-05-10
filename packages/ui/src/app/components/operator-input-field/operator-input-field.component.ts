@@ -60,7 +60,7 @@ export class OperatorInputFieldComponent {
   ];
 
   /** Operators that hold date type values */
-  private dateOperators = [Operators.DATE_AFTER, Operators.DATE_BEFORE];
+  protected dateOperators = [Operators.DATE_AFTER, Operators.DATE_BEFORE];
 
   ngOnChanges(changes: SimpleChanges) {
     if ('operator' in changes) {
@@ -81,6 +81,7 @@ export class OperatorInputFieldComponent {
       // strings
       this.value.setValidators([Validators.required]);
     }
+    this.value.markAsTouched();
     this.value.updateValueAndValidity();
   }
 

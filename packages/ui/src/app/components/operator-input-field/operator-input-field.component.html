@@ -1,15 +1,37 @@
 @if (singleValueOperators.includes(operator)) {
-  <mat-form-field id="valueField">
-    <mat-label>Value</mat-label>
-    <input matInput id="value" placeholder="value" [formControl]="value" />
-    @if (value.hasError('required')) {
-      <mat-error>Value is required</mat-error>
-    } @else if (value.hasError('pattern')) {
-      <mat-error>Value must be numeric</mat-error>
-    } @else if (value.hasError('invalidDate')) {
-      <mat-error>Value must be a date</mat-error>
-    }
-  </mat-form-field>
+  @if (dateOperators.includes(operator)) {
+    <mat-form-field id="valueField">
+      <mat-label>Value</mat-label>
+      <input
+        matInput
+        [matDatepicker]="picker"
+        id="value"
+        placeholder="value"
+        [formControl]="value"
+      />
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      @if (value.hasError('required')) {
+        <mat-error>Value is required</mat-error>
+      } @else if (value.hasError('invalidDate')) {
+        <mat-error>Value must be a date</mat-error>
+      }
+      <mat-datepicker-toggle
+        matIconSuffix
+        [for]="picker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  } @else {
+    <mat-form-field id="valueField">
+      <mat-label>Value</mat-label>
+      <input matInput id="value" placeholder="value" [formControl]="value" />
+      @if (value.hasError('required')) {
+        <mat-error>Value is required</mat-error>
+      } @else if (value.hasError('pattern')) {
+        <mat-error>Value must be numeric</mat-error>
+      }
+    </mat-form-field>
+  }
 } @else {
   <mat-form-field id="valuesField">
     <mat-label>Values</mat-label>
