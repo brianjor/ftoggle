@@ -2,7 +2,7 @@ import { AbstractControl, ValidationErrors } from '@angular/forms';
 import { DateTime } from 'luxon';
 
 export const isDateValidator = (
-  control: AbstractControl<string>,
+  control: AbstractControl<string | Date>,
 ): ValidationErrors | null => {
   const value = control.value;
 
@@ -10,7 +10,12 @@ export const isDateValidator = (
     return null;
   }
 
-  const possibleDate = DateTime.fromISO(value);
+  let isDate = false;
+  if (value instanceof Date) {
+    isDate = true;
+  } else {
+    isDate = DateTime.fromISO(value).isValid;
+  }
 
-  return !possibleDate.isValid ? { invalidDate: true } : null;
+  return !isDate ? { invalidDate: true } : null;
 };
