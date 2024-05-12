@@ -11,9 +11,11 @@ import {
 import { conditionsFieldValuesReqs } from '@ftoggle/common/validations/conditionsValidations';
 import { Elysia, t } from 'elysia';
 import { ConditionsController } from '../controllers/conditionsController';
+import { ContextFieldController } from '../controllers/contextFieldController';
 import { FeaturesController } from '../controllers/featuresController';
 import { ProjectsController } from '../controllers/projectsController';
 import { UserPermission } from '../enums/permissions';
+import { BadRequestError } from '../errors/apiErrors';
 import { hooks } from '../hooks';
 
 const projectsController = new ProjectsController();
@@ -34,18 +36,39 @@ export const conditionHandlers = new Elysia()
       );
       const condition =
         await conditionsController.getConditionById(conditionId);
+      const contextField = await new ContextFieldController().getContextField(
+        condition.contextFieldId,
+      );
+      const newOperator = body.operator;
+
+      const tryingToChangeFromDateOperator =
+        contextField.name === 'currentTime' &&
+        !DateOperatorsValues.includes(newOperator);
+      if (tryingToChangeFromDateOperator) {
+        throw new BadRequestError(
+          '"currentTime" can only be used with date operators',
+        );
+      }
+      const tryingToChangeToDateOperator =
+        DateOperatorsValues.includes(newOperator) &&
+        contextField.name != 'currentTime';
+      if (tryingToChangeToDateOperator) {
+        throw new BadRequestError(
+          'Only "currentTime" can be used with date operators',
+        );
+      }
 
       if ('value' in body) {
         await conditionsController.patchCondition(
           condition,
-          body.operator,
+          newOperator,
           body.value,
           undefined,
         );
       } else if ('values' in body) {
         await conditionsController.patchCondition(
           condition,
-          body.operator,
+          newOperator,
           undefined,
           body.values,
         );
