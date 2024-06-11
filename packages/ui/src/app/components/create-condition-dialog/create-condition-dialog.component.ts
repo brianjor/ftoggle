@@ -129,6 +129,13 @@ export class CreateConditionDialogComponent {
     const value = this.value.value;
     const description = this.description.value;
     this.inFlight.set(true);
+    console.log('Creating condition with:', {
+      contextName,
+      operator,
+      values,
+      value,
+      description,
+    });
     this.conditionsService
       .createConditions(
         this.data.projectId,

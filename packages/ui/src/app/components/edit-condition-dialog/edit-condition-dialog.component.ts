@@ -21,7 +21,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
-import { ConditionsTableItem } from '@ftoggle/api/types/conditionsTypes';
+import { ConditionWithContextField } from '@ftoggle/api/types/conditionsTypes';
 import {
   MultiValueOperatorsValues,
   Operators,
@@ -32,7 +32,7 @@ import { ConditionsService } from '../../services/conditions.service';
 import { OperatorInputFieldComponent } from '../operator-input-field/operator-input-field.component';
 
 export interface EditConditionDialogData {
-  condition: ConditionsTableItem;
+  condition: ConditionWithContextField;
   projectId: string;
   featureName: string;
   environmentName: string;
@@ -83,6 +83,7 @@ export class EditConditionDialogComponent {
   operators = OperatorsValues;
   multiValueOperators = MultiValueOperatorsValues;
   singleValueOperators = SingleValueOperatorsValues;
+  contextField = '';
 
   constructor(
     private conditionService: ConditionsService,
@@ -93,6 +94,7 @@ export class EditConditionDialogComponent {
     this.operator.setValue(this.data.condition.operator);
     this.value.setValue(this.data.condition.value ?? '');
     this.values.setValue(this.data.condition.values);
+    this.contextField = this.data.condition.contextField.name;
   }
 
   addValue(event: MatChipInputEvent) {
