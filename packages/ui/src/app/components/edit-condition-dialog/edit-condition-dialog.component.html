@@ -5,19 +5,9 @@
     [formGroup]="editConditionForm"
     (ngSubmit)="(editCondition)"
   >
-    <mat-form-field id="operatorFormField">
-      <mat-label>Operator</mat-label>
-      <mat-select id="operator" [formControl]="operator">
-        @for (operator of operators; track operator) {
-          <mat-option [value]="operator">{{ operator }}</mat-option>
-        }
-      </mat-select>
-      @if (operator.hasError('required')) {
-        <mat-error>Operator is required</mat-error>
-      }
-    </mat-form-field>
     <app-operator-input-field
-      [operator]="operator.value"
+      [contextFieldName]="contextField"
+      [operator]="operator"
       [value]="value"
       [values]="values"
     />

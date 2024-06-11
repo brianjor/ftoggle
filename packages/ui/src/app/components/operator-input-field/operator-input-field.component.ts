@@ -11,6 +11,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import {
   Operators,
   SingleValueOperatorsValues,
@@ -28,13 +29,15 @@ import { isDateValidator } from '../../validators/isDateValidator';
     MatIconModule,
     MatInputModule,
     MatDatepickerModule,
+    MatSelectModule,
     ReactiveFormsModule,
   ],
   templateUrl: './operator-input-field.component.html',
   styleUrl: './operator-input-field.component.scss',
 })
 export class OperatorInputFieldComponent {
-  @Input() operator!: Operators;
+  @Input() contextFieldName!: string;
+  @Input() operator!: FormControl<Operators>;
   @Input() value!: FormControl<string>;
   @Input() values!: FormControl<string[]>;
 
@@ -57,6 +60,11 @@ export class OperatorInputFieldComponent {
     Operators.CONTAINS,
     Operators.IN,
     Operators.NOT_IN,
+  ];
+
+  protected nonDateOperators = [
+    ...this.numericOperators,
+    ...this.stringOperators,
   ];
 
   /** Operators that hold date type values */

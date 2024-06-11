@@ -26,6 +26,8 @@ const featuresController = new FeaturesController();
 
 const sharedPostBodySchema = {
   contextName: t.String({
+    // Allow any context field name, except "currentTime"
+    pattern: '^(?!currentTime$).*',
     maxLength: contextFieldNameReqs.maxLength,
   }),
   description: t.Optional(
@@ -50,11 +52,13 @@ const postBodySchema = t.Object({
           value: t.String({
             maxLength: conditionsFieldValuesReqs.maxLength,
             pattern: '^\\d+$',
-            default: '0',
+            default: '0', // TODO: Remove once https://github.com/elysiajs/elysia/issues/514 is resolved
           }),
         }),
         t.Object({
           ...sharedPostBodySchema,
+          // Only allow Date Operators to be set with the "currentTime" context field
+          contextName: t.Literal('currentTime'),
           operator: t.Enum(DateOperators, {
             error: `operator: Expected one of [${DateOperatorsValues.join(', ')}]`,
             examples: DateOperatorsValues,

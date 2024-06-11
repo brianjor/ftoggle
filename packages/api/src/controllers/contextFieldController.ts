@@ -1,7 +1,10 @@
 import { dbClient } from '@ftoggle/db/connection';
 import { tContextFields } from '@ftoggle/db/schema';
 import { and, eq } from 'drizzle-orm';
-import { DuplicateRecordError } from '../errors/dbErrors';
+import {
+  DuplicateRecordError,
+  RecordDoesNotExistError,
+} from '../errors/dbErrors';
 
 export class ContextFieldController {
   /**
@@ -39,6 +42,24 @@ export class ContextFieldController {
     return await dbClient.query.tContextFields.findMany({
       where: eq(tContextFields.projectId, projectId),
     });
+  }
+
+  /**
+   * Gets a context field by its id
+   * @param contextFieldId id of the context field
+   * @returns the context field
+   * @throws A {@link RecordDoesNotExistError} if the context field does not exist
+   */
+  async getContextField(contextFieldId: string) {
+    const contextField = await dbClient.query.tContextFields.findFirst({
+      where: eq(tContextFields.id, contextFieldId),
+    });
+    if (contextField === undefined) {
+      throw new RecordDoesNotExistError(
+        `Context Field with id: ${contextFieldId} does not exist`,
+      );
+    }
+    return contextField;
   }
 
   /**

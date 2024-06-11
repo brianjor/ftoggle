@@ -1,5 +1,22 @@
-@if (singleValueOperators.includes(operator)) {
-  @if (dateOperators.includes(operator)) {
+<mat-form-field id="operatorFormField">
+  <mat-label>Operator</mat-label>
+  <mat-select id="operator" [formControl]="operator">
+    @if (contextFieldName === 'currentTime') {
+      @for (operator of dateOperators; track operator) {
+        <mat-option [value]="operator">{{ operator }}</mat-option>
+      }
+    } @else {
+      @for (operator of nonDateOperators; track operator) {
+        <mat-option [value]="operator">{{ operator }}</mat-option>
+      }
+    }
+  </mat-select>
+  @if (operator.hasError('required')) {
+    <mat-error>Operator is required</mat-error>
+  }
+</mat-form-field>
+@if (singleValueOperators.includes(operator.value)) {
+  @if (dateOperators.includes(operator.value)) {
     <mat-form-field id="valueField">
       <mat-label>Value</mat-label>
       <input
@@ -33,6 +50,7 @@
     </mat-form-field>
   }
 } @else {
+  <!-- Multi value operators -->
   <mat-form-field id="valuesField">
     <mat-label>Values</mat-label>
     <input
