@@ -52,6 +52,10 @@ export const featuresHandlers = new Elysia()
       response: {
         200: t.String(),
       },
-      beforeHandle: [({ isSignedIn }) => isSignedIn()],
+      beforeHandle: [
+        ({ isSignedIn }) => isSignedIn(),
+        ({ hasUserPermissions }) =>
+          hasUserPermissions([UserPermission.CREATE_FEATURE_TOGGLE]),
+      ],
     },
   );
