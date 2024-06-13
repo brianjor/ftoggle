@@ -23,15 +23,15 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@elysiajs/cors": "^0.7.2",
-    "@elysiajs/swagger": "^0.8.5",
+    "@elysiajs/cors": "^1.0.2",
+    "@elysiajs/swagger": "^1.0.3",
     "@ftoggle/common": "workspace:*",
     "@ftoggle/db": "workspace:*",
     "@lucia-auth/adapter-postgresql": "^3.0.0",
     "arctic": "^1.1.6",
     "dotenv": "^16.4.4",
     "drizzle-orm": "^0.29.1",
-    "elysia": "^0.8.17",
+    "elysia": "^1.0.0",
     "lucia": "^3.0.1"
   }
 }

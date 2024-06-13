@@ -27,7 +27,7 @@
     "@angular/platform-browser": "^17.0.0",
     "@angular/platform-browser-dynamic": "^17.0.0",
     "@angular/router": "^17.0.0",
-    "@elysiajs/eden": "^0.7.7",
+    "@elysiajs/eden": "^1.0.11",
     "@ftoggle/api": "workspace:*",
     "@ftoggle/common": "workspace:*",
     "luxon": "^3.4.4",
