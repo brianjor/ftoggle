@@ -35,7 +35,7 @@ export class AppComponent {
   }
 
   pingApi() {
-    this.http.get('/demo').subscribe((data) => {
+    this.http.post('/demo', { context: this.context }).subscribe((data) => {
       console.log(data);
       this.apiResponse.set((data as unknown as { data: string }).data);
     });
