@@ -55,7 +55,7 @@ export class FToggle {
     const conditions = feature.conditions;
     const context = this._config.context;
     const passes = conditions.every((condition) => {
-      if (!(condition.field in context)) {
+      if (!(condition.field in context) && condition.field !== 'currentTime') {
         console.error(`FToggle: Context missing field: "${condition.field}"`);
         return false;
       }
