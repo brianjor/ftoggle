@@ -42,6 +42,14 @@ export class FToggle {
     this.getFeatures();
   }
 
+  public set context(ctx: Context) {
+    this._config.context = ctx;
+  }
+
+  public get context() {
+    return this._config.context;
+  }
+
   public isEnabled(featureName: string): boolean {
     const feature = this.features.get(featureName);
     return (feature?.isEnabled ?? false) && this.checkConditions(feature!);

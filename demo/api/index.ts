@@ -1,5 +1,5 @@
 import { FToggle } from '@ftoggle/clients-bun';
-import { Elysia } from 'elysia';
+import { Elysia, t } from 'elysia';
 
 const host = Bun.env.host ?? 'localhost';
 const ftoggle = new FToggle({
@@ -13,12 +13,21 @@ const ftoggle = new FToggle({
 
 const app = new Elysia();
 
-app.get('/demo', () => {
-  if (ftoggle.isEnabled('feature')) {
-    return { data: 'Hello' };
-  }
-  return { data: 'Not enabled' };
-});
+app.post(
+  '/demo',
+  ({ body }) => {
+    ftoggle.context = body.context;
+    if (ftoggle.isEnabled('feature')) {
+      return { data: 'Hello' };
+    }
+    return { data: 'Not enabled' };
+  },
+  {
+    body: t.Object({
+      context: t.Record(t.String(), t.Array(t.String())),
+    }),
+  },
+);
 
 app.listen({ port: 8081 }, () =>
   console.log(`Demo Api listening on ${app.server?.url}`),
