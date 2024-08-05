@@ -10,7 +10,7 @@ export const hasPermissions = new Elysia({
   name: 'hooks:hasPermissions',
 })
   .use(requestUserHooks)
-  .derive((context) => {
+  .derive({ as: 'global' }, (context) => {
     return {
       hasUserPermissions: async (requiredPermissions: UserPermission[]) => {
         const { user } = await context.getRequestUser();
