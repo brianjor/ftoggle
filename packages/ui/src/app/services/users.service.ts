@@ -17,7 +17,7 @@ export class UsersService {
     const { data, response, error } =
       await this.apiService.api.users.roles.get();
     if (!response.ok) {
-      console.error('Error getting users', error?.message);
+      console.error('Error getting users', error?.value);
     }
     this._users.set(data?.users ?? []);
   }
@@ -36,7 +36,7 @@ export class UsersService {
       .users({ userId: user.id })
       .roles.post({ role });
     if (!response.ok) {
-      console.error('Error adding role', error?.message);
+      console.error('Error adding role', error?.value);
     }
   }
 

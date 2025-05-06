@@ -100,6 +100,7 @@ export class UsersController {
       }
       return user;
     } catch (err) {
+      console.log('Hallo');
       // Catch any errors thrown and log them
       console.error(err);
       // Throw a generic validation error

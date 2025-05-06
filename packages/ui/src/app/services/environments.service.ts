@@ -14,7 +14,6 @@ export class EnvironmentsService {
   async createEnvironment(projectId: string, environment: { name: string }) {
     try {
       await this.apiService.api.projects({ projectId }).environments.post({
-        $query: { projectId },
         environmentName: environment.name,
       });
     } catch (err) {

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import type { ConditionsTableItem } from '@ftoggle/api/types/conditionsTypes';
+import { ConditionsTableItem } from '@ftoggle/api/types/conditionsTypes';
 import { SingleValueOperatorsValues } from '@ftoggle/common/enums/operators';
-import type { ApiService } from './api.service';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root',
