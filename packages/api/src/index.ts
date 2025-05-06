@@ -8,7 +8,7 @@ const port = Bun.env.API_PORT ?? 8080;
 const app = new Elysia()
   .use(cors())
   .use(swagger())
-  .onError(errorHook)
+  .onError((context) => errorHook(context))
   .use(routes)
   .listen(port, (server) => {
     console.log(`Started server on http://${server?.hostname}:${server?.port}`);

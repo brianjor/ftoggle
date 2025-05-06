@@ -20,7 +20,7 @@ export class ApiTokenService {
   }) {
     const { projectId, name, environmentId, type } = fields;
     try {
-      await this.apiService.api.projects[projectId].apiTokens.post({
+      await this.apiService.api.projects({ projectId }).apiTokens.post({
         name,
         environmentId,
         type,
@@ -32,8 +32,9 @@ export class ApiTokenService {
 
   async getApiTokens(projectId: string) {
     try {
-      const response =
-        await this.apiService.api.projects[projectId].apiTokens.get();
+      const response = await this.apiService.api
+        .projects({ projectId })
+        .apiTokens.get();
       this._apiTokens.set(response.data?.tokens ?? []);
     } catch (err) {
       console.error('Error getting api tokens', err);
@@ -42,9 +43,10 @@ export class ApiTokenService {
 
   async deleteApiToken(projectId: string, apiTokenId: string) {
     try {
-      await this.apiService.api.projects[projectId].apiTokens[
-        apiTokenId
-      ].delete();
+      await this.apiService.api
+        .projects({ projectId })
+        .apiTokens({ apiTokenId })
+        .delete();
     } catch (err) {
       console.error('Error creating api token', err);
     }

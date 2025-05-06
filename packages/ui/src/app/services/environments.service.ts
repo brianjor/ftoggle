@@ -13,8 +13,7 @@ export class EnvironmentsService {
 
   async createEnvironment(projectId: string, environment: { name: string }) {
     try {
-      await this.apiService.api.projects[projectId].environments.post({
-        $query: { projectId },
+      await this.apiService.api.projects({ projectId }).environments.post({
         environmentName: environment.name,
       });
     } catch (err) {
@@ -24,8 +23,9 @@ export class EnvironmentsService {
 
   async getEnvironments(projectId: string) {
     try {
-      const response =
-        await this.apiService.api.projects[projectId].environments.get();
+      const response = await this.apiService.api
+        .projects({ projectId })
+        .environments.get();
 
       this._environments.set(response.data?.data.environments ?? []);
     } catch (err) {
@@ -35,9 +35,10 @@ export class EnvironmentsService {
 
   async deleteEnvironment(projectId: string, environmentName: string) {
     try {
-      await this.apiService.api.projects[projectId].environments[
-        environmentName
-      ].delete();
+      await this.apiService.api
+        .projects({ projectId })
+        .environments({ environmentName })
+        .delete();
     } catch (err) {
       console.error('Error deleting environment', err);
     }

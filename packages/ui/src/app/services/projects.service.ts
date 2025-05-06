@@ -32,7 +32,7 @@ export class ProjectsService {
 
   async deleteProject(projectId: string) {
     try {
-      await this.apiService.api.projects[projectId].delete();
+      await this.apiService.api.projects({ projectId }).delete();
     } catch (err) {
       console.error('Error deleting project', err);
     }

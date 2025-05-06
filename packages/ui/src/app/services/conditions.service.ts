@@ -21,11 +21,13 @@ export class ConditionsService {
       value: string;
     }[],
   ) {
-    return await this.apiService.api.projects[projectId].features[
-      featureName
-    ].environments[environmentName].conditions.post({
-      conditions,
-    });
+    return await this.apiService.api
+      .projects({ projectId })
+      .features({ featureName })
+      .environments({ environmentName })
+      .conditions.post({
+        conditions,
+      });
   }
 
   async getConditions(
@@ -33,10 +35,11 @@ export class ConditionsService {
     featureName: string,
     environmentName: string,
   ) {
-    const res =
-      await this.apiService.api.projects[projectId].features[
-        featureName
-      ].environments[environmentName].conditions.get();
+    const res = await this.apiService.api
+      .projects({ projectId })
+      .features({ featureName })
+      .environments({ environmentName })
+      .conditions.get();
     return res.data?.conditions ?? [];
   }
 
@@ -47,14 +50,17 @@ export class ConditionsService {
     environmentName: string,
     changes: { operator: string; value: string; values: string[] },
   ) {
-    await this.apiService.api.projects[projectId].features[
-      featureName
-    ].environments[environmentName].conditions[conditionToEdit.id].patch({
-      operator: changes.operator,
-      ...(SingleValueOperatorsValues.includes(changes.operator)
-        ? { value: changes.value }
-        : { values: changes.values }),
-    });
+    await this.apiService.api
+      .projects({ projectId })
+      .features({ featureName })
+      .environments({ environmentName })
+      .conditions({ conditionId: conditionToEdit.id })
+      .patch({
+        operator: changes.operator,
+        ...(SingleValueOperatorsValues.includes(changes.operator)
+          ? { value: changes.value }
+          : { values: changes.values }),
+      });
   }
 
   async deleteCondition(
@@ -62,8 +68,11 @@ export class ConditionsService {
     featureName: string,
     environmentName: string,
   ) {
-    await this.apiService.api.projects[condition.projectId].features[
-      featureName
-    ].environments[environmentName].conditions[condition.id].delete();
+    await this.apiService.api
+      .projects({ projectId: condition.projectId })
+      .features({ featureName })
+      .environments({ environmentName })
+      .conditions({ conditionId: condition.id })
+      .delete();
   }
 }
